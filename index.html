@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home Apps</title>
+
+<style>
+:root{
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --primary:#2f6fed;
+    --primary-hover:#1d56c8;
+    --text:#263238;
+    --shadow:0 8px 20px rgba(0,0,0,.12);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,Roboto,Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#eef3fb,#dfe9f7);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+}
+
+.container{
+    width:min(900px,100%);
+    background:var(--card);
+    border-radius:24px;
+    padding:40px;
+    box-shadow:var(--shadow);
+}
+
+h1{
+    text-align:center;
+    color:var(--text);
+    font-size:2.2rem;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    color:#607d8b;
+    margin-bottom:40px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:20px;
+}
+
+.app{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    padding:18px 22px;
+    background:#f8fbff;
+    border:2px solid #e3ebf8;
+    border-radius:16px;
+    text-decoration:none;
+    color:var(--text);
+    transition:.25s;
+}
+
+.app:hover{
+    background:var(--primary);
+    color:white;
+    transform:translateY(-4px);
+    box-shadow:0 10px 18px rgba(47,111,237,.25);
+}
+
+.icon{
+    font-size:30px;
+}
+
+.name{
+    font-size:1.1rem;
+    font-weight:600;
+}
+
+footer{
+    margin-top:40px;
+    text-align:center;
+    color:#90a4ae;
+    font-size:.9rem;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🚀 Le mie App</h1>
+
+<p class="subtitle">
+Seleziona una delle applicazioni disponibili.
+</p>
+
+<div class="grid">
+
+    <!-- APP -->
+    <a class="app" href="Scala/index.html">
+        <div class="icon">🃏</div>
+        <div class="name">Scala</div>
+    </a>
+
+    <!-- Nuove app:
+    <a class="app" href="NomeCartella/index.html">
+        <div class="icon">📦</div>
+        <div class="name">Nome App</div>
+    </a>
+    -->
+
+</div>
+
+<footer>
+Repository personale • GitHub Pages
+</footer>
+
+</div>
+
+</body>
+</html>
