@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assessment punti di forza dei bambini</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f4f6fb;
+      color: #1f2937;
+    }
+
+    header {
+      background: #374151;
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      opacity: 0.85;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    section {
+      margin: 20px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin: 12px 0;
+      font-weight: 600;
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      padding: 12px;
+      margin-top: 6px;
+      font-size: 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      margin: 8px 6px 8px 0;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+    }
+
+    button:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    button.secondary {
+      background: #64748b;
+    }
+
+    button.danger {
+      background: #dc2626;
+    }
+
+    .child-name-row {
+      margin-bottom: 12px;
+    }
+
+    #questionNumber {
+      color: #2563eb;
+      margin-bottom: 8px;
+    }
+
+    #questionCategory {
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #3730a3;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    #questionText {
+      font-size: 22px;
+      line-height: 1.35;
+      margin-top: 0;
+    }
+
+    .answer-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 16px 0;
+      background: #f9fafb;
+    }
+
+    .answer-card h4 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    .options {
+      display: grid;
+      gap: 8px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      font-weight: 500;
+    }
+        .option input {
+      transform: scale(1.2);
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      gap: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      border-bottom: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #eef2ff;
+    }
+
+    canvas {
+      max-width: 700px;
+      margin: auto;
+      display: block;
+    }
+
+    @media (max-width:700px){
+
+      #questionText{
+        font-size:19px;
+      }
+
+      .navigation{
+        flex-direction:column;
+      }
+
+      button{
+        width:100%;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>Assessment dei Punti di Forza del Carattere</h1>
+
+<p>Valutazione contemporanea di più bambini</p>
+
+</header>
+
+<main>
+
+<section id="setup">
+
+<h2>Configurazione</h2>
+
+<label>
+
+Numero bambini
+
+<input id="numChildren"
+type="number"
+min="1"
+max="10"
+value="2">
+
+</label>
+
+<div id="childrenNames"></div>
+
+<button id="createChildren">
+
+Aggiorna elenco
+
+</button>
+
+<button id="startButton">
+
+Inizia Assessment
+
+</button>
+
+</section>
+
+<section id="assessment" class="hidden">
+
+<div id="questionNumber"></div>
+
+<div id="questionCategory"></div>
+
+<h2 id="questionText"></h2>
+
+<div id="answersContainer"></div>
+
+<div class="navigation">
+
+<button id="previousButton">
+
+← Indietro
+
+</button>
+
+<button id="nextButton">
+
+Avanti →
+
+</button>
+
+</div>
+
+</section>
+
+<section id="results" class="hidden">
+
+<h2>Risultati</h2>
+
+<canvas id="radarChart"></canvas>
+
+<div id="summary"></div>
+
+<br>
+
+<button id="restartButton" class="secondary">
+
+Nuovo assessment
+
+</button>
+
+</section>
+
+</main>
+
+<script>
+
+const categories=[
+"Autostima",
+"Empatia",
+"Integrità",
+"Autocontrollo",
+"Curiosità",
+"Perseveranza",
+"Ottimismo"
+];
+
+const labels=[
+"Mai",
+"Raramente",
+"A volte",
+"Spesso",
+"Sempre"
+];
+
+const questions=[
+
+{category:"Autostima",text:"Sa descrivere facilmente e con precisione i propri punti di forza e le proprie qualità positive."},
+{category:"Autostima",text:"È fiero delle proprie capacità e ama essere sé stesso."},
+{category:"Autostima",text:"Si concentra soprattutto sui propri punti di forza."},
+{category:"Autostima",text:"Parla di sé in modo prevalentemente positivo."},
+{category:"Autostima",text:"Ha hobby e interessi che valorizzano i suoi talenti."},
+
+{category:"Empatia",text:"Mostra sensibilità verso i bisogni e i sentimenti degli altri."},
+{category:"Empatia",text:"Riconosce quando qualcuno è in difficoltà."},
+{category:"Empatia",text:"Cerca di comprendere il punto di vista degli altri."},
+{category:"Empatia",text:"Vuole aiutare quando qualcuno è trattato ingiustamente."},
+{category:"Empatia",text:"Si rattrista quando vede qualcuno soffrire."},
+{category:"Integrità",text:"È onesto, ammette i propri errori e se ne assume la responsabilità."},
+{category:"Integrità",text:"Sa riconoscere un comportamento sbagliato e correggerlo."},
+{category:"Integrità",text:"Prova dispiacere quando compie un'azione sbagliata."},
+{category:"Integrità",text:"Ha raramente bisogno che gli venga ricordato come comportarsi."},
+{category:"Integrità",text:"Fa la cosa giusta anche quando nessuno lo osserva."},
+
+{category:"Autocontrollo",text:"Controlla impulsi e desideri senza l'aiuto di un adulto."},
+{category:"Autocontrollo",text:"Si calma facilmente dopo essersi arrabbiato o agitato."},
+{category:"Autocontrollo",text:"Riconosce le proprie emozioni prima che prendano il sopravvento."},
+{category:"Autocontrollo",text:"Sa aspettare senza perdere il controllo."},
+{category:"Autocontrollo",text:"Mantiene l'attenzione su attività adeguate alla sua età."},
+
+{category:"Curiosità",text:"Fa molte domande per capire meglio il mondo."},
+{category:"Curiosità",text:"Gli piace trovare modi nuovi per risolvere i problemi."},
+{category:"Curiosità",text:"Ama imparare cose nuove."},
+{category:"Curiosità",text:"È incuriosito da attività nuove o insolite."},
+{category:"Curiosità",text:"Accetta di poter sbagliare e prova strategie diverse."},
+
+{category:"Perseveranza",text:"Affronta nuovi compiti senza eccessiva paura di sbagliare."},
+{category:"Perseveranza",text:"Sa che migliorare richiede impegno."},
+{category:"Perseveranza",text:"Continua a provarci anche quando qualcosa è difficile."},
+{category:"Perseveranza",text:"Se non riesce, riprova."},
+{category:"Perseveranza",text:"Considera gli errori come occasioni per imparare."},
+
+{category:"Ottimismo",text:"Esprime gratitudine per le cose positive."},
+{category:"Ottimismo",text:"Parla a sé stesso in modo positivo."},
+{category:"Ottimismo",text:"Perdona invece di incolpare gli altri."},
+{category:"Ottimismo",text:"Trova un aspetto positivo anche nelle difficoltà."},
+{category:"Ottimismo",text:"Considera gli insuccessi come temporanei."}
+
+];
+
+let children=[];
+let answers={};
+let currentQuestion=0;
+let radar=null;
+
+const setup=document.getElementById("setup");
+const assessment=document.getElementById("assessment");
+const results=document.getElementById("results");
+
+const namesDiv=document.getElementById("childrenNames");
+
+document.getElementById("createChildren").onclick=createChildrenInputs;
+document.getElementById("startButton").onclick=startAssessment;
+document.getElementById("previousButton").onclick=previousQuestion;
+document.getElementById("nextButton").onclick=nextQuestion;
+document.getElementById("restartButton").onclick=restart;
+
+createChildrenInputs();
+
+function createChildrenInputs(){
+
+namesDiv.innerHTML="";
+
+const n=parseInt(document.getElementById("numChildren").value);
+
+for(let i=0;i<n;i++){
+
+const div=document.createElement("div");
+div.className="child-name-row";
+
+div.innerHTML=`
+<label>Nome bambino ${i+1}
+<input type="text" value="Bambino ${i+1}">
+</label>`;
+
+namesDiv.appendChild(div);
+
+}
+
+}
+
+function startAssessment(){
+
+children=[...namesDiv.querySelectorAll("input")].map(e=>e.value||"Bambino");
+
+answers={};
+
+children.forEach(c=>{
+answers[c]=Array(35).fill(null);
+});
+
+currentQuestion=0;
+
+setup.classList.add("hidden");
+assessment.classList.remove("hidden");
+
+showQuestion();
+
+}
+
+function showQuestion(){
+
+const q=questions[currentQuestion];
+
+document.getElementById("questionNumber").innerHTML=
+`Domanda ${currentQuestion+1} di ${questions.length}`;
+
+document.getElementById("questionCategory").innerHTML=q.category;
+
+document.getElementById("questionText").innerHTML=q.text;
+
+const container=document.getElementById("answersContainer");
+
+container.innerHTML="";
+children.forEach(child=>{
+
+const card=document.createElement("div");
+card.className="answer-card";
+
+const title=document.createElement("h4");
+title.textContent=child;
+
+const options=document.createElement("div");
+options.className="options";
+
+for(let score=1;score<=5;score++){
+
+const label=document.createElement("label");
+label.className="option";
+
+const radio=document.createElement("input");
+radio.type="radio";
+radio.name=`${child}-${currentQuestion}`;
+radio.value=score;
+
+if(answers[child][currentQuestion]===score){
+radio.checked=true;
+}
+
+radio.onchange=()=>{
+answers[child][currentQuestion]=score;
+save();
+};
+
+const span=document.createElement("span");
+span.textContent=`${score} - ${labels[score-1]}`;
+
+label.appendChild(radio);
+label.appendChild(span);
+options.appendChild(label);
+
+}
+
+card.appendChild(title);
+card.appendChild(options);
+container.appendChild(card);
+
+});
+
+document.getElementById("previousButton").disabled=currentQuestion===0;
+
+document.getElementById("nextButton").textContent=
+currentQuestion===questions.length-1 ? "Mostra risultati" : "Avanti →";
+
+save();
+
+}
+
+function previousQuestion(){
+
+if(currentQuestion>0){
+currentQuestion--;
+showQuestion();
+}
+
+}
+
+function nextQuestion(){
+
+if(!isComplete()){
+alert("Rispondi alla domanda per tutti i bambini prima di continuare.");
+return;
+}
+
+if(currentQuestion<questions.length-1){
+currentQuestion++;
+showQuestion();
+}else{
+showResults();
+}
+
+}
+
+function isComplete(){
+
+return children.every(child=>answers[child][currentQuestion]!==null);
+
+}
+
+function calculateScores(){
+
+const scores={};
+
+children.forEach(child=>{
+
+scores[child]={};
+
+categories.forEach(cat=>{
+scores[child][cat]=0;
+});
+
+questions.forEach((q,i)=>{
+scores[child][q.category]+=answers[child][i];
+});
+
+});
+
+return scores;
+
+}
+
+function showResults(){
+
+const scores=calculateScores();
+
+assessment.classList.add("hidden");
+results.classList.remove("hidden");
+
+drawRadar(scores);
+drawSummary(scores);
+
+save();
+
+}
+
+function drawRadar(scores){
+
+const ctx=document.getElementById("radarChart");
+
+if(radar){
+radar.destroy();
+}
+
+radar=new Chart(ctx,{
+type:"radar",
+data:{
+labels:categories,
+datasets:children.map(child=>({
+label:child,
+data:categories.map(cat=>scores[child][cat]),
+fill:true
+}))
+},
+options:{
+responsive:true,
+scales:{
+r:{
+min:0,
+max:25,
+ticks:{
+stepSize:5
+}
+}
+}
+}
+});
+
+}
+function drawSummary(scores){
+
+const summary=document.getElementById("summary");
+summary.innerHTML="";
+
+children.forEach(child=>{
+
+const ordered=Object.entries(scores[child])
+.sort((a,b)=>b[1]-a[1]);
+
+const strongest=ordered[0];
+const weakest=ordered[ordered.length-1];
+
+const div=document.createElement("div");
+div.className="answer-card";
+
+div.innerHTML=`
+<h3>${child}</h3>
+<p><strong>Punto di forza principale:</strong> ${strongest[0]} (${strongest[1]}/25)</p>
+<p><strong>Area da incoraggiare:</strong> ${weakest[0]} (${weakest[1]}/25)</p>
+<table>
+<tr>
+<th>Area</th>
+<th>Punteggio</th>
+</tr>
+${ordered.map(([cat,score])=>`
+<tr>
+<td>${cat}</td>
+<td>${score}/25</td>
+</tr>
+`).join("")}
+</table>
+`;
+
+summary.appendChild(div);
+
+});
+
+}
+
+function save(){
+
+const data={
+children,
+answers,
+currentQuestion,
+screen:results.classList.contains("hidden") ? "assessment" : "results"
+};
+
+localStorage.setItem("assessmentCarattereBambini",JSON.stringify(data));
+
+}
+
+function load(){
+
+const raw=localStorage.getItem("assessmentCarattereBambini");
+
+if(!raw){
+return;
+}
+
+try{
+
+const data=JSON.parse(raw);
+
+if(!data.children || !data.answers){
+return;
+}
+
+children=data.children;
+answers=data.answers;
+currentQuestion=data.currentQuestion || 0;
+
+setup.classList.add("hidden");
+
+if(data.screen==="results"){
+results.classList.remove("hidden");
+assessment.classList.add("hidden");
+const scores=calculateScores();
+drawRadar(scores);
+drawSummary(scores);
+}else{
+assessment.classList.remove("hidden");
+results.classList.add("hidden");
+showQuestion();
+}
+
+}catch(e){
+console.error(e);
+}
+
+}
+
+function restart(){
+
+if(!confirm("Vuoi cancellare i dati salvati e iniziare un nuovo assessment?")){
+return;
+}
+
+localStorage.removeItem("assessmentCarattereBambini");
+
+children=[];
+answers={};
+currentQuestion=0;
+
+results.classList.add("hidden");
+assessment.classList.add("hidden");
+setup.classList.remove("hidden");
+
+createChildrenInputs();
+
+}
+
+load();
+
+</script>
+
+</body>
+</html>
