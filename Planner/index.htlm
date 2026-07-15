@@ -1,0 +1,2077 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agenda figli offline</title>
+  <style>
+    :root {
+      --bg: #f7f8f6;
+      --panel: #ffffff;
+      --panel-soft: #eef6f3;
+      --text: #1e2329;
+      --muted: #5d6673;
+      --line: #d8ded9;
+      --focus: #0f766e;
+      --primary: #0f766e;
+      --primary-strong: #115e59;
+      --danger: #b42318;
+      --warning: #a15c07;
+      --blue: #2563eb;
+      --shadow: 0 12px 32px rgba(27, 42, 38, .10);
+      --radius: 8px;
+      --tap: 44px;
+    }
+
+    * { box-sizing: border-box; }
+    html { color-scheme: light; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.45;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button, a, input, select, textarea, summary {
+      outline-offset: 3px;
+    }
+
+    :focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--focus) 70%, white);
+      outline-offset: 3px;
+    }
+
+    .app-shell {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(247, 248, 246, .96);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 18px 10px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      background: #163b36;
+      color: white;
+      font-weight: 800;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 0;
+      font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+      letter-spacing: 0;
+    }
+    .subtitle {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .tab {
+      min-height: 40px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--text);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .tab[aria-selected="true"] {
+      background: #163b36;
+      border-color: #163b36;
+      color: white;
+      font-weight: 700;
+    }
+
+    main {
+      max-width: 1180px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 22px 18px 52px;
+    }
+
+    .view-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .view-head h2 {
+      margin-bottom: 4px;
+      font-size: clamp(1.35rem, 2.4vw, 2rem);
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .section.unframed {
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+      padding: 0;
+    }
+
+    .section h3 {
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+    }
+
+    .stack { display: grid; gap: 10px; }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .row.spread { justify-content: space-between; }
+
+    .button {
+      min-height: var(--tap);
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 9px 13px;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      text-decoration: none;
+    }
+
+    .button:hover { background: var(--primary-strong); }
+    .button.secondary {
+      background: var(--panel);
+      color: var(--text);
+      border-color: var(--line);
+    }
+    .button.secondary:hover { background: #eef2ef; }
+    .button.danger {
+      background: var(--danger);
+      color: white;
+    }
+    .button.warning {
+      background: #fff7ed;
+      color: #873c00;
+      border-color: #fed7aa;
+    }
+    .button.small {
+      min-height: 36px;
+      padding: 6px 10px;
+      font-size: .92rem;
+    }
+
+    .filters {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 5px;
+      color: var(--text);
+      font-weight: 650;
+      font-size: .94rem;
+    }
+
+    input, select, textarea {
+      min-height: 42px;
+      width: 100%;
+      border: 1px solid #c8d0cb;
+      border-radius: var(--radius);
+      background: white;
+      color: var(--text);
+      padding: 9px 10px;
+    }
+
+    textarea {
+      min-height: 96px;
+      resize: vertical;
+    }
+
+    input[type="checkbox"], input[type="radio"] {
+      width: 18px;
+      min-height: 18px;
+      accent-color: var(--primary);
+    }
+
+    .choice-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .checkline {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      font-weight: 500;
+    }
+
+    .empty {
+      border: 1px dashed #b9c3bd;
+      border-radius: var(--radius);
+      padding: 18px;
+      color: var(--muted);
+      background: #fbfcfb;
+    }
+
+    .event-card {
+      background: white;
+      border: 1px solid var(--line);
+      border-left: 6px solid var(--primary);
+      border-radius: var(--radius);
+      padding: 13px;
+      display: grid;
+      gap: 9px;
+    }
+
+    .event-card.archived,
+    .child-card.archived {
+      opacity: .68;
+      background: #f5f5f4;
+    }
+
+    .event-title {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .event-title h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: .94rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 28px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #f7faf8;
+      color: #25312d;
+      font-size: .86rem;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .child-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: #111827;
+      background: #f3f4f6;
+      border: 1px solid var(--line);
+      font-weight: 700;
+    }
+
+    .avatar {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      color: white;
+      font-size: .78rem;
+      font-weight: 800;
+      flex: 0 0 auto;
+    }
+
+    .day-group {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .day-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #26332f;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+      margin: 0;
+    }
+
+    .child-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+
+    details.advanced {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfcfb;
+      padding: 8px 10px;
+    }
+
+    details.advanced > summary {
+      cursor: pointer;
+      font-weight: 750;
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      background: rgba(13, 24, 22, .48);
+      display: none;
+      align-items: stretch;
+      justify-content: flex-end;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .panel {
+      width: min(720px, 100%);
+      background: var(--panel);
+      min-height: 100%;
+      overflow: auto;
+      box-shadow: -20px 0 50px rgba(0, 0, 0, .20);
+      padding: 18px;
+    }
+
+    .panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+      position: sticky;
+      top: 0;
+      background: var(--panel);
+      padding-bottom: 10px;
+      z-index: 1;
+    }
+
+    .steps {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .step-chip {
+      min-height: 30px;
+      border: 1px solid var(--line);
+      background: #f7faf8;
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: var(--muted);
+      font-size: .85rem;
+    }
+
+    .step-chip.active {
+      background: #163b36;
+      color: white;
+      border-color: #163b36;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .form-grid .full { grid-column: 1 / -1; }
+
+    .inline-error {
+      color: var(--danger);
+      font-size: .9rem;
+      font-weight: 650;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      z-index: 90;
+      background: #163b36;
+      color: white;
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      box-shadow: var(--shadow);
+      min-width: min(380px, calc(100vw - 28px));
+      text-align: center;
+      display: none;
+    }
+
+    .toast.show { display: block; }
+
+    .data-box {
+      border: 1px solid var(--line);
+      background: #fbfcfb;
+      border-radius: var(--radius);
+      padding: 12px;
+      overflow: auto;
+      max-height: 260px;
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: .86rem;
+    }
+
+    .packing-list {
+      display: grid;
+      gap: 7px;
+      padding-top: 2px;
+    }
+
+    .week-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 860px) {
+      .grid-3, .grid-2, .form-grid {
+        grid-template-columns: 1fr;
+      }
+      .brand-row, .view-head {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .actions {
+        justify-content: stretch;
+      }
+      .actions .button {
+        flex: 1 1 160px;
+      }
+      .panel {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .topbar-inner, main { padding-left: 12px; padding-right: 12px; }
+      .tabs { gap: 6px; }
+      .tab { padding: 8px 10px; }
+      .section { padding: 13px; }
+      .event-title { display: grid; }
+      .button { width: 100%; }
+      .row .button { width: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand-row">
+          <div class="brand">
+            <div class="brand-mark" aria-hidden="true">AF</div>
+            <div>
+              <h1>Agenda figli offline</h1>
+              <p class="subtitle">Impegni condivisi, chiari, salvati su questo dispositivo.</p>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="button" id="quickAddEvent" type="button">+ Aggiungi impegno</button>
+            <button class="button secondary" id="quickAddChild" type="button">+ Aggiungi figlio</button>
+          </div>
+        </div>
+        <nav class="tabs" aria-label="Schermate principali" id="tabs"></nav>
+      </div>
+    </header>
+    <main id="app" tabindex="-1"></main>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <section class="panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="panel-head">
+        <div>
+          <h2 id="modalTitle">Modifica</h2>
+          <p class="subtitle" id="modalSubtitle"></p>
+        </div>
+        <button class="button secondary small" id="modalClose" type="button">Chiudi</button>
+      </div>
+      <div id="modalBody"></div>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const SCHEMA_VERSION = 1;
+      const STORAGE_KEY = "agenda_figli_offline_v1";
+      const WEEKDAYS = [
+        { value: 1, short: "Lun", long: "Lunedì" },
+        { value: 2, short: "Mar", long: "Martedì" },
+        { value: 3, short: "Mer", long: "Mercoledì" },
+        { value: 4, short: "Gio", long: "Giovedì" },
+        { value: 5, short: "Ven", long: "Venerdì" },
+        { value: 6, short: "Sab", long: "Sabato" },
+        { value: 0, short: "Dom", long: "Domenica" }
+      ];
+      const CATEGORIES = ["scuola", "sport", "centro estivo", "festa", "appuntamento", "altro"];
+      const EVENT_TYPES = [
+        { value: "single", label: "Singolo" },
+        { value: "recurring", label: "Ricorrente" },
+        { value: "continuous", label: "Continuativo" }
+      ];
+      const MEALS = [
+        { value: "mensa", label: "Mensa" },
+        { value: "merenda inclusa", label: "Merenda inclusa" },
+        { value: "pranzo al sacco", label: "Pranzo al sacco" }
+      ];
+
+      const state = {
+        data: loadData(),
+        view: "home",
+        weekStart: startOfWeek(new Date()),
+        filters: { childId: "all", category: "all", eventType: "all" },
+        tempChecklist: {},
+        lastFocus: null
+      };
+
+      const els = {
+        app: document.getElementById("app"),
+        tabs: document.getElementById("tabs"),
+        modal: document.getElementById("modalBackdrop"),
+        modalTitle: document.getElementById("modalTitle"),
+        modalSubtitle: document.getElementById("modalSubtitle"),
+        modalBody: document.getElementById("modalBody"),
+        modalClose: document.getElementById("modalClose"),
+        toast: document.getElementById("toast")
+      };
+
+      const VIEWS = [
+        { id: "home", label: "Home" },
+        { id: "week", label: "Settimana" },
+        { id: "agenda", label: "Agenda" },
+        { id: "children", label: "Figli" },
+        { id: "events", label: "Impegni" },
+        { id: "data", label: "Dati" }
+      ];
+
+      function uid(prefix) {
+        return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+      }
+
+      function todayISO() {
+        return toISODate(new Date());
+      }
+
+      function toISODate(date) {
+        const copy = new Date(date);
+        copy.setHours(0, 0, 0, 0);
+        const year = copy.getFullYear();
+        const month = String(copy.getMonth() + 1).padStart(2, "0");
+        const day = String(copy.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
+
+      function parseISODate(value) {
+        if (!value) return null;
+        const [y, m, d] = value.split("-").map(Number);
+        if (!y || !m || !d) return null;
+        return new Date(y, m - 1, d);
+      }
+
+      function addDays(date, days) {
+        const copy = new Date(date);
+        copy.setDate(copy.getDate() + days);
+        return copy;
+      }
+
+      function startOfWeek(date) {
+        const copy = new Date(date);
+        copy.setHours(0, 0, 0, 0);
+        const day = copy.getDay();
+        const diff = day === 0 ? -6 : 1 - day;
+        return addDays(copy, diff);
+      }
+
+      function formatDate(value, options = {}) {
+        const date = typeof value === "string" ? parseISODate(value) : value;
+        if (!date) return "";
+        return new Intl.DateTimeFormat("it-IT", {
+          weekday: options.weekday ? "long" : undefined,
+          day: "2-digit",
+          month: "short",
+          year: options.year ? "numeric" : undefined
+        }).format(date);
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+        }[char]));
+      }
+
+      function normalizeColor(value, fallback = "#0f766e") {
+        return /^#[0-9a-f]{6}$/i.test(value || "") ? value : fallback;
+      }
+
+      function createEmptyData() {
+        return {
+          schemaVersion: SCHEMA_VERSION,
+          exportedAt: null,
+          settings: { weekStartsOn: 1 },
+          children: [],
+          events: [],
+          lastSavedAt: null
+        };
+      }
+
+      function migrateData(raw) {
+        const base = createEmptyData();
+        if (!raw || typeof raw !== "object") return base;
+        const migrated = {
+          ...base,
+          ...raw,
+          schemaVersion: SCHEMA_VERSION,
+          settings: { ...base.settings, ...(raw.settings || {}) },
+          children: Array.isArray(raw.children) ? raw.children : [],
+          events: Array.isArray(raw.events) ? raw.events : []
+        };
+        migrated.children = migrated.children.map((child) => ({
+          id: String(child.id || uid("child")),
+          name: String(child.name || "Senza nome"),
+          color: normalizeColor(child.color),
+          avatar: String(child.avatar || child.name?.[0] || "?").slice(0, 2),
+          notes: String(child.notes || ""),
+          archived: Boolean(child.archived)
+        }));
+        migrated.events = migrated.events.map(normalizeEvent);
+        return migrated;
+      }
+
+      function normalizeEvent(event) {
+        const eventType = ["single", "recurring", "continuous"].includes(event.eventType) ? event.eventType : "single";
+        const category = CATEGORIES.includes(event.category) ? event.category : "altro";
+        const timeMode = event.timeMode === "window" ? "window" : "fixed";
+        const fixedTime = event.fixedTime && typeof event.fixedTime === "object"
+          ? { start: String(event.fixedTime.start || ""), end: String(event.fixedTime.end || "") }
+          : { start: "", end: "" };
+        const timeWindow = event.timeWindow && typeof event.timeWindow === "object"
+          ? {
+              entryStart: String(event.timeWindow.entryStart || ""),
+              entryEnd: String(event.timeWindow.entryEnd || ""),
+              exitStart: String(event.timeWindow.exitStart || ""),
+              exitEnd: String(event.timeWindow.exitEnd || "")
+            }
+          : { entryStart: "", entryEnd: "", exitStart: "", exitEnd: "" };
+        return {
+          id: String(event.id || uid("event")),
+          title: String(event.title || "Impegno senza titolo"),
+          category,
+          eventType,
+          childIds: Array.isArray(event.childIds) ? event.childIds.map(String) : [],
+          location: String(event.location || ""),
+          date: String(event.date || event.startDate || todayISO()),
+          startDate: String(event.startDate || event.date || todayISO()),
+          endDate: String(event.endDate || ""),
+          weekdays: Array.isArray(event.weekdays) ? event.weekdays.map(Number).filter((d) => d >= 0 && d <= 6) : [],
+          timeMode,
+          fixedTime: timeMode === "fixed" ? fixedTime : null,
+          timeWindow: timeMode === "window" ? timeWindow : null,
+          mealOptions: Array.isArray(event.mealOptions) ? event.mealOptions.map(String) : [],
+          notes: String(event.notes || ""),
+          packingList: Array.isArray(event.packingList)
+            ? event.packingList.map((item) => ({ id: String(item.id || uid("item")), label: String(item.label || "") })).filter((item) => item.label)
+            : [],
+          closures: Array.isArray(event.closures) ? event.closures.map(normalizeClosure).filter(Boolean) : [],
+          exceptions: Array.isArray(event.exceptions) ? event.exceptions.map(normalizeException).filter(Boolean) : [],
+          archived: Boolean(event.archived)
+        };
+      }
+
+      function normalizeClosure(closure) {
+        if (!closure || typeof closure !== "object") return null;
+        const type = closure.type === "range" ? "range" : "date";
+        return {
+          id: String(closure.id || uid("closure")),
+          type,
+          date: String(closure.date || ""),
+          startDate: String(closure.startDate || ""),
+          endDate: String(closure.endDate || ""),
+          reason: String(closure.reason || "")
+        };
+      }
+
+      function normalizeException(exception) {
+        if (!exception || typeof exception !== "object") return null;
+        const type = exception.type === "cancelled" ? "cancelled" : "modified_time";
+        return {
+          id: String(exception.id || uid("exception")),
+          date: String(exception.date || ""),
+          type,
+          fixedTime: exception.fixedTime ? {
+            start: String(exception.fixedTime.start || ""),
+            end: String(exception.fixedTime.end || "")
+          } : null,
+          timeWindow: exception.timeWindow ? {
+            entryStart: String(exception.timeWindow.entryStart || ""),
+            entryEnd: String(exception.timeWindow.entryEnd || ""),
+            exitStart: String(exception.timeWindow.exitStart || ""),
+            exitEnd: String(exception.timeWindow.exitEnd || "")
+          } : null,
+          note: String(exception.note || "")
+        };
+      }
+
+      function loadData() {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (!stored) return createEmptyData();
+          return migrateData(JSON.parse(stored));
+        } catch (error) {
+          console.warn("Dati locali non leggibili. Uso un archivio vuoto.", error);
+          return createEmptyData();
+        }
+      }
+
+      function saveData(message = "Salvato") {
+        state.data.lastSavedAt = new Date().toISOString();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+        if (message) showToast(message);
+      }
+
+      function validateImportedData(candidate) {
+        const errors = [];
+        if (!candidate || typeof candidate !== "object") errors.push("Il file deve contenere un oggetto JSON.");
+        if (!Number.isInteger(candidate?.schemaVersion)) errors.push("Manca schemaVersion numerico.");
+        if (!Array.isArray(candidate?.children)) errors.push("children deve essere un array.");
+        if (!Array.isArray(candidate?.events)) errors.push("events deve essere un array.");
+        const childIds = new Set();
+        (candidate?.children || []).forEach((child, index) => {
+          if (!child.id) errors.push(`Figlio ${index + 1}: manca id.`);
+          if (!child.name) errors.push(`Figlio ${index + 1}: manca nome.`);
+          if (child.id && childIds.has(child.id)) errors.push(`Id figlio duplicato: ${child.id}.`);
+          childIds.add(child.id);
+        });
+        (candidate?.events || []).forEach((event, index) => {
+          if (!event.id) errors.push(`Impegno ${index + 1}: manca id.`);
+          if (!event.title) errors.push(`Impegno ${index + 1}: manca titolo.`);
+          if (!["single", "recurring", "continuous"].includes(event.eventType)) errors.push(`Impegno ${index + 1}: tipologia non valida.`);
+          if (!Array.isArray(event.childIds)) errors.push(`Impegno ${index + 1}: childIds deve essere un array.`);
+          (event.childIds || []).forEach((childId) => {
+            if (!childIds.has(childId)) errors.push(`Impegno "${event.title || index + 1}": figlio non trovato (${childId}).`);
+          });
+        });
+        return { ok: errors.length === 0, errors };
+      }
+
+      function exportPayload(data = state.data) {
+        return {
+          schemaVersion: SCHEMA_VERSION,
+          exportedAt: new Date().toISOString(),
+          settings: data.settings,
+          children: data.children,
+          events: data.events
+        };
+      }
+
+      function downloadJSON(filename, payload) {
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function makeSampleData() {
+        const children = [
+          { id: "child_anna", name: "Anna", color: "#0f766e", avatar: "A", notes: "Ama sapere il piano in anticipo.", archived: false },
+          { id: "child_luca", name: "Luca", color: "#2563eb", avatar: "L", notes: "Preferisce checklist brevi.", archived: false },
+          { id: "child_mia", name: "Mia", color: "#c2410c", avatar: "M", notes: "Portare sempre borraccia.", archived: false }
+        ];
+        const events = [
+          {
+            id: "event_asilo",
+            title: "Asilo Bosco Chiaro",
+            category: "scuola",
+            eventType: "continuous",
+            childIds: ["child_anna", "child_luca"],
+            location: "Via delle Robinie 12",
+            date: "2026-09-07",
+            startDate: "2026-09-07",
+            endDate: "2027-06-30",
+            weekdays: [1, 2, 3, 4, 5],
+            timeMode: "window",
+            fixedTime: null,
+            timeWindow: { entryStart: "08:00", entryEnd: "09:00", exitStart: "16:00", exitEnd: "17:00" },
+            mealOptions: ["mensa", "merenda inclusa"],
+            notes: "Sacchetto cambio il lunedì. Comunicazioni in bacheca.",
+            packingList: [
+              { id: "item_asilo_1", label: "Cambio completo" },
+              { id: "item_asilo_2", label: "Borraccia" },
+              { id: "item_asilo_3", label: "Grembiule" }
+            ],
+            closures: [
+              { id: "closure_asilo_1", type: "date", date: "2026-12-08", startDate: "", endDate: "", reason: "Festività" },
+              { id: "closure_asilo_2", type: "range", date: "", startDate: "2026-12-23", endDate: "2027-01-06", reason: "Vacanze di Natale" }
+            ],
+            exceptions: [
+              { id: "exception_asilo_1", date: "2027-06-10", type: "modified_time", fixedTime: { start: "08:00", end: "13:00" }, timeWindow: null, note: "Uscita anticipata" }
+            ],
+            archived: false
+          },
+          {
+            id: "event_nuoto",
+            title: "Nuoto insieme",
+            category: "sport",
+            eventType: "recurring",
+            childIds: ["child_anna", "child_luca", "child_mia"],
+            location: "Piscina comunale",
+            date: "2026-09-12",
+            startDate: "2026-09-12",
+            endDate: "2027-06-26",
+            weekdays: [6],
+            timeMode: "fixed",
+            fixedTime: { start: "10:00", end: "11:00" },
+            timeWindow: null,
+            mealOptions: [],
+            notes: "Arrivare 10 minuti prima.",
+            packingList: [
+              { id: "item_nuoto_1", label: "Costume" },
+              { id: "item_nuoto_2", label: "Cuffia" },
+              { id: "item_nuoto_3", label: "Accappatoio" },
+              { id: "item_nuoto_4", label: "Ciabatte" },
+              { id: "item_nuoto_5", label: "Occhialini" },
+              { id: "item_nuoto_6", label: "Cambio" },
+              { id: "item_nuoto_7", label: "Borraccia" }
+            ],
+            closures: [],
+            exceptions: [
+              { id: "exception_nuoto_1", date: "2027-03-13", type: "cancelled", fixedTime: null, timeWindow: null, note: "Gara in piscina" }
+            ],
+            archived: false
+          },
+          {
+            id: "event_festa",
+            title: "Festa di compleanno di Giulia",
+            category: "festa",
+            eventType: "single",
+            childIds: ["child_mia"],
+            location: "Parco Arcobaleno",
+            date: "2026-07-25",
+            startDate: "2026-07-25",
+            endDate: "",
+            weekdays: [],
+            timeMode: "fixed",
+            fixedTime: { start: "16:00", end: "18:30" },
+            timeWindow: null,
+            mealOptions: ["merenda inclusa"],
+            notes: "Portare regalo già incartato.",
+            packingList: [{ id: "item_festa_1", label: "Regalo" }],
+            closures: [],
+            exceptions: [],
+            archived: false
+          },
+          {
+            id: "event_centro_estivo",
+            title: "Centro estivo Natura",
+            category: "centro estivo",
+            eventType: "continuous",
+            childIds: ["child_anna", "child_mia"],
+            location: "Cascina Verde",
+            date: "2026-07-20",
+            startDate: "2026-07-20",
+            endDate: "2026-08-07",
+            weekdays: [1, 2, 3, 4, 5],
+            timeMode: "fixed",
+            fixedTime: { start: "08:30", end: "16:30" },
+            timeWindow: null,
+            mealOptions: ["pranzo al sacco"],
+            notes: "Crema solare già applicata al mattino.",
+            packingList: [
+              { id: "item_estivo_1", label: "Cappellino" },
+              { id: "item_estivo_2", label: "Crema solare" },
+              { id: "item_estivo_3", label: "Pranzo al sacco" },
+              { id: "item_estivo_4", label: "Borraccia" }
+            ],
+            closures: [{ id: "closure_estivo_1", type: "date", date: "2026-07-31", startDate: "", endDate: "", reason: "Gita annullata: centro chiuso" }],
+            exceptions: [{ id: "exception_estivo_1", date: "2026-07-24", type: "modified_time", fixedTime: { start: "08:30", end: "13:00" }, timeWindow: null, note: "Uscita anticipata" }],
+            archived: false
+          }
+        ];
+        return {
+          schemaVersion: SCHEMA_VERSION,
+          exportedAt: new Date().toISOString(),
+          settings: { weekStartsOn: 1 },
+          children,
+          events
+        };
+      }
+
+      function getActiveChildren() {
+        return state.data.children.filter((child) => !child.archived);
+      }
+
+      function childById(id) {
+        return state.data.children.find((child) => child.id === id);
+      }
+
+      function childrenForEvent(event) {
+        return event.childIds.map(childById).filter(Boolean);
+      }
+
+      function timeLabel(eventOrOccurrence) {
+        const event = eventOrOccurrence.event || eventOrOccurrence;
+        const fixed = eventOrOccurrence.fixedTime || event.fixedTime;
+        const windowTime = eventOrOccurrence.timeWindow || event.timeWindow;
+        if (event.timeMode === "window" && windowTime) {
+          return `Ingresso ${windowTime.entryStart || "?"}-${windowTime.entryEnd || "?"} · Uscita ${windowTime.exitStart || "?"}-${windowTime.exitEnd || "?"}`;
+        }
+        if (fixed?.start || fixed?.end) return `${fixed.start || "?"}-${fixed.end || "?"}`;
+        return "Orario non indicato";
+      }
+
+      function eventAccent(event) {
+        const first = childrenForEvent(event)[0];
+        return normalizeColor(first?.color, "#0f766e");
+      }
+
+      function eventMatchesDate(event, dateISO) {
+        if (event.archived) return false;
+        if (event.eventType === "single") return event.date === dateISO;
+        const date = parseISODate(dateISO);
+        const start = parseISODate(event.startDate);
+        const end = parseISODate(event.endDate || dateISO);
+        if (!date || !start || date < start || (end && date > end)) return false;
+        if (!event.weekdays.includes(date.getDay())) return false;
+        return true;
+      }
+
+      function closureForDate(event, dateISO) {
+        return event.closures.find((closure) => {
+          if (closure.type === "date") return closure.date === dateISO;
+          if (closure.type === "range") return closure.startDate <= dateISO && closure.endDate >= dateISO;
+          return false;
+        });
+      }
+
+      function exceptionForDate(event, dateISO) {
+        return event.exceptions.find((exception) => exception.date === dateISO);
+      }
+
+      function occurrenceForDate(event, dateISO) {
+        if (!eventMatchesDate(event, dateISO)) return null;
+        const closure = closureForDate(event, dateISO);
+        if (closure) return null;
+        const exception = exceptionForDate(event, dateISO);
+        if (exception?.type === "cancelled") return null;
+        return {
+          id: `${event.id}_${dateISO}`,
+          event,
+          eventId: event.id,
+          date: dateISO,
+          fixedTime: exception?.fixedTime || event.fixedTime,
+          timeWindow: exception?.timeWindow || event.timeWindow,
+          exceptionNote: exception?.note || "",
+          changed: Boolean(exception)
+        };
+      }
+
+      function occurrencesBetween(startDate, endDate, options = {}) {
+        const start = typeof startDate === "string" ? parseISODate(startDate) : startDate;
+        const end = typeof endDate === "string" ? parseISODate(endDate) : endDate;
+        const childId = options.childId || "all";
+        const category = options.category || "all";
+        const eventType = options.eventType || "all";
+        const occurrences = [];
+        for (let cursor = new Date(start); cursor <= end; cursor = addDays(cursor, 1)) {
+          const dateISO = toISODate(cursor);
+          state.data.events.forEach((event) => {
+            if (childId !== "all" && !event.childIds.includes(childId)) return;
+            if (category !== "all" && event.category !== category) return;
+            if (eventType !== "all" && event.eventType !== eventType) return;
+            const occurrence = occurrenceForDate(event, dateISO);
+            if (occurrence) occurrences.push(occurrence);
+          });
+        }
+        return occurrences.sort(compareOccurrences);
+      }
+
+      function compareOccurrences(a, b) {
+        const dateCompare = a.date.localeCompare(b.date);
+        if (dateCompare) return dateCompare;
+        const aTime = a.fixedTime?.start || a.timeWindow?.entryStart || "99:99";
+        const bTime = b.fixedTime?.start || b.timeWindow?.entryStart || "99:99";
+        return aTime.localeCompare(bTime) || a.event.title.localeCompare(b.event.title);
+      }
+
+      function upcomingChanges(days = 45) {
+        const today = todayISO();
+        const end = toISODate(addDays(new Date(), days));
+        const changes = [];
+        state.data.events.filter((event) => !event.archived).forEach((event) => {
+          [
+            { date: event.startDate, label: "Inizio attività" },
+            { date: event.endDate, label: "Fine attività" }
+          ].forEach((item) => {
+            if (item.date && item.date >= today && item.date <= end) {
+              changes.push({ date: item.date, title: event.title, detail: item.label, event });
+            }
+          });
+          if (event.eventType === "single" && event.date >= today && event.date <= end) {
+            changes.push({ date: event.date, title: event.title, detail: "Evento singolo", event });
+          }
+          event.closures.forEach((closure) => {
+            const date = closure.type === "date" ? closure.date : closure.startDate;
+            if (date && date >= today && date <= end) {
+              changes.push({ date, title: event.title, detail: closure.reason || "Chiusura", event });
+            }
+          });
+          event.exceptions.forEach((exception) => {
+            if (exception.date >= today && exception.date <= end) {
+              changes.push({
+                date: exception.date,
+                title: event.title,
+                detail: exception.type === "cancelled" ? "Annullato" : (exception.note || "Variazione orario"),
+                event
+              });
+            }
+          });
+        });
+        return changes.sort((a, b) => a.date.localeCompare(b.date)).slice(0, 8);
+      }
+
+      function renderTabs() {
+        els.tabs.innerHTML = VIEWS.map((view) => `
+          <button class="tab" type="button" data-view="${view.id}" aria-selected="${state.view === view.id}">
+            ${escapeHtml(view.label)}
+          </button>
+        `).join("");
+        els.tabs.querySelectorAll(".tab").forEach((tab) => {
+          tab.addEventListener("click", () => {
+            state.view = tab.dataset.view;
+            render();
+            els.app.focus();
+          });
+        });
+      }
+
+      function render() {
+        renderTabs();
+        const renderers = {
+          home: renderHome,
+          week: renderWeek,
+          agenda: renderAgenda,
+          children: renderChildren,
+          events: renderEvents,
+          data: renderData
+        };
+        els.app.innerHTML = renderers[state.view]();
+        bindViewActions();
+      }
+
+      function viewHeader(title, text, action = "") {
+        return `
+          <div class="view-head">
+            <div>
+              <h2>${escapeHtml(title)}</h2>
+              <p class="subtitle">${escapeHtml(text)}</p>
+            </div>
+            ${action}
+          </div>
+        `;
+      }
+
+      function renderHome() {
+        const today = todayISO();
+        const weekStart = startOfWeek(new Date());
+        const weekEnd = addDays(weekStart, 6);
+        const todayItems = occurrencesBetween(today, today);
+        const weekItems = occurrencesBetween(weekStart, weekEnd).slice(0, 7);
+        const changes = upcomingChanges();
+        return `
+          ${viewHeader("Home", "Tre cose da guardare: oggi, settimana, cambiamenti.")}
+          <div class="grid-3">
+            <section class="section">
+              <h3>Oggi</h3>
+              <div class="stack">${renderOccurrenceList(todayItems, "Nessun impegno per oggi.")}</div>
+            </section>
+            <section class="section">
+              <h3>Questa settimana</h3>
+              <div class="stack">${renderOccurrenceList(weekItems, "Nessun impegno questa settimana.")}</div>
+            </section>
+            <section class="section">
+              <h3>Prossimi cambiamenti</h3>
+              <div class="stack">${changes.length ? changes.map(renderChange).join("") : `<div class="empty">Nessun cambiamento imminente.</div>`}</div>
+            </section>
+          </div>
+        `;
+      }
+
+      function renderWeek() {
+        const start = state.weekStart;
+        const end = addDays(start, 6);
+        const items = occurrencesBetween(start, end, { childId: state.filters.childId });
+        const groups = groupBy(items, "date");
+        return `
+          ${viewHeader("Vista settimana", `${formatDate(start, { year: true })} - ${formatDate(end, { year: true })}`)}
+          <div class="week-nav">
+            <div class="row">
+              <button class="button secondary small" type="button" data-week-move="-7">← Settimana prima</button>
+              <button class="button secondary small" type="button" data-week-today="true">Oggi</button>
+              <button class="button secondary small" type="button" data-week-move="7">Settimana dopo →</button>
+            </div>
+            <label>
+              Filtra per figlio
+              <select data-filter-child>
+                ${renderChildOptions(state.filters.childId, true)}
+              </select>
+            </label>
+          </div>
+          <div class="stack">
+            ${Array.from({ length: 7 }, (_, index) => {
+              const date = toISODate(addDays(start, index));
+              const dayItems = groups[date] || [];
+              return `
+                <section class="day-group">
+                  <h3 class="day-title">${formatDate(date, { weekday: true, year: true })}</h3>
+                  ${renderOccurrenceList(dayItems, "Nessun impegno.")}
+                </section>
+              `;
+            }).join("")}
+          </div>
+        `;
+      }
+
+      function renderAgenda() {
+        const start = new Date();
+        const end = addDays(start, 90);
+        const items = occurrencesBetween(start, end, { childId: state.filters.childId });
+        const groups = groupBy(items, "date");
+        return `
+          ${viewHeader("Agenda", "Elenco cronologico dei prossimi 90 giorni.")}
+          <div class="filters">
+            <label>
+              Figlio
+              <select data-filter-child>${renderChildOptions(state.filters.childId, true)}</select>
+            </label>
+          </div>
+          <div>
+            ${items.length ? Object.keys(groups).map((date) => `
+              <section class="day-group">
+                <h3 class="day-title">${formatDate(date, { weekday: true, year: true })}</h3>
+                ${renderOccurrenceList(groups[date], "")}
+              </section>
+            `).join("") : `<div class="empty">Nessun impegno futuro.</div>`}
+          </div>
+        `;
+      }
+
+      function renderChildren() {
+        const children = state.data.children;
+        return `
+          ${viewHeader("Figli", "Anagrafica, colori e impegni collegati.", `<button class="button" type="button" data-add-child>+ Aggiungi figlio</button>`)}
+          <div class="grid-2">
+            ${children.length ? children.map(renderChildCard).join("") : `<div class="empty">Aggiungi il primo figlio.</div>`}
+          </div>
+        `;
+      }
+
+      function renderEvents() {
+        const filtered = state.data.events.filter((event) => {
+          if (state.filters.category !== "all" && event.category !== state.filters.category) return false;
+          if (state.filters.eventType !== "all" && event.eventType !== state.filters.eventType) return false;
+          if (state.filters.childId !== "all" && !event.childIds.includes(state.filters.childId)) return false;
+          return true;
+        });
+        return `
+          ${viewHeader("Impegni", "Crea, modifica, duplica, archivia o elimina.", `<button class="button" type="button" data-add-event>+ Aggiungi impegno</button>`)}
+          <div class="filters">
+            <label>Categoria
+              <select data-filter-category>
+                <option value="all">Tutte</option>
+                ${CATEGORIES.map((cat) => `<option value="${cat}" ${state.filters.category === cat ? "selected" : ""}>${cat}</option>`).join("")}
+              </select>
+            </label>
+            <label>Figlio
+              <select data-filter-child>${renderChildOptions(state.filters.childId, true)}</select>
+            </label>
+            <label>Tipologia
+              <select data-filter-type>
+                <option value="all">Tutte</option>
+                ${EVENT_TYPES.map((type) => `<option value="${type.value}" ${state.filters.eventType === type.value ? "selected" : ""}>${type.label}</option>`).join("")}
+              </select>
+            </label>
+          </div>
+          <div class="stack">
+            ${filtered.length ? filtered.map((event) => renderEventManageCard(event)).join("") : `<div class="empty">Nessun impegno con questi filtri.</div>`}
+          </div>
+        `;
+      }
+
+      function renderData() {
+        const payload = JSON.stringify(exportPayload(), null, 2);
+        return `
+          ${viewHeader("Dati", "Importa, esporta e gestisci il salvataggio locale.")}
+          <div class="grid-2">
+            <section class="section stack">
+              <h3>Azioni</h3>
+              <button class="button" type="button" data-export-current>Scarica JSON corrente</button>
+              <button class="button secondary" type="button" data-export-sample>Scarica JSON di esempio</button>
+              <label>
+                Importa JSON
+                <input type="file" accept="application/json,.json" data-import-file>
+              </label>
+              <button class="button warning" type="button" data-load-sample>Carica esempio nell'app</button>
+              <button class="button danger" type="button" data-clear-data>Cancella tutti i dati</button>
+              <p class="inline-error" id="dataError" aria-live="assertive"></p>
+            </section>
+            <section class="section stack">
+              <h3>Stato</h3>
+              <p><strong>Schema JSON:</strong> versione ${SCHEMA_VERSION}</p>
+              <p><strong>Salvataggio:</strong> localStorage, chiave <code>${STORAGE_KEY}</code></p>
+              <p><strong>Ultimo salvataggio:</strong> ${state.data.lastSavedAt ? new Date(state.data.lastSavedAt).toLocaleString("it-IT") : "non ancora salvato"}</p>
+              <details class="advanced">
+                <summary>Anteprima JSON corrente</summary>
+                <pre class="data-box">${escapeHtml(payload)}</pre>
+              </details>
+            </section>
+          </div>
+        `;
+      }
+
+      function renderOccurrenceList(items, emptyText) {
+        if (!items.length) return emptyText ? `<div class="empty">${escapeHtml(emptyText)}</div>` : "";
+        return items.map(renderOccurrenceCard).join("");
+      }
+
+      function renderOccurrenceCard(occurrence) {
+        const event = occurrence.event;
+        const childPills = childrenForEvent(event).map(renderChildPill).join("");
+        const meal = event.mealOptions.length ? `<span class="badge">Pasti: ${event.mealOptions.map(escapeHtml).join(", ")}</span>` : "";
+        const flags = [
+          event.notes ? `<span class="badge">Note</span>` : "",
+          event.packingList.length ? `<span class="badge">Checklist</span>` : "",
+          occurrence.changed ? `<span class="badge">Variazione</span>` : ""
+        ].join("");
+        return `
+          <article class="event-card" style="border-left-color:${eventAccent(event)}">
+            <div class="event-title">
+              <div>
+                <h3>${escapeHtml(event.title)}</h3>
+                <div class="meta">${escapeHtml(timeLabel(occurrence))}${event.location ? ` · ${escapeHtml(event.location)}` : ""}</div>
+              </div>
+              <span class="badge">${escapeHtml(event.category)}</span>
+            </div>
+            <div class="row">${childPills}</div>
+            <div class="row">${meal}${flags}</div>
+            ${occurrence.exceptionNote ? `<p class="meta"><strong>Eccezione:</strong> ${escapeHtml(occurrence.exceptionNote)}</p>` : ""}
+            ${event.notes ? `<details class="advanced"><summary>Note</summary><p>${escapeHtml(event.notes)}</p></details>` : ""}
+            ${event.packingList.length ? renderPackingChecklist(occurrence) : ""}
+          </article>
+        `;
+      }
+
+      function renderPackingChecklist(occurrence) {
+        const key = `${occurrence.eventId}|${occurrence.date}`;
+        const checked = state.tempChecklist[key] || {};
+        return `
+          <details class="advanced">
+            <summary>Cose da portare</summary>
+            <div class="packing-list" data-checklist-key="${key}">
+              ${occurrence.event.packingList.map((item) => `
+                <label class="checkline">
+                  <input type="checkbox" data-temp-check="${item.id}" ${checked[item.id] ? "checked" : ""}>
+                  ${escapeHtml(item.label)}
+                </label>
+              `).join("")}
+            </div>
+          </details>
+        `;
+      }
+
+      function renderChange(change) {
+        return `
+          <article class="event-card" style="border-left-color:${eventAccent(change.event)}">
+            <div class="event-title">
+              <div>
+                <h3>${escapeHtml(change.title)}</h3>
+                <div class="meta">${formatDate(change.date, { weekday: true, year: true })}</div>
+              </div>
+            </div>
+            <p class="meta">${escapeHtml(change.detail)}</p>
+            <div class="row">${childrenForEvent(change.event).map(renderChildPill).join("")}</div>
+          </article>
+        `;
+      }
+
+      function renderChildPill(child) {
+        return `
+          <span class="child-pill">
+            <span class="avatar" style="background:${normalizeColor(child.color)}">${escapeHtml(child.avatar || child.name[0] || "?")}</span>
+            ${escapeHtml(child.name)}
+          </span>
+        `;
+      }
+
+      function renderChildCard(child) {
+        const count = state.data.events.filter((event) => event.childIds.includes(child.id) && !event.archived).length;
+        return `
+          <article class="child-card ${child.archived ? "archived" : ""}">
+            <div class="row spread">
+              <div class="row">
+                <span class="avatar" style="background:${normalizeColor(child.color)}">${escapeHtml(child.avatar)}</span>
+                <div>
+                  <h3 style="margin:0">${escapeHtml(child.name)}</h3>
+                  <p class="meta" style="margin:0">${child.archived ? "Archiviato" : "Attivo"} · ${count} impegni</p>
+                </div>
+              </div>
+            </div>
+            ${child.notes ? `<p class="meta">${escapeHtml(child.notes)}</p>` : ""}
+            <div class="row">
+              <button class="button secondary small" type="button" data-edit-child="${child.id}">Modifica</button>
+              <button class="button secondary small" type="button" data-toggle-child="${child.id}">${child.archived ? "Riattiva" : "Archivia"}</button>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderEventManageCard(event) {
+        return `
+          <article class="event-card ${event.archived ? "archived" : ""}" style="border-left-color:${eventAccent(event)}">
+            <div class="event-title">
+              <div>
+                <h3>${escapeHtml(event.title)}</h3>
+                <div class="meta">${eventTypeLabel(event.eventType)} · ${escapeHtml(event.category)} · ${event.archived ? "Archiviato" : "Attivo"}</div>
+              </div>
+              <span class="badge">${escapeHtml(timeLabel(event))}</span>
+            </div>
+            <div class="row">${childrenForEvent(event).map(renderChildPill).join("") || `<span class="meta">Nessun figlio collegato</span>`}</div>
+            <div class="row">
+              <button class="button secondary small" type="button" data-edit-event="${event.id}">Modifica</button>
+              <button class="button secondary small" type="button" data-duplicate-event="${event.id}">Duplica</button>
+              <button class="button secondary small" type="button" data-toggle-event="${event.id}">${event.archived ? "Riattiva" : "Archivia"}</button>
+              <button class="button danger small" type="button" data-delete-event="${event.id}">Elimina</button>
+            </div>
+          </article>
+        `;
+      }
+
+      function renderChildOptions(selected, includeAll = false) {
+        return `${includeAll ? `<option value="all">Tutti</option>` : ""}${state.data.children.map((child) => `
+          <option value="${child.id}" ${selected === child.id ? "selected" : ""}>${escapeHtml(child.name)}${child.archived ? " (archiviato)" : ""}</option>
+        `).join("")}`;
+      }
+
+      function eventTypeLabel(type) {
+        return EVENT_TYPES.find((item) => item.value === type)?.label || type;
+      }
+
+      function groupBy(items, key) {
+        return items.reduce((acc, item) => {
+          const value = item[key];
+          acc[value] = acc[value] || [];
+          acc[value].push(item);
+          return acc;
+        }, {});
+      }
+
+      function bindViewActions() {
+        els.app.querySelectorAll("[data-add-child]").forEach((button) => button.addEventListener("click", () => openChildForm()));
+        els.app.querySelectorAll("[data-add-event]").forEach((button) => button.addEventListener("click", () => openEventForm()));
+        els.app.querySelectorAll("[data-edit-child]").forEach((button) => button.addEventListener("click", () => openChildForm(button.dataset.editChild)));
+        els.app.querySelectorAll("[data-toggle-child]").forEach((button) => button.addEventListener("click", () => toggleChild(button.dataset.toggleChild)));
+        els.app.querySelectorAll("[data-edit-event]").forEach((button) => button.addEventListener("click", () => openEventForm(button.dataset.editEvent)));
+        els.app.querySelectorAll("[data-duplicate-event]").forEach((button) => button.addEventListener("click", () => duplicateEvent(button.dataset.duplicateEvent)));
+        els.app.querySelectorAll("[data-toggle-event]").forEach((button) => button.addEventListener("click", () => toggleEvent(button.dataset.toggleEvent)));
+        els.app.querySelectorAll("[data-delete-event]").forEach((button) => button.addEventListener("click", () => deleteEvent(button.dataset.deleteEvent)));
+        els.app.querySelectorAll("[data-week-move]").forEach((button) => button.addEventListener("click", () => {
+          state.weekStart = addDays(state.weekStart, Number(button.dataset.weekMove));
+          render();
+        }));
+        els.app.querySelectorAll("[data-week-today]").forEach((button) => button.addEventListener("click", () => {
+          state.weekStart = startOfWeek(new Date());
+          render();
+        }));
+        els.app.querySelectorAll("[data-filter-child]").forEach((select) => select.addEventListener("change", () => {
+          state.filters.childId = select.value;
+          render();
+        }));
+        const category = els.app.querySelector("[data-filter-category]");
+        if (category) category.addEventListener("change", () => { state.filters.category = category.value; render(); });
+        const eventType = els.app.querySelector("[data-filter-type]");
+        if (eventType) eventType.addEventListener("change", () => { state.filters.eventType = eventType.value; render(); });
+        els.app.querySelectorAll("[data-temp-check]").forEach((checkbox) => {
+          checkbox.addEventListener("change", () => {
+            const key = checkbox.closest("[data-checklist-key]").dataset.checklistKey;
+            state.tempChecklist[key] = state.tempChecklist[key] || {};
+            state.tempChecklist[key][checkbox.dataset.tempCheck] = checkbox.checked;
+          });
+        });
+        bindDataActions();
+      }
+
+      function bindDataActions() {
+        const exportCurrent = els.app.querySelector("[data-export-current]");
+        if (exportCurrent) exportCurrent.addEventListener("click", () => downloadJSON("agenda-figli.json", exportPayload()));
+        const exportSample = els.app.querySelector("[data-export-sample]");
+        if (exportSample) exportSample.addEventListener("click", () => downloadJSON("agenda-figli-esempio.json", makeSampleData()));
+        const loadSample = els.app.querySelector("[data-load-sample]");
+        if (loadSample) loadSample.addEventListener("click", () => {
+          if (!confirm("Caricare l'esempio? I dati attuali saranno sovrascritti.")) return;
+          state.data = migrateData(makeSampleData());
+          saveData("Esempio caricato");
+          render();
+        });
+        const clearData = els.app.querySelector("[data-clear-data]");
+        if (clearData) clearData.addEventListener("click", () => {
+          if (!confirm("Cancellare tutti i dati salvati su questo dispositivo?")) return;
+          state.data = createEmptyData();
+          state.tempChecklist = {};
+          saveData("Dati cancellati");
+          render();
+        });
+        const importInput = els.app.querySelector("[data-import-file]");
+        if (importInput) importInput.addEventListener("change", handleImportFile);
+      }
+
+      function handleImportFile(event) {
+        const errorEl = els.app.querySelector("#dataError");
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const parsed = JSON.parse(String(reader.result));
+            const validation = validateImportedData(parsed);
+            if (!validation.ok) {
+              errorEl.textContent = `File non valido: ${validation.errors.join(" ")}`;
+              event.target.value = "";
+              return;
+            }
+            if (!confirm("Importare questo file e sovrascrivere i dati attuali?")) {
+              event.target.value = "";
+              return;
+            }
+            state.data = migrateData(parsed);
+            state.tempChecklist = {};
+            saveData("Importazione completata");
+            render();
+          } catch (error) {
+            errorEl.textContent = "JSON non valido. I dati esistenti non sono stati modificati.";
+            event.target.value = "";
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      function openModal(title, subtitle, html) {
+        state.lastFocus = document.activeElement;
+        els.modalTitle.textContent = title;
+        els.modalSubtitle.textContent = subtitle || "";
+        els.modalBody.innerHTML = html;
+        els.modal.classList.add("open");
+        els.modal.setAttribute("aria-hidden", "false");
+        const first = els.modal.querySelector("button, input, select, textarea, summary");
+        if (first) first.focus();
+      }
+
+      function closeModal() {
+        els.modal.classList.remove("open");
+        els.modal.setAttribute("aria-hidden", "true");
+        els.modalBody.innerHTML = "";
+        if (state.lastFocus?.focus) state.lastFocus.focus();
+      }
+
+      function trapModalFocus(event) {
+        if (!els.modal.classList.contains("open") || event.key !== "Tab") return;
+        const focusables = [...els.modal.querySelectorAll("button, input, select, textarea, summary")].filter((el) => !el.disabled && el.offsetParent !== null);
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+
+      function openChildForm(childId) {
+        const child = childById(childId) || {
+          id: uid("child"),
+          name: "",
+          color: "#0f766e",
+          avatar: "",
+          notes: "",
+          archived: false
+        };
+        openModal(childId ? "Modifica figlio" : "Aggiungi figlio", "Campi brevi, colore sempre accompagnato da nome o iniziale.", `
+          <form id="childForm" class="stack">
+            <div class="form-grid">
+              <label>Nome
+                <input name="name" required value="${escapeHtml(child.name)}">
+              </label>
+              <label>Colore
+                <input name="color" type="color" value="${normalizeColor(child.color)}">
+              </label>
+              <label>Emoji o iniziale
+                <input name="avatar" maxlength="2" value="${escapeHtml(child.avatar)}">
+              </label>
+              <label>Stato
+                <select name="archived">
+                  <option value="false" ${!child.archived ? "selected" : ""}>Attivo</option>
+                  <option value="true" ${child.archived ? "selected" : ""}>Archiviato</option>
+                </select>
+              </label>
+              <label class="full">Note
+                <textarea name="notes">${escapeHtml(child.notes)}</textarea>
+              </label>
+            </div>
+            <p class="inline-error" id="childError"></p>
+            <div class="row">
+              <button class="button" type="submit">Salva figlio</button>
+              <button class="button secondary" type="button" data-cancel-modal>Annulla</button>
+            </div>
+          </form>
+        `);
+        const form = document.getElementById("childForm");
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const data = new FormData(form);
+          const name = String(data.get("name") || "").trim();
+          if (!name) {
+            document.getElementById("childError").textContent = "Inserisci il nome.";
+            return;
+          }
+          const nextChild = {
+            id: child.id,
+            name,
+            color: normalizeColor(String(data.get("color") || "")),
+            avatar: String(data.get("avatar") || name[0] || "?").trim().slice(0, 2),
+            notes: String(data.get("notes") || "").trim(),
+            archived: data.get("archived") === "true"
+          };
+          const index = state.data.children.findIndex((item) => item.id === child.id);
+          if (index >= 0) state.data.children[index] = nextChild;
+          else state.data.children.push(nextChild);
+          saveData("Figlio salvato");
+          closeModal();
+          render();
+        });
+        els.modalBody.querySelector("[data-cancel-modal]").addEventListener("click", closeModal);
+      }
+
+      function openEventForm(eventId) {
+        const existing = state.data.events.find((event) => event.id === eventId);
+        const draft = normalizeEvent(existing || {
+          id: uid("event"),
+          title: "",
+          category: "altro",
+          eventType: "single",
+          childIds: [],
+          location: "",
+          date: todayISO(),
+          startDate: todayISO(),
+          endDate: "",
+          weekdays: [],
+          timeMode: "fixed",
+          fixedTime: { start: "", end: "" },
+          timeWindow: null,
+          mealOptions: [],
+          notes: "",
+          packingList: [],
+          closures: [],
+          exceptions: [],
+          archived: false
+        });
+        let step = 0;
+        const steps = [
+          "Tipo", "Figli", "Quando", "Orario", "Pasti", "Note", "Eccezioni", "Riepilogo"
+        ];
+        openModal(existing ? "Modifica impegno" : "Aggiungi impegno", "Procedi a piccoli passi. I campi non utili restano nascosti.", `<form id="eventForm" class="stack"></form>`);
+        const form = document.getElementById("eventForm");
+
+        function currentFormData() {
+          const data = new FormData(form);
+          const hasField = (name) => Boolean(form.querySelector(`[name="${name}"]`));
+          if (hasField("title")) draft.title = String(data.get("title") ?? draft.title).trim();
+          if (hasField("category")) draft.category = String(data.get("category") ?? draft.category);
+          if (hasField("eventType")) draft.eventType = String(data.get("eventType") ?? draft.eventType);
+          if (hasField("childIds")) draft.childIds = data.getAll("childIds").map(String);
+          if (hasField("location")) draft.location = String(data.get("location") ?? draft.location).trim();
+          if (hasField("date")) draft.date = String(data.get("date") ?? draft.date);
+          if (hasField("startDate")) draft.startDate = String(data.get("startDate") ?? draft.startDate);
+          if (hasField("endDate")) draft.endDate = String(data.get("endDate") ?? draft.endDate);
+          if (hasField("weekdays")) draft.weekdays = data.getAll("weekdays").map(Number);
+          if (hasField("timeMode")) {
+            draft.timeMode = String(data.get("timeMode") ?? draft.timeMode);
+            if (draft.timeMode === "fixed") {
+              draft.fixedTime = { start: String(data.get("fixedStart") || ""), end: String(data.get("fixedEnd") || "") };
+              draft.timeWindow = null;
+            } else {
+              draft.fixedTime = null;
+              draft.timeWindow = {
+                entryStart: String(data.get("entryStart") || ""),
+                entryEnd: String(data.get("entryEnd") || ""),
+                exitStart: String(data.get("exitStart") || ""),
+                exitEnd: String(data.get("exitEnd") || "")
+              };
+            }
+          }
+          if (hasField("mealOptions")) draft.mealOptions = data.getAll("mealOptions").map(String);
+          if (hasField("notes")) draft.notes = String(data.get("notes") || "").trim();
+          if (hasField("packingList")) draft.packingList = linesToItems(String(data.get("packingList") || ""), "item");
+          if (hasField("closures")) draft.closures = parseClosures(String(data.get("closures") || ""));
+          if (hasField("exceptions")) draft.exceptions = parseExceptions(String(data.get("exceptions") || ""));
+          if (hasField("archived")) draft.archived = data.get("archived") === "true";
+        }
+
+        function renderStep() {
+          form.innerHTML = `
+            <div class="steps" aria-label="Passaggi">${steps.map((label, index) => `
+              <span class="step-chip ${index === step ? "active" : ""}">${index + 1}. ${label}</span>
+            `).join("")}</div>
+            ${stepHtml()}
+            <p class="inline-error" id="eventError" aria-live="assertive"></p>
+            <div class="row spread">
+              <div class="row">
+                <button class="button secondary" type="button" data-prev-step ${step === 0 ? "disabled" : ""}>Indietro</button>
+                ${step < steps.length - 1 ? `<button class="button" type="button" data-next-step>Avanti</button>` : `<button class="button" type="submit">Salva impegno</button>`}
+              </div>
+              <button class="button secondary" type="button" data-cancel-modal>Annulla</button>
+            </div>
+          `;
+          bindEventStepControls();
+        }
+
+        function stepHtml() {
+          if (step === 0) return `
+            <div class="form-grid">
+              <label class="full">Titolo
+                <input name="title" required value="${escapeHtml(draft.title)}" placeholder="Es. Nuoto, scuola, visita">
+              </label>
+              <label>Categoria
+                <select name="category">${CATEGORIES.map((cat) => `<option value="${cat}" ${draft.category === cat ? "selected" : ""}>${cat}</option>`).join("")}</select>
+              </label>
+              <label>Tipo di impegno
+                <select name="eventType">${EVENT_TYPES.map((type) => `<option value="${type.value}" ${draft.eventType === type.value ? "selected" : ""}>${type.label}</option>`).join("")}</select>
+              </label>
+              <label>Stato
+                <select name="archived">
+                  <option value="false" ${!draft.archived ? "selected" : ""}>Attivo</option>
+                  <option value="true" ${draft.archived ? "selected" : ""}>Archiviato</option>
+                </select>
+              </label>
+            </div>
+          `;
+          if (step === 1) return `
+            <div class="stack">
+              <p class="subtitle">Seleziona uno o più figli. Un evento condiviso resta salvato una sola volta.</p>
+              <div class="choice-list">
+                ${state.data.children.length ? state.data.children.map((child) => `
+                  <label class="checkline">
+                    <input type="checkbox" name="childIds" value="${child.id}" ${draft.childIds.includes(child.id) ? "checked" : ""}>
+                    <span class="avatar" style="background:${normalizeColor(child.color)}">${escapeHtml(child.avatar)}</span>
+                    ${escapeHtml(child.name)}${child.archived ? " (archiviato)" : ""}
+                  </label>
+                `).join("") : `<div class="empty">Aggiungi prima almeno un figlio.</div>`}
+              </div>
+            </div>
+          `;
+          if (step === 2) return `
+            <div class="form-grid">
+              ${draft.eventType === "single" ? `
+                <label>Data
+                  <input type="date" name="date" value="${escapeHtml(draft.date)}">
+                </label>
+              ` : `
+                <label>Data di inizio
+                  <input type="date" name="startDate" value="${escapeHtml(draft.startDate)}">
+                </label>
+                <label>Data di fine
+                  <input type="date" name="endDate" value="${escapeHtml(draft.endDate)}">
+                </label>
+                <div class="full">
+                  <p class="subtitle">Giorni della settimana</p>
+                  <div class="choice-list">
+                    ${WEEKDAYS.map((day) => `
+                      <label class="checkline">
+                        <input type="checkbox" name="weekdays" value="${day.value}" ${draft.weekdays.includes(day.value) ? "checked" : ""}>
+                        ${day.long}
+                      </label>
+                    `).join("")}
+                  </div>
+                </div>
+              `}
+              <label class="full">Luogo
+                <input name="location" value="${escapeHtml(draft.location)}" placeholder="Facoltativo">
+              </label>
+            </div>
+          `;
+          if (step === 3) return `
+            <div class="stack">
+              <label>Modalità orario
+                <select name="timeMode" data-time-mode>
+                  <option value="fixed" ${draft.timeMode === "fixed" ? "selected" : ""}>Orario fisso</option>
+                  <option value="window" ${draft.timeMode === "window" ? "selected" : ""}>Finestra possibile</option>
+                </select>
+              </label>
+              <div class="form-grid" data-fixed-fields ${draft.timeMode === "window" ? "hidden" : ""}>
+                <label>Ora inizio
+                  <input type="time" name="fixedStart" value="${escapeHtml(draft.fixedTime?.start || "")}">
+                </label>
+                <label>Ora fine
+                  <input type="time" name="fixedEnd" value="${escapeHtml(draft.fixedTime?.end || "")}">
+                </label>
+              </div>
+              <div class="form-grid" data-window-fields ${draft.timeMode === "fixed" ? "hidden" : ""}>
+                <label>Inizio ingresso
+                  <input type="time" name="entryStart" value="${escapeHtml(draft.timeWindow?.entryStart || "")}">
+                </label>
+                <label>Fine ingresso
+                  <input type="time" name="entryEnd" value="${escapeHtml(draft.timeWindow?.entryEnd || "")}">
+                </label>
+                <label>Inizio uscita
+                  <input type="time" name="exitStart" value="${escapeHtml(draft.timeWindow?.exitStart || "")}">
+                </label>
+                <label>Fine uscita
+                  <input type="time" name="exitEnd" value="${escapeHtml(draft.timeWindow?.exitEnd || "")}">
+                </label>
+              </div>
+            </div>
+          `;
+          if (step === 4) return `
+            <div class="stack">
+              <p class="subtitle">Lascia vuoto se non rilevante.</p>
+              ${MEALS.map((meal) => `
+                <label class="checkline">
+                  <input type="checkbox" name="mealOptions" value="${meal.value}" ${draft.mealOptions.includes(meal.value) ? "checked" : ""}>
+                  ${meal.label}
+                </label>
+              `).join("")}
+            </div>
+          `;
+          if (step === 5) return `
+            <div class="form-grid">
+              <label class="full">Note
+                <textarea name="notes" placeholder="Informazioni utili, senza promemoria automatici.">${escapeHtml(draft.notes)}</textarea>
+              </label>
+              <label class="full">Cose da portare
+                <textarea name="packingList" placeholder="Una voce per riga">${escapeHtml(draft.packingList.map((item) => item.label).join("\n"))}</textarea>
+              </label>
+            </div>
+          `;
+          if (step === 6) return `
+            <div class="stack">
+              <details class="advanced" ${draft.eventType !== "single" ? "open" : ""}>
+                <summary>Chiusure</summary>
+                <p class="subtitle">Una riga per chiusura: <code>data|motivo</code> oppure <code>inizio..fine|motivo</code>.</p>
+                <label>Chiusure
+                  <textarea name="closures" placeholder="2026-12-08|Festività&#10;2026-12-23..2027-01-06|Vacanze">${escapeHtml(formatClosures(draft.closures))}</textarea>
+                </label>
+              </details>
+              <details class="advanced" ${draft.exceptions.length ? "open" : ""}>
+                <summary>Eccezioni</summary>
+                <p class="subtitle">Una riga: <code>data|annullato|nota</code> oppure <code>data|HH:MM-HH:MM|nota</code>.</p>
+                <label>Eccezioni
+                  <textarea name="exceptions" placeholder="2027-06-10|08:00-13:00|Uscita anticipata&#10;2027-03-13|annullato|Piscina chiusa">${escapeHtml(formatExceptions(draft.exceptions))}</textarea>
+                </label>
+              </details>
+            </div>
+          `;
+          return `
+            <div class="section stack">
+              <h3>Riepilogo</h3>
+              <p><strong>${escapeHtml(draft.title || "Senza titolo")}</strong></p>
+              <p>${eventTypeLabel(draft.eventType)} · ${escapeHtml(draft.category)} · ${escapeHtml(timeLabel(draft))}</p>
+              <div class="row">${draft.childIds.map(childById).filter(Boolean).map(renderChildPill).join("") || `<span class="meta">Nessun figlio selezionato</span>`}</div>
+              <p class="meta">${escapeHtml(draft.location || "Luogo non indicato")}</p>
+              <p class="meta">${draft.packingList.length} cose da portare · ${draft.closures.length} chiusure · ${draft.exceptions.length} eccezioni</p>
+            </div>
+          `;
+        }
+
+        function bindEventStepControls() {
+          form.querySelector("[data-cancel-modal]")?.addEventListener("click", closeModal);
+          form.querySelector("[data-prev-step]")?.addEventListener("click", () => {
+            currentFormData();
+            step = Math.max(0, step - 1);
+            renderStep();
+          });
+          form.querySelector("[data-next-step]")?.addEventListener("click", () => {
+            currentFormData();
+            const error = validateEventDraft(draft, step);
+            if (error) {
+              document.getElementById("eventError").textContent = error;
+              return;
+            }
+            step = Math.min(steps.length - 1, step + 1);
+            renderStep();
+          });
+          form.querySelector("[data-time-mode]")?.addEventListener("change", (event) => {
+            const fixed = form.querySelector("[data-fixed-fields]");
+            const windowFields = form.querySelector("[data-window-fields]");
+            fixed.hidden = event.target.value !== "fixed";
+            windowFields.hidden = event.target.value !== "window";
+          });
+        }
+
+        form.addEventListener("submit", (event) => {
+          event.preventDefault();
+          currentFormData();
+          const error = validateEventDraft(draft, 7);
+          if (error) {
+            document.getElementById("eventError").textContent = error;
+            return;
+          }
+          const index = state.data.events.findIndex((item) => item.id === draft.id);
+          const next = normalizeEvent(draft);
+          if (index >= 0) state.data.events[index] = next;
+          else state.data.events.push(next);
+          saveData("Impegno salvato");
+          closeModal();
+          render();
+        });
+
+        renderStep();
+      }
+
+      function validateEventDraft(event, step) {
+        if (step >= 0 && !event.title) return "Inserisci un titolo.";
+        if (step >= 1 && !event.childIds.length) return "Seleziona almeno un figlio.";
+        if (step >= 2) {
+          if (event.eventType === "single" && !event.date) return "Inserisci la data.";
+          if (event.eventType !== "single" && !event.startDate) return "Inserisci la data di inizio.";
+          if (event.eventType !== "single" && !event.weekdays.length) return "Seleziona almeno un giorno.";
+          if (event.endDate && event.endDate < event.startDate) return "La data di fine deve essere successiva all'inizio.";
+        }
+        return "";
+      }
+
+      function linesToItems(text, prefix) {
+        return text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).map((label) => ({
+          id: uid(prefix),
+          label
+        }));
+      }
+
+      function parseClosures(text) {
+        return text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).map((line) => {
+          const [datePart, reason = ""] = line.split("|");
+          if (datePart.includes("..")) {
+            const [startDate, endDate] = datePart.split("..").map((part) => part.trim());
+            return { id: uid("closure"), type: "range", date: "", startDate, endDate, reason: reason.trim() };
+          }
+          return { id: uid("closure"), type: "date", date: datePart.trim(), startDate: "", endDate: "", reason: reason.trim() };
+        });
+      }
+
+      function formatClosures(closures) {
+        return closures.map((closure) => {
+          const date = closure.type === "range" ? `${closure.startDate}..${closure.endDate}` : closure.date;
+          return `${date}|${closure.reason || ""}`;
+        }).join("\n");
+      }
+
+      function parseExceptions(text) {
+        return text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean).map((line) => {
+          const [date, mode = "", note = ""] = line.split("|").map((part) => part.trim());
+          if (mode.toLowerCase() === "annullato" || mode.toLowerCase() === "cancelled") {
+            return { id: uid("exception"), date, type: "cancelled", fixedTime: null, timeWindow: null, note };
+          }
+          const [start, end] = mode.split("-").map((part) => part.trim());
+          return { id: uid("exception"), date, type: "modified_time", fixedTime: { start: start || "", end: end || "" }, timeWindow: null, note };
+        });
+      }
+
+      function formatExceptions(exceptions) {
+        return exceptions.map((exception) => {
+          const mode = exception.type === "cancelled" ? "annullato" : `${exception.fixedTime?.start || ""}-${exception.fixedTime?.end || ""}`;
+          return `${exception.date}|${mode}|${exception.note || ""}`;
+        }).join("\n");
+      }
+
+      function toggleChild(id) {
+        const child = childById(id);
+        if (!child) return;
+        child.archived = !child.archived;
+        saveData(child.archived ? "Figlio archiviato" : "Figlio riattivato");
+        render();
+      }
+
+      function duplicateEvent(id) {
+        const event = state.data.events.find((item) => item.id === id);
+        if (!event) return;
+        const copy = normalizeEvent(JSON.parse(JSON.stringify(event)));
+        copy.id = uid("event");
+        copy.title = `${copy.title} (copia)`;
+        state.data.events.push(copy);
+        saveData("Impegno duplicato");
+        render();
+      }
+
+      function toggleEvent(id) {
+        const event = state.data.events.find((item) => item.id === id);
+        if (!event) return;
+        event.archived = !event.archived;
+        saveData(event.archived ? "Impegno archiviato" : "Impegno riattivato");
+        render();
+      }
+
+      function deleteEvent(id) {
+        const event = state.data.events.find((item) => item.id === id);
+        if (!event) return;
+        if (!confirm(`Eliminare "${event.title}"?`)) return;
+        state.data.events = state.data.events.filter((item) => item.id !== id);
+        saveData("Impegno eliminato");
+        render();
+      }
+
+      function showToast(message) {
+        els.toast.textContent = message;
+        els.toast.classList.add("show");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => els.toast.classList.remove("show"), 2200);
+      }
+
+      document.getElementById("quickAddEvent").addEventListener("click", () => openEventForm());
+      document.getElementById("quickAddChild").addEventListener("click", () => openChildForm());
+      els.modalClose.addEventListener("click", closeModal);
+      els.modal.addEventListener("click", (event) => {
+        if (event.target === els.modal) closeModal();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && els.modal.classList.contains("open")) closeModal();
+        trapModalFocus(event);
+      });
+
+      window.__agendaFigliTest = {
+        makeSampleData,
+        migrateData,
+        validateImportedData,
+        occurrencesBetween: (start, end, data) => {
+          const previous = state.data;
+          if (data) state.data = migrateData(data);
+          const result = occurrencesBetween(start, end);
+          state.data = previous;
+          return result.map((item) => ({
+            eventId: item.eventId,
+            title: item.event.title,
+            date: item.date,
+            childCount: item.event.childIds.length,
+            time: timeLabel(item),
+            changed: item.changed
+          }));
+        },
+        STORAGE_KEY
+      };
+
+      render();
+    })();
+  </script>
+</body>
+</html>
