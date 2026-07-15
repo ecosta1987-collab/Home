@@ -1,0 +1,1952 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Diario benessere e terapia</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f6f7f5;
+      --panel: #ffffff;
+      --panel-soft: #eef4f1;
+      --text: #18221f;
+      --muted: #63706b;
+      --line: #d9e0dc;
+      --primary: #28685b;
+      --primary-strong: #174d43;
+      --accent: #b45a3c;
+      --warn: #a43e32;
+      --good: #27724d;
+      --focus: #235bd6;
+      --shadow: 0 12px 35px rgba(22, 38, 33, .1);
+      --radius: 8px;
+      --tap: 46px;
+      --font: 16px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #141817;
+      --panel: #202725;
+      --panel-soft: #263331;
+      --text: #eef5f2;
+      --muted: #aebbb7;
+      --line: #3a4643;
+      --primary: #8ad1c0;
+      --primary-strong: #b4ecdf;
+      --accent: #f0a27f;
+      --warn: #ff9d91;
+      --good: #9de0b8;
+      --focus: #9bbcff;
+      --shadow: 0 16px 40px rgba(0, 0, 0, .32);
+    }
+
+    [data-text="grande"] { --font: 18px; }
+    [data-text="molto-grande"] { --font: 20px; }
+
+    * { box-sizing: border-box; }
+
+    html {
+      font-size: var(--font);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+      padding-bottom: calc(86px + env(safe-area-inset-bottom));
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button, .button {
+      min-height: var(--tap);
+      border: 0;
+      border-radius: var(--radius);
+      padding: .7rem .9rem;
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      text-decoration: none;
+      touch-action: manipulation;
+    }
+
+    button.secondary { background: var(--panel-soft); color: var(--text); border: 1px solid var(--line); }
+    button.ghost { background: transparent; color: var(--primary-strong); border: 1px solid transparent; }
+    button.danger { background: var(--warn); color: white; }
+    button.small { min-height: 38px; padding: .45rem .65rem; font-size: .92rem; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible {
+      outline: 3px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      min-height: var(--tap);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--text);
+      padding: .7rem .75rem;
+    }
+
+    input[type="range"] {
+      padding: 0;
+      accent-color: var(--primary);
+    }
+
+    textarea {
+      min-height: 112px;
+      resize: vertical;
+    }
+
+    label {
+      display: grid;
+      gap: .35rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    label span, .hint {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: .9rem;
+    }
+
+    header.app-head {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: color-mix(in srgb, var(--bg), transparent 8%);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+      padding: env(safe-area-inset-top) 1rem .75rem;
+    }
+
+    .head-inner {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      line-height: 1.1;
+    }
+
+    .brand p {
+      margin: .2rem 0 0;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .notice {
+      border: 1px solid color-mix(in srgb, var(--accent), var(--line) 45%);
+      background: color-mix(in srgb, var(--accent), var(--panel) 88%);
+      color: var(--text);
+      border-radius: var(--radius);
+      padding: .75rem;
+      margin-bottom: 1rem;
+      font-size: .92rem;
+    }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .grid {
+      display: grid;
+      gap: .8rem;
+    }
+
+    .grid.two, .grid.three { grid-template-columns: 1fr; }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .panel.flat {
+      box-shadow: none;
+    }
+
+    .panel h2, .panel h3 {
+      margin: 0 0 .8rem;
+      line-height: 1.2;
+    }
+
+    .panel h2 { font-size: 1.35rem; }
+    .panel h3 { font-size: 1.05rem; }
+
+    .quick-actions {
+      position: sticky;
+      bottom: calc(70px + env(safe-area-inset-bottom));
+      z-index: 12;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .6rem;
+      margin: 1rem 0;
+    }
+
+    .value-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: .75rem;
+    }
+
+    .score {
+      min-width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      font-weight: 800;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+    }
+
+    .chip {
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: .48rem .72rem;
+      background: var(--panel-soft);
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .chip input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .chip:has(input:checked), .chip.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    details {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      margin-bottom: .75rem;
+      overflow: hidden;
+    }
+
+    summary {
+      min-height: var(--tap);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .8rem .9rem;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    details .details-body {
+      border-top: 1px solid var(--line);
+      padding: .9rem;
+      display: grid;
+      gap: .8rem;
+    }
+
+    .nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 30;
+      padding: .4rem .45rem calc(.45rem + env(safe-area-inset-bottom));
+      background: color-mix(in srgb, var(--panel), transparent 4%);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(18px);
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: .25rem;
+    }
+
+    .nav button {
+      min-height: 56px;
+      padding: .25rem .15rem;
+      background: transparent;
+      color: var(--muted);
+      border-radius: var(--radius);
+      display: grid;
+      gap: .12rem;
+      font-size: .74rem;
+      font-weight: 750;
+    }
+
+    .nav button .ico {
+      display: block;
+      font-size: 1.05rem;
+      line-height: 1;
+    }
+
+    .nav button.active {
+      background: var(--panel-soft);
+      color: var(--primary-strong);
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .55rem;
+      align-items: end;
+      margin-bottom: .8rem;
+    }
+
+    .toolbar > label { flex: 1 1 160px; }
+
+    .entry-card, .med-card {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: .85rem;
+      display: grid;
+      gap: .5rem;
+    }
+
+    .entry-card h3, .med-card h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .45rem;
+    }
+
+    .pill-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .35rem;
+    }
+
+    .pill {
+      border-radius: 999px;
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: .25rem .48rem;
+      font-size: .84rem;
+    }
+
+    .med-dose-row, .strategy-row, .dose-change-row {
+      display: grid;
+      gap: .55rem;
+      padding: .75rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel-soft);
+      margin-bottom: .55rem;
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      padding: 1rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    canvas {
+      width: 100%;
+      min-height: 220px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .6rem;
+    }
+
+    .stat {
+      background: var(--panel-soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: .75rem;
+    }
+
+    .stat b {
+      display: block;
+      font-size: 1.3rem;
+      line-height: 1.1;
+    }
+
+    dialog {
+      width: min(720px, calc(100vw - 1.5rem));
+      max-height: min(88vh, 900px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--text);
+      padding: 0;
+      box-shadow: var(--shadow);
+    }
+
+    dialog::backdrop { background: rgba(0, 0, 0, .45); }
+    .modal-head, .modal-foot {
+      padding: .9rem;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .75rem;
+    }
+    .modal-foot {
+      border-top: 1px solid var(--line);
+      border-bottom: 0;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .modal-body {
+      padding: .9rem;
+      overflow: auto;
+      max-height: 68vh;
+    }
+
+    .toast {
+      position: fixed;
+      left: 1rem;
+      right: 1rem;
+      bottom: calc(92px + env(safe-area-inset-bottom));
+      z-index: 50;
+      display: none;
+      background: var(--primary-strong);
+      color: var(--panel);
+      border-radius: var(--radius);
+      padding: .85rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+      font-weight: 800;
+    }
+
+    .print-area { display: none; }
+
+    @media (min-width: 760px) {
+      body { padding-bottom: 1rem; }
+      .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .quick-actions {
+        position: static;
+        grid-template-columns: auto auto;
+        justify-content: start;
+      }
+      .nav {
+        left: 50%;
+        transform: translateX(-50%);
+        width: min(720px, calc(100vw - 2rem));
+        bottom: .8rem;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: var(--shadow);
+      }
+      main { padding-bottom: 6rem; }
+      .stats { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    }
+
+    @media print {
+      body { background: #fff; color: #111; padding: 0; }
+      header, .nav, main, .toast, dialog { display: none !important; }
+      .print-area { display: block; padding: 1.5rem; }
+      .print-area h1, .print-area h2 { break-after: avoid; }
+      .print-area section { break-inside: avoid; margin-bottom: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-head">
+    <div class="head-inner">
+      <div class="brand">
+        <h1>Diario benessere e terapia</h1>
+        <p>Diario locale, privato, pensato per telefono</p>
+      </div>
+      <button class="secondary small" id="themeToggle" type="button">Tema</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="notice">
+      Questa app e un diario personale: non fornisce diagnosi ne indicazioni terapeutiche. Non modificare, aumentare, ridurre o sospendere farmaci senza indicazione medica. In caso di emergenza contatta subito il numero locale di emergenza o il Pronto Soccorso.
+    </div>
+
+    <section id="oggi" class="section active" aria-labelledby="oggiTitle">
+      <div class="panel">
+        <h2 id="oggiTitle">Oggi</h2>
+        <p class="hint">Compilazione rapida in alto. Le parti piu dettagliate sono espandibili.</p>
+        <div class="quick-actions">
+          <button id="newEntryBtn" type="button">Nuova registrazione</button>
+          <button id="quickMedBtn" class="secondary" type="button">Farmaco al bisogno</button>
+        </div>
+        <form id="entryForm" class="grid" autocomplete="off">
+          <input type="hidden" id="entryId">
+          <div class="grid two">
+            <label>Data <span>Obbligatoria</span><input id="entryDate" type="date" required></label>
+            <label>Ora <span>Precompilata, modificabile</span><input id="entryTime" type="time" required></label>
+          </div>
+
+          <div class="grid two">
+            <label>Umore
+              <div class="value-row">
+                <input id="mood" type="range" min="1" max="10" value="5">
+                <output id="moodOut" class="score">5</output>
+              </div>
+              <span>1 molto basso, 5 neutro, 10 molto positivo</span>
+            </label>
+            <label>Ansia
+              <div class="value-row">
+                <input id="anxiety" type="range" min="0" max="10" value="0">
+                <output id="anxietyOut" class="score">0</output>
+              </div>
+            </label>
+          </div>
+
+          <label>Farmaci assunti
+            <div id="takenMeds"></div>
+            <button type="button" class="secondary" id="addTakenMedBtn">Aggiungi farmaco</button>
+          </label>
+
+          <label>Note rapide
+            <textarea id="notes" placeholder="Cosa e successo, cosa ha aiutato, domande da ricordare..."></textarea>
+          </label>
+
+          <details open>
+            <summary>Emozioni</summary>
+            <div class="details-body">
+              <div id="emotionChips" class="chips"></div>
+              <label id="otherEmotionWrap" hidden>Altra emozione<input id="otherEmotion" type="text"></label>
+            </div>
+          </details>
+
+          <details>
+            <summary>Ansia e panico</summary>
+            <div class="details-body">
+              <label class="chip"><input id="panic" type="checkbox"> Attacco di panico</label>
+              <div id="panicFields" class="grid" hidden>
+                <div class="grid three">
+                  <label>Ora inizio<input id="panicStart" type="time"></label>
+                  <label>Durata stimata<input id="panicDuration" type="text" placeholder="es. 20 minuti"></label>
+                  <label>Intensita massima<input id="panicMax" type="number" min="0" max="10"></label>
+                </div>
+                <label>Sintomi durante il panico<div id="symptomChips" class="chips"></div></label>
+                <label id="otherSymptomWrap" hidden>Altro sintomo<input id="otherSymptom" type="text"></label>
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Sonno</summary>
+            <div class="details-body">
+              <div class="grid three">
+                <label>A letto<input id="bedTime" type="time"></label>
+                <label>Risveglio<input id="wakeTime" type="time"></label>
+                <label>Ore dormite<input id="sleepHours" type="number" step="0.1" min="0" max="24"></label>
+              </div>
+              <div class="grid two">
+                <label>Risvegli<input id="wakeups" type="number" min="0" step="1"></label>
+                <label>Qualita sonno
+                  <div class="value-row"><input id="sleepQuality" type="range" min="1" max="10" value="5"><output id="sleepQualityOut" class="score">5</output></div>
+                </label>
+              </div>
+              <div class="chips">
+                <label class="chip"><input id="fallAsleepHard" type="checkbox"> Difficolta ad addormentarsi</label>
+                <label class="chip"><input id="earlyWake" type="checkbox"> Risveglio precoce</label>
+                <label class="chip"><input id="nightmares" type="checkbox"> Incubi o sonno agitato</label>
+              </div>
+            </div>
+          </details>
+
+          <details>
+            <summary>Energia e funzionamento</summary>
+            <div class="details-body grid two" id="functionScales"></div>
+          </details>
+
+          <details>
+            <summary>Eventi e fattori rilevanti</summary>
+            <div class="details-body">
+              <div id="eventChips" class="chips"></div>
+              <label id="otherEventWrap" hidden>Altro evento<input id="otherEvent" type="text"></label>
+            </div>
+          </details>
+
+          <details>
+            <summary>Strategie utilizzate</summary>
+            <div class="details-body">
+              <div id="strategyRows"></div>
+              <button type="button" class="secondary" id="addStrategyBtn">Aggiungi strategia</button>
+            </div>
+          </details>
+
+          <div class="toolbar">
+            <button type="submit">Salva registrazione</button>
+            <button type="button" class="secondary" id="resetFormBtn">Svuota</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="diario" class="section" aria-labelledby="diarioTitle">
+      <div class="panel">
+        <h2 id="diarioTitle">Diario</h2>
+        <div class="toolbar">
+          <label>Ricerca<input id="searchText" type="search" placeholder="Cerca in note, emozioni, farmaci"></label>
+          <label>Da<input id="filterFrom" type="date"></label>
+          <label>A<input id="filterTo" type="date"></label>
+          <label>Farmaco<select id="filterMed"></select></label>
+          <label>Panico<select id="filterPanic"><option value="">Tutti</option><option value="yes">Solo con panico</option><option value="no">Senza panico</option></select></label>
+          <label>Ansia minima<input id="filterAnxiety" type="number" min="0" max="10" placeholder="0-10"></label>
+          <label>Emozione<select id="filterEmotion"></select></label>
+          <label>Evento<select id="filterEvent"></select></label>
+        </div>
+        <div id="entryList" class="grid"></div>
+      </div>
+    </section>
+
+    <section id="farmaci" class="section" aria-labelledby="farmaciTitle">
+      <div class="panel">
+        <h2 id="farmaciTitle">Farmaci</h2>
+        <p class="hint">Anagrafica personale dei farmaci. Gli orari e dosaggi servono solo come promemoria descrittivo.</p>
+        <div class="toolbar">
+          <button id="addMedBtn" type="button">Nuovo farmaco</button>
+          <button id="showSuspendedBtn" type="button" class="secondary">Mostra sospesi</button>
+        </div>
+        <div id="medList" class="grid"></div>
+      </div>
+    </section>
+
+    <section id="andamento" class="section" aria-labelledby="andamentoTitle">
+      <div class="panel">
+        <h2 id="andamentoTitle">Andamento</h2>
+        <div class="toolbar">
+          <label>Periodo<select id="chartRange"><option value="7">Ultimi 7 giorni</option><option value="14">Ultimi 14 giorni</option><option value="30" selected>Ultimi 30 giorni</option><option value="90">Ultimi 90 giorni</option><option value="custom">Personalizzato</option></select></label>
+          <label>Da<input id="chartFrom" type="date"></label>
+          <label>A<input id="chartTo" type="date"></label>
+          <button id="refreshChartsBtn" type="button" class="secondary">Aggiorna</button>
+        </div>
+        <div class="stats" id="stats"></div>
+      </div>
+      <div id="charts"></div>
+      <div class="panel">
+        <h2>Riepilogo per il medico</h2>
+        <p class="hint">Dato descrittivo, non conclusione clinica. Puoi scegliere manualmente quali note includere.</p>
+        <button id="doctorSummaryBtn" type="button">Crea riepilogo per il medico</button>
+      </div>
+    </section>
+
+    <section id="impostazioni" class="section" aria-labelledby="settingsTitle">
+      <div class="panel">
+        <h2 id="settingsTitle">Impostazioni</h2>
+        <div class="grid two">
+          <label>Tema iniziale
+            <select id="themeMode">
+              <option value="auto">Automatico in base al telefono</option>
+              <option value="light">Chiaro</option>
+              <option value="dark">Scuro</option>
+            </select>
+          </label>
+          <label>Dimensione testo
+            <select id="textSize">
+              <option value="normale">Normale</option>
+              <option value="grande">Grande</option>
+              <option value="molto-grande">Molto grande</option>
+            </select>
+          </label>
+          <label>Soglia ansia alta<input id="highAnxiety" type="number" min="1" max="10"></label>
+          <label>Primo giorno settimana<select id="weekStart"><option value="1">Lunedi</option><option value="0">Domenica</option></select></label>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>Liste personalizzabili</h2>
+        <div class="grid two">
+          <label>Emozioni<textarea id="listEmotions"></textarea></label>
+          <label>Sintomi<textarea id="listSymptoms"></textarea></label>
+          <label>Eventi<textarea id="listEvents"></textarea></label>
+          <label>Strategie<textarea id="listStrategies"></textarea></label>
+        </div>
+        <p class="hint">Una voce per riga. Usa "altro" se vuoi mantenere il campo libero.</p>
+        <button id="saveListsBtn" type="button">Salva liste</button>
+      </div>
+
+      <div class="panel">
+        <h2>Backup e dati</h2>
+        <p class="hint" id="backupInfo">Nessun backup registrato.</p>
+        <div class="toolbar">
+          <button id="exportJsonBtn" type="button">Esporta JSON</button>
+          <button id="backupBtn" type="button" class="secondary">Backup manuale</button>
+          <button id="exportCsvBtn" type="button" class="secondary">Esporta CSV</button>
+          <label class="button secondary" for="importFile">Importa JSON</label>
+          <input id="importFile" type="file" accept="application/json,.json" hidden>
+          <button id="restoreBackupBtn" type="button" class="secondary">Ripristina copia interna</button>
+          <button id="clearAllBtn" type="button" class="danger">Cancella tutto</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="nav" aria-label="Sezioni principali">
+    <button data-section="oggi" class="active" type="button"><span class="ico">+</span>Oggi</button>
+    <button data-section="diario" type="button"><span class="ico">=</span>Diario</button>
+    <button data-section="farmaci" type="button"><span class="ico">*</span>Farmaci</button>
+    <button data-section="andamento" type="button"><span class="ico">~</span>Andamento</button>
+    <button data-section="impostazioni" type="button"><span class="ico">.</span>Impostazioni</button>
+  </nav>
+
+  <dialog id="medDialog">
+    <form method="dialog" id="medForm">
+      <div class="modal-head"><h2 id="medDialogTitle">Farmaco</h2><button type="button" class="ghost small closeDialog">Chiudi</button></div>
+      <div class="modal-body grid">
+        <input id="medId" type="hidden">
+        <div class="grid two">
+          <label>Nome commerciale<input id="medName" required></label>
+          <label>Principio attivo<input id="medActive"></label>
+          <label>Dose abituale<input id="medDose"></label>
+          <label>Unita<select id="medUnit"><option>mg</option><option>gocce</option><option>compresse</option><option>ml</option><option>altro</option></select></label>
+          <label>Orario abituale<input id="medSchedule" placeholder="es. mattina, 21:00"></label>
+          <label>Frequenza<input id="medFrequency" placeholder="es. una volta al giorno"></label>
+          <label>Tipo<select id="medType"><option value="programmato">Programmato</option><option value="bisogno">Al bisogno</option></select></label>
+          <label>Data inizio<input id="medStart" type="date"></label>
+          <label>Data fine opzionale<input id="medEnd" type="date"></label>
+          <label>Prescrittore<input id="medPrescriber"></label>
+          <label>Stato<select id="medStatus"><option value="attivo">Attivo</option><option value="sospeso">Sospeso</option></select></label>
+        </div>
+        <h3>Dosi e orari abituali</h3>
+        <p class="hint">Aggiungi piu righe se lo stesso farmaco ha dosaggi diversi in momenti diversi.</p>
+        <div id="medSchedules"></div>
+        <button type="button" class="secondary" id="addMedScheduleBtn">Aggiungi dose/orario</button>
+        <label>Istruzioni<textarea id="medInstructions"></textarea></label>
+        <label>Note<textarea id="medNotes"></textarea></label>
+        <h3>Modifiche di dose</h3>
+        <div id="doseChanges"></div>
+        <button type="button" class="secondary" id="addDoseChangeBtn">Aggiungi modifica dose</button>
+      </div>
+      <div class="modal-foot">
+        <button type="submit">Salva farmaco</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="quickMedDialog">
+    <form method="dialog" id="quickMedForm">
+      <div class="modal-head"><h2>Farmaco al bisogno</h2><button type="button" class="ghost small closeDialog">Chiudi</button></div>
+      <div class="modal-body grid">
+        <label>Farmaco<select id="quickMedSelect"></select></label>
+        <label>Dose predefinita<select id="quickMedSchedule"></select></label>
+        <div class="grid two">
+          <label>Dose<input id="quickMedDose"></label>
+          <label>Ora<input id="quickMedTime" type="time"></label>
+        </div>
+        <label>Motivo facoltativo<input id="quickMedReason"></label>
+      </div>
+      <div class="modal-foot">
+        <button type="submit">Aggiungi a Oggi</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="importDialog">
+    <div class="modal-head"><h2>Importazione</h2><button type="button" class="ghost small closeDialog">Chiudi</button></div>
+    <div class="modal-body" id="importPreview"></div>
+    <div class="modal-foot">
+      <button id="mergeImportBtn" type="button">Unisci dati</button>
+      <button id="replaceImportBtn" type="button" class="secondary">Sovrascrivi tutto</button>
+    </div>
+  </dialog>
+
+  <dialog id="summaryDialog">
+    <div class="modal-head"><h2>Riepilogo medico</h2><button type="button" class="ghost small closeDialog">Chiudi</button></div>
+    <div class="modal-body grid">
+      <div class="grid two">
+        <label>Da<input id="summaryFrom" type="date"></label>
+        <label>A<input id="summaryTo" type="date"></label>
+      </div>
+      <button id="prepareSummaryBtn" type="button" class="secondary">Mostra note disponibili</button>
+      <div id="summaryNotes"></div>
+      <label>Domande per il medico<textarea id="doctorQuestions"></textarea></label>
+      <div id="summaryOutput" class="panel flat"></div>
+    </div>
+    <div class="modal-foot">
+      <button id="printSummaryBtn" type="button">Stampa</button>
+      <button id="copySummaryBtn" type="button" class="secondary">Copia testo</button>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="print-area" id="printArea"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const STORAGE_KEY = "diarioBenessereTerapia.v1";
+      const DRAFT_KEY = "diarioBenessereTerapia.draft";
+      const BACKUP_KEY = "diarioBenessereTerapia.backup";
+
+      const defaults = {
+        emotions: ["tranquilla", "serena", "fiduciosa", "energica", "concentrata", "stanca", "triste", "sopraffatta", "irritabile", "frustrata", "agitata", "spaventata", "in colpa", "confusa", "emotivamente instabile", "altro"],
+        symptoms: ["tachicardia", "senso di oppressione", "respiro corto", "tremori", "sudorazione", "nausea", "vertigini", "pianto", "paura di perdere il controllo", "sensazione di irrealtà", "agitazione interna", "difficoltà a concentrarsi", "altro"],
+        events: ["giornata lavorativa intensa", "riunione difficile", "responsabilità elevata", "conflitto", "imprevisto", "difficoltà domestiche", "sovraccarico familiare", "poco sonno", "ciclo mestruale", "problema di salute", "visita medica", "psicoterapia", "attività fisica", "tempo all'aperto", "momento piacevole", "tempo con la famiglia", "tempo da sola", "esposizione a rumore o confusione", "cambio di programma", "viaggio o spostamento", "guida", "uso elevato di caffeina", "alcol", "altro"],
+        strategies: ["respirazione lenta", "grounding", "camminata", "riposo", "musica", "doccia", "parlare con una persona", "stare da sola", "scrivere", "mangiare qualcosa", "bere acqua", "ridurre stimoli", "esercizio fisico", "farmaco al bisogno", "altro"]
+      };
+
+      const scaleFields = [
+        ["energy", "Energia"],
+        ["concentration", "Concentrazione"],
+        ["organization", "Capacita organizzativa"],
+        ["irritability", "Irritabilita"],
+        ["restlessness", "Irrequietezza"],
+        ["mentalLoad", "Sovraccarico mentale"],
+        ["dailyFunction", "Gestione attivita quotidiane"]
+      ];
+
+      const state = loadState();
+      let pendingImport = null;
+
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+
+      function uid(prefix = "id") {
+        return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+      }
+
+      function today() {
+        return new Date().toISOString().slice(0, 10);
+      }
+
+      function nowTime() {
+        return new Date().toTimeString().slice(0, 5);
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return initialState();
+          const parsed = JSON.parse(raw);
+          return {
+            entries: Array.isArray(parsed.entries) ? parsed.entries : [],
+            meds: Array.isArray(parsed.meds) ? parsed.meds : [],
+            lists: { ...defaults, ...(parsed.lists || {}) },
+            settings: { ...initialState().settings, ...(parsed.settings || {}) },
+            lastBackup: parsed.lastBackup || ""
+          };
+        } catch {
+          return initialState();
+        }
+      }
+
+      function initialState() {
+        return {
+          entries: [],
+          meds: [],
+          lists: structuredClone(defaults),
+          settings: {
+            theme: "auto",
+            textSize: "normale",
+            highAnxiety: 7,
+            weekStart: "1",
+            colorScale: "standard"
+          },
+          lastBackup: ""
+        };
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function showToast(message) {
+        const toast = $("#toast");
+        toast.textContent = message;
+        toast.style.display = "block";
+        window.clearTimeout(showToast.timer);
+        showToast.timer = window.setTimeout(() => toast.style.display = "none", 2600);
+      }
+
+      function applyTheme() {
+        const mode = state.settings.theme || "auto";
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.dataset.theme = mode === "auto" ? (prefersDark ? "dark" : "light") : mode;
+        document.documentElement.dataset.text = state.settings.textSize || "normale";
+      }
+
+      function setSection(id) {
+        $$(".section").forEach(section => section.classList.toggle("active", section.id === id));
+        $$(".nav button").forEach(button => button.classList.toggle("active", button.dataset.section === id));
+        if (id === "diario") renderEntries();
+        if (id === "farmaci") renderMeds();
+        if (id === "andamento") renderCharts();
+        if (id === "impostazioni") renderSettings();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function renderChips(containerId, items, name, selected = []) {
+        const box = $(`#${containerId}`);
+        box.innerHTML = "";
+        items.forEach(item => {
+          const label = document.createElement("label");
+          label.className = "chip";
+          label.innerHTML = `<input type="checkbox" name="${name}" value="${escapeHtml(item)}"> ${escapeHtml(item)}`;
+          const input = $("input", label);
+          input.checked = selected.includes(item);
+          box.append(label);
+        });
+      }
+
+      function renderFunctionScales(values = {}) {
+        const box = $("#functionScales");
+        box.innerHTML = "";
+        scaleFields.forEach(([key, label]) => {
+          const wrap = document.createElement("label");
+          wrap.innerHTML = `${label}<div class="value-row"><input id="${key}" type="range" min="0" max="10" value="${values[key] ?? 5}"><output class="score">${values[key] ?? 5}</output></div>`;
+          const input = $("input", wrap);
+          const output = $("output", wrap);
+          input.addEventListener("input", () => output.textContent = input.value);
+          box.append(wrap);
+        });
+      }
+
+      function renderStrategyRows(strategies = []) {
+        const box = $("#strategyRows");
+        box.innerHTML = "";
+        if (!strategies.length) strategies = [{ name: "", effectiveness: "", note: "" }];
+        strategies.forEach(item => addStrategyRow(item));
+      }
+
+      function addStrategyRow(item = {}) {
+        const row = document.createElement("div");
+        row.className = "strategy-row";
+        row.innerHTML = `
+          <div class="grid three">
+            <label>Strategia<select class="strategyName">${options(state.lists.strategies, item.name)}</select></label>
+            <label>Efficacia 0-10<input class="strategyEffect" type="number" min="0" max="10" value="${escapeAttr(item.effectiveness || "")}"></label>
+            <label>Nota<input class="strategyNote" value="${escapeAttr(item.note || "")}"></label>
+          </div>
+          <button type="button" class="secondary small removeRow">Rimuovi</button>
+        `;
+        $(".removeRow", row).addEventListener("click", () => row.remove());
+        $("#strategyRows").append(row);
+      }
+
+      function renderTakenMeds(items = []) {
+        const box = $("#takenMeds");
+        box.innerHTML = "";
+        items.forEach(item => addTakenMedRow(item));
+      }
+
+      function addTakenMedRow(item = {}) {
+        const row = document.createElement("div");
+        row.className = "med-dose-row";
+        row.innerHTML = `
+          <div class="grid three">
+            <label>Farmaco<select class="takenMedName">${medOptions(item.medId)}</select></label>
+            <label>Dose<input class="takenDose" value="${escapeAttr(item.dose || "")}"></label>
+            <label>Unita<input class="takenUnit" value="${escapeAttr(item.unit || "")}"></label>
+            <label>Orario<input class="takenTime" type="time" value="${escapeAttr(item.time || nowTime())}"></label>
+            <label>Tipo<select class="takenType"><option value="programmato">Programmato</option><option value="bisogno">Al bisogno</option></select></label>
+            <label>Efficacia 0-10<input class="takenEffect" type="number" min="0" max="10" value="${escapeAttr(item.effectiveness || "")}"></label>
+          </div>
+          <label>Motivo<input class="takenReason" value="${escapeAttr(item.reason || "")}"></label>
+          <label>Effetti indesiderati<input class="takenSideEffects" value="${escapeAttr(item.sideEffects || "")}"></label>
+          <label>Note<input class="takenNotes" value="${escapeAttr(item.notes || "")}"></label>
+          <button type="button" class="secondary small removeRow">Rimuovi</button>
+        `;
+        $(".takenType", row).value = item.type || "programmato";
+        $(".takenMedName", row).addEventListener("change", e => fillMedDose(row, e.target.value));
+        $(".removeRow", row).addEventListener("click", () => row.remove());
+        $("#takenMeds").append(row);
+      }
+
+      function medOptions(selectedId = "") {
+        const active = state.meds.filter(m => m.status !== "sospeso");
+        if (!active.length) return `<option value="">Nessun farmaco configurato</option>`;
+        return `<option value="">Seleziona</option>` + active.map(m => `<option value="${escapeAttr(m.id)}" ${m.id === selectedId ? "selected" : ""}>${escapeHtml(m.name)}</option>`).join("");
+      }
+
+      function fillMedDose(row, medId) {
+        const med = state.meds.find(m => m.id === medId);
+        if (!med) return;
+        const schedule = (med.schedules && med.schedules[0]) || defaultScheduleFromMed(med)[0] || {};
+        $(".takenDose", row).value = schedule.dose || med.dose || "";
+        $(".takenUnit", row).value = schedule.unit || med.unit || "";
+        if (schedule.time && /^\d\d:\d\d$/.test(schedule.time)) $(".takenTime", row).value = schedule.time;
+        $(".takenType", row).value = med.type || "programmato";
+      }
+
+      function setupForm(entry = null) {
+        $("#entryForm").reset();
+        $("#entryId").value = entry?.id || "";
+        $("#entryDate").value = entry?.date || today();
+        $("#entryTime").value = entry?.time || nowTime();
+        $("#mood").value = entry?.mood ?? 5;
+        $("#anxiety").value = entry?.anxiety ?? 0;
+        $("#notes").value = entry?.notes || "";
+        $("#panic").checked = !!entry?.panic?.present;
+        $("#panicStart").value = entry?.panic?.start || "";
+        $("#panicDuration").value = entry?.panic?.duration || "";
+        $("#panicMax").value = entry?.panic?.maxIntensity || "";
+        $("#bedTime").value = entry?.sleep?.bedTime || "";
+        $("#wakeTime").value = entry?.sleep?.wakeTime || "";
+        $("#sleepHours").value = entry?.sleep?.hours || "";
+        $("#wakeups").value = entry?.sleep?.wakeups || "";
+        $("#sleepQuality").value = entry?.sleep?.quality || 5;
+        $("#fallAsleepHard").checked = !!entry?.sleep?.fallAsleepHard;
+        $("#earlyWake").checked = !!entry?.sleep?.earlyWake;
+        $("#nightmares").checked = !!entry?.sleep?.nightmares;
+        updateOutputs();
+        renderChips("emotionChips", state.lists.emotions, "emotion", entry?.emotions || []);
+        renderChips("symptomChips", state.lists.symptoms, "symptom", entry?.panic?.symptoms || []);
+        renderChips("eventChips", state.lists.events, "event", entry?.events || []);
+        $("#otherEmotion").value = entry?.otherEmotion || "";
+        $("#otherSymptom").value = entry?.panic?.otherSymptom || "";
+        $("#otherEvent").value = entry?.otherEvent || "";
+        renderFunctionScales(entry?.functioning || {});
+        renderTakenMeds(entry?.medications || []);
+        renderStrategyRows(entry?.strategies || []);
+        toggleConditionalFields();
+      }
+
+      function collectEntry() {
+        const functioning = {};
+        scaleFields.forEach(([key]) => functioning[key] = Number($(`#${key}`).value || 0));
+        return {
+          id: $("#entryId").value || uid("entry"),
+          updatedAt: new Date().toISOString(),
+          date: $("#entryDate").value,
+          time: $("#entryTime").value,
+          mood: Number($("#mood").value),
+          anxiety: Number($("#anxiety").value),
+          emotions: checkedValues("emotion"),
+          otherEmotion: $("#otherEmotion").value.trim(),
+          panic: {
+            present: $("#panic").checked,
+            start: $("#panicStart").value,
+            duration: $("#panicDuration").value.trim(),
+            maxIntensity: $("#panicMax").value,
+            symptoms: checkedValues("symptom"),
+            otherSymptom: $("#otherSymptom").value.trim()
+          },
+          sleep: {
+            bedTime: $("#bedTime").value,
+            wakeTime: $("#wakeTime").value,
+            hours: $("#sleepHours").value,
+            wakeups: $("#wakeups").value,
+            quality: Number($("#sleepQuality").value),
+            fallAsleepHard: $("#fallAsleepHard").checked,
+            earlyWake: $("#earlyWake").checked,
+            nightmares: $("#nightmares").checked
+          },
+          functioning,
+          medications: $$("#takenMeds .med-dose-row").map(row => {
+            const med = state.meds.find(m => m.id === $(".takenMedName", row).value);
+            return {
+              medId: $(".takenMedName", row).value,
+              name: med?.name || "",
+              dose: $(".takenDose", row).value.trim(),
+              unit: $(".takenUnit", row).value.trim(),
+              time: $(".takenTime", row).value,
+              type: $(".takenType", row).value,
+              reason: $(".takenReason", row).value.trim(),
+              effectiveness: $(".takenEffect", row).value,
+              sideEffects: $(".takenSideEffects", row).value.trim(),
+              notes: $(".takenNotes", row).value.trim()
+            };
+          }).filter(m => m.medId || m.name || m.dose),
+          events: checkedValues("event"),
+          otherEvent: $("#otherEvent").value.trim(),
+          notes: $("#notes").value.trim(),
+          strategies: $$("#strategyRows .strategy-row").map(row => ({
+            name: $(".strategyName", row).value,
+            effectiveness: $(".strategyEffect", row).value,
+            note: $(".strategyNote", row).value.trim()
+          })).filter(s => s.name || s.note)
+        };
+      }
+
+      function checkedValues(name) {
+        return $$(`input[name="${name}"]:checked`).map(input => input.value);
+      }
+
+      function updateOutputs() {
+        $("#moodOut").textContent = $("#mood").value;
+        $("#anxietyOut").textContent = $("#anxiety").value;
+        $("#sleepQualityOut").textContent = $("#sleepQuality").value;
+      }
+
+      function toggleConditionalFields() {
+        $("#panicFields").hidden = !$("#panic").checked;
+        $("#otherEmotionWrap").hidden = !checkedValues("emotion").includes("altro");
+        $("#otherSymptomWrap").hidden = !checkedValues("symptom").includes("altro");
+        $("#otherEventWrap").hidden = !checkedValues("event").includes("altro");
+      }
+
+      function calculateSleep() {
+        const bed = $("#bedTime").value;
+        const wake = $("#wakeTime").value;
+        if (!bed || !wake) return;
+        const [bh, bm] = bed.split(":").map(Number);
+        const [wh, wm] = wake.split(":").map(Number);
+        let minutes = (wh * 60 + wm) - (bh * 60 + bm);
+        if (minutes < 0) minutes += 24 * 60;
+        $("#sleepHours").value = (minutes / 60).toFixed(1);
+      }
+
+      function renderEntries() {
+        fillFilters();
+        const list = $("#entryList");
+        const entries = filteredEntries().sort((a, b) => (b.date + b.time).localeCompare(a.date + a.time));
+        list.innerHTML = "";
+        if (!entries.length) {
+          list.innerHTML = `<div class="empty">Nessuna registrazione trovata.</div>`;
+          return;
+        }
+        entries.forEach(entry => {
+          const card = document.createElement("article");
+          card.className = "entry-card";
+          const medText = entry.medications?.map(m => `${m.name || "Farmaco"} ${m.dose || ""}${m.unit || ""}`.trim()).join(", ") || "nessun farmaco";
+          const emotions = [...(entry.emotions || []), entry.otherEmotion].filter(Boolean).slice(0, 4);
+          card.innerHTML = `
+            <h3>${formatDate(entry.date)} alle ${entry.time}</h3>
+            <div class="meta">Umore ${entry.mood}/10 · Ansia ${entry.anxiety}/10 ${entry.panic?.present ? "· panico" : ""}</div>
+            <div class="pill-line">${emotions.map(e => `<span class="pill">${escapeHtml(e)}</span>`).join("")}</div>
+            <div class="meta">Farmaci: ${escapeHtml(medText)}</div>
+            <p>${escapeHtml((entry.notes || "").slice(0, 150))}${entry.notes && entry.notes.length > 150 ? "..." : ""}</p>
+            <div class="card-actions">
+              <button type="button" class="small secondary" data-action="detail">Dettaglio</button>
+              <button type="button" class="small secondary" data-action="edit">Modifica</button>
+              <button type="button" class="small secondary" data-action="copy">Duplica</button>
+              <button type="button" class="small secondary" data-action="print">Stampa</button>
+              <button type="button" class="small danger" data-action="delete">Elimina</button>
+            </div>
+          `;
+          card.addEventListener("click", event => {
+            const action = event.target.dataset.action;
+            if (!action) return;
+            handleEntryAction(action, entry.id);
+          });
+          list.append(card);
+        });
+      }
+
+      function filteredEntries() {
+        const text = $("#searchText")?.value.toLowerCase().trim() || "";
+        const from = $("#filterFrom")?.value || "";
+        const to = $("#filterTo")?.value || "";
+        const med = $("#filterMed")?.value || "";
+        const panic = $("#filterPanic")?.value || "";
+        const minAnxiety = $("#filterAnxiety")?.value;
+        const emotion = $("#filterEmotion")?.value || "";
+        const eventFilter = $("#filterEvent")?.value || "";
+        return state.entries.filter(entry => {
+          const haystack = JSON.stringify(entry).toLowerCase();
+          if (text && !haystack.includes(text)) return false;
+          if (from && entry.date < from) return false;
+          if (to && entry.date > to) return false;
+          if (med && !(entry.medications || []).some(m => m.medId === med)) return false;
+          if (panic === "yes" && !entry.panic?.present) return false;
+          if (panic === "no" && entry.panic?.present) return false;
+          if (minAnxiety !== "" && Number(entry.anxiety) < Number(minAnxiety)) return false;
+          if (emotion && !(entry.emotions || []).includes(emotion)) return false;
+          if (eventFilter && !(entry.events || []).includes(eventFilter)) return false;
+          return true;
+        });
+      }
+
+      function handleEntryAction(action, id) {
+        const entry = state.entries.find(e => e.id === id);
+        if (!entry) return;
+        if (action === "edit") {
+          setSection("oggi");
+          setupForm(entry);
+          showToast("Registrazione aperta per modifica");
+        }
+        if (action === "copy") {
+          const copy = { ...structuredClone(entry), id: uid("entry"), date: today(), time: nowTime(), updatedAt: new Date().toISOString() };
+          state.entries.push(copy);
+          saveState();
+          renderEntries();
+          showToast("Registrazione duplicata");
+        }
+        if (action === "delete" && confirm("Eliminare questa registrazione?")) {
+          state.entries = state.entries.filter(e => e.id !== id);
+          saveState();
+          renderEntries();
+          showToast("Registrazione eliminata");
+        }
+        if (action === "print") printEntry(entry);
+        if (action === "detail") alert(entryToText(entry));
+      }
+
+      function fillFilters() {
+        const medSelect = $("#filterMed");
+        const currentMed = medSelect.value;
+        medSelect.innerHTML = `<option value="">Tutti</option>` + state.meds.map(m => `<option value="${escapeAttr(m.id)}">${escapeHtml(m.name)}</option>`).join("");
+        medSelect.value = currentMed;
+        fillSelect("#filterEmotion", state.lists.emotions, "Tutte");
+        fillSelect("#filterEvent", state.lists.events, "Tutti");
+      }
+
+      function renderMeds(showSuspended = false) {
+        const list = $("#medList");
+        const meds = state.meds.filter(m => showSuspended || m.status !== "sospeso");
+        list.innerHTML = "";
+        if (!meds.length) {
+          list.innerHTML = `<div class="empty">Nessun farmaco configurato. Aggiungi il primo farmaco dalla tua anagrafica personale.</div>`;
+          return;
+        }
+        meds.forEach(med => {
+          const card = document.createElement("article");
+          card.className = "med-card";
+          card.innerHTML = `
+          <h3>${escapeHtml(med.name || "Senza nome")}</h3>
+          <div class="meta">${escapeHtml(med.active || "")} · ${escapeHtml(scheduleSummary(med))}</div>
+            <div class="pill-line"><span class="pill">${escapeHtml(med.type || "programmato")}</span><span class="pill">${escapeHtml(med.status || "attivo")}</span></div>
+            <p>${escapeHtml(med.notes || med.instructions || "")}</p>
+            <div class="card-actions">
+              <button type="button" class="small secondary" data-action="edit">Modifica</button>
+              <button type="button" class="small secondary" data-action="toggle">${med.status === "sospeso" ? "Riattiva" : "Sospendi"}</button>
+              <button type="button" class="small danger" data-action="delete">Elimina</button>
+            </div>
+          `;
+          card.addEventListener("click", event => {
+            const action = event.target.dataset.action;
+            if (!action) return;
+            if (action === "edit") openMedDialog(med);
+            if (action === "toggle") {
+              med.status = med.status === "sospeso" ? "attivo" : "sospeso";
+              saveState();
+              renderMeds(showSuspended);
+              showToast("Stato farmaco aggiornato");
+            }
+            if (action === "delete" && confirm("Eliminare questo farmaco dall'anagrafica? Le vecchie registrazioni resteranno nel diario.")) {
+              state.meds = state.meds.filter(m => m.id !== med.id);
+              saveState();
+              renderMeds(showSuspended);
+              showToast("Farmaco eliminato");
+            }
+          });
+          list.append(card);
+        });
+      }
+
+      function openMedDialog(med = null) {
+        $("#medForm").reset();
+        $("#medDialogTitle").textContent = med ? "Modifica farmaco" : "Nuovo farmaco";
+        $("#medId").value = med?.id || "";
+        $("#medName").value = med?.name || "";
+        $("#medActive").value = med?.active || "";
+        $("#medDose").value = med?.dose || "";
+        $("#medUnit").value = med?.unit || "mg";
+        $("#medSchedule").value = med?.schedule || "";
+        $("#medFrequency").value = med?.frequency || "";
+        $("#medType").value = med?.type || "programmato";
+        $("#medStart").value = med?.start || "";
+        $("#medEnd").value = med?.end || "";
+        $("#medPrescriber").value = med?.prescriber || "";
+        $("#medStatus").value = med?.status || "attivo";
+        $("#medInstructions").value = med?.instructions || "";
+        $("#medNotes").value = med?.notes || "";
+        renderMedSchedules(med?.schedules || defaultScheduleFromMed(med));
+        renderDoseChanges(med?.doseChanges || []);
+        $("#medDialog").showModal();
+      }
+
+      function defaultScheduleFromMed(med) {
+        if (!med) return [];
+        if (!med.dose && !med.schedule) return [];
+        return [{ label: "abituale", dose: med.dose || "", unit: med.unit || "", time: med.schedule || "" }];
+      }
+
+      function renderMedSchedules(schedules = []) {
+        const box = $("#medSchedules");
+        box.innerHTML = "";
+        if (!schedules.length) schedules = [{ label: "", dose: "", unit: "mg", time: "" }];
+        schedules.forEach(schedule => addMedScheduleRow(schedule));
+      }
+
+      function addMedScheduleRow(schedule = {}) {
+        const row = document.createElement("div");
+        row.className = "dose-change-row";
+        row.innerHTML = `
+          <div class="grid three">
+            <label>Momento<input class="medScheduleLabel" value="${escapeAttr(schedule.label || "")}" placeholder="es. mattina, sera"></label>
+            <label>Dose<input class="medScheduleDose" value="${escapeAttr(schedule.dose || "")}"></label>
+            <label>Unita<select class="medScheduleUnit"><option>mg</option><option>gocce</option><option>compresse</option><option>ml</option><option>altro</option></select></label>
+            <label>Orario<input class="medScheduleTime" value="${escapeAttr(schedule.time || "")}" placeholder="es. 08:00"></label>
+          </div>
+          <button type="button" class="secondary small removeRow">Rimuovi</button>
+        `;
+        $(".medScheduleUnit", row).value = schedule.unit || "mg";
+        $(".removeRow", row).addEventListener("click", () => row.remove());
+        $("#medSchedules").append(row);
+      }
+
+      function renderDoseChanges(changes = []) {
+        const box = $("#doseChanges");
+        box.innerHTML = "";
+        changes.forEach(change => addDoseChangeRow(change));
+      }
+
+      function addDoseChangeRow(change = {}) {
+        const row = document.createElement("div");
+        row.className = "dose-change-row";
+        row.innerHTML = `
+          <div class="grid three">
+            <label>Data<input class="doseChangeDate" type="date" value="${escapeAttr(change.date || today())}"></label>
+            <label>Dose<input class="doseChangeDose" value="${escapeAttr(change.dose || "")}"></label>
+            <label>Motivo/nota<input class="doseChangeNote" value="${escapeAttr(change.note || "")}"></label>
+          </div>
+          <button type="button" class="secondary small removeRow">Rimuovi</button>
+        `;
+        $(".removeRow", row).addEventListener("click", () => row.remove());
+        $("#doseChanges").append(row);
+      }
+
+      function collectMed() {
+        return {
+          id: $("#medId").value || uid("med"),
+          updatedAt: new Date().toISOString(),
+          name: $("#medName").value.trim(),
+          active: $("#medActive").value.trim(),
+          dose: $("#medDose").value.trim(),
+          unit: $("#medUnit").value,
+          schedule: $("#medSchedule").value.trim(),
+          frequency: $("#medFrequency").value.trim(),
+          type: $("#medType").value,
+          start: $("#medStart").value,
+          end: $("#medEnd").value,
+          prescriber: $("#medPrescriber").value.trim(),
+          status: $("#medStatus").value,
+          instructions: $("#medInstructions").value.trim(),
+          notes: $("#medNotes").value.trim(),
+          schedules: $$("#medSchedules .dose-change-row").map(row => ({
+            label: $(".medScheduleLabel", row).value.trim(),
+            dose: $(".medScheduleDose", row).value.trim(),
+            unit: $(".medScheduleUnit", row).value,
+            time: $(".medScheduleTime", row).value.trim()
+          })).filter(s => s.label || s.dose || s.time),
+          doseChanges: $$("#doseChanges .dose-change-row").map(row => ({
+            date: $(".doseChangeDate", row).value,
+            dose: $(".doseChangeDose", row).value.trim(),
+            note: $(".doseChangeNote", row).value.trim()
+          })).filter(c => c.date || c.dose || c.note)
+        };
+      }
+
+      function chartEntries() {
+        const range = $("#chartRange").value;
+        let from = $("#chartFrom").value;
+        let to = $("#chartTo").value || today();
+        if (range !== "custom") {
+          const d = new Date();
+          d.setDate(d.getDate() - Number(range) + 1);
+          from = d.toISOString().slice(0, 10);
+          $("#chartFrom").value = from;
+          $("#chartTo").value = to;
+        }
+        return state.entries.filter(e => (!from || e.date >= from) && (!to || e.date <= to)).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+      }
+
+      function renderCharts() {
+        const entries = chartEntries();
+        renderStats(entries);
+        const charts = [
+          ["Ansia nel tempo", entries.map(e => ({ label: shortDate(e.date), value: e.anxiety })), 10],
+          ["Stato d'animo nel tempo", entries.map(e => ({ label: shortDate(e.date), value: e.mood })), 10],
+          ["Qualita del sonno", entries.map(e => ({ label: shortDate(e.date), value: e.sleep?.quality || null })), 10],
+          ["Ore dormite", entries.map(e => ({ label: shortDate(e.date), value: Number(e.sleep?.hours) || null })), 12],
+          ["Energia", entries.map(e => ({ label: shortDate(e.date), value: e.functioning?.energy ?? null })), 10],
+          ["Irrequietezza", entries.map(e => ({ label: shortDate(e.date), value: e.functioning?.restlessness ?? null })), 10],
+          ["Attacchi di panico", groupByDate(entries, e => e.panic?.present ? 1 : 0), 5],
+          ["Efficacia farmaci al bisogno", prnEffectiveness(entries), 10],
+          ["Frequenza emozioni", frequencyChartData(entries.flatMap(e => [...(e.emotions || []), e.otherEmotion].filter(Boolean))), null],
+          ["Frequenza eventi", frequencyChartData(entries.flatMap(e => [...(e.events || []), e.otherEvent].filter(Boolean))), null],
+          ["Effetti indesiderati", frequencyChartData(entries.flatMap(e => (e.medications || []).flatMap(m => splitList(m.sideEffects)))), null]
+        ];
+        const wrap = $("#charts");
+        wrap.innerHTML = "";
+        charts.forEach((chart, index) => {
+          const details = document.createElement("details");
+          details.open = index < 2;
+          details.innerHTML = `<summary>${escapeHtml(chart[0])}</summary><div class="details-body"><canvas height="260"></canvas></div>`;
+          wrap.append(details);
+          drawChart($("canvas", details), chart[1], chart[2]);
+        });
+      }
+
+      function renderStats(entries) {
+        const avg = key => {
+          const values = entries.map(key).filter(v => Number.isFinite(Number(v)));
+          return values.length ? (values.reduce((a, b) => a + Number(b), 0) / values.length).toFixed(1) : "-";
+        };
+        const panicCount = entries.filter(e => e.panic?.present).length;
+        const high = entries.filter(e => Number(e.anxiety) >= Number(state.settings.highAnxiety || 7)).length;
+        const topStrategies = topItems(entries.flatMap(e => (e.strategies || []).map(s => s.name).filter(Boolean))).slice(0, 3).join(", ") || "-";
+        const topEventsHigh = topItems(entries.filter(e => Number(e.anxiety) >= Number(state.settings.highAnxiety || 7)).flatMap(e => e.events || [])).slice(0, 3).join(", ") || "-";
+        $("#stats").innerHTML = `
+          <div class="stat"><b>${avg(e => e.anxiety)}</b><span>Media ansia</span></div>
+          <div class="stat"><b>${avg(e => e.mood)}</b><span>Media umore</span></div>
+          <div class="stat"><b>${avg(e => e.sleep?.quality)}</b><span>Media sonno</span></div>
+          <div class="stat"><b>${panicCount}</b><span>Attacchi panico</span></div>
+          <div class="stat"><b>${high}</b><span>Giorni ansia alta</span></div>
+          <div class="stat"><b>${escapeHtml(topStrategies)}</b><span>Strategie piu usate</span></div>
+          <div class="stat"><b>${escapeHtml(topEventsHigh)}</b><span>Possibile associazione osservata nei dati</span></div>
+        `;
+      }
+
+      function drawChart(canvas, data, maxValue) {
+        const ctx = canvas.getContext("2d");
+        const ratio = window.devicePixelRatio || 1;
+        const width = canvas.clientWidth || 600;
+        const height = Number(canvas.getAttribute("height")) || 260;
+        canvas.width = width * ratio;
+        canvas.height = height * ratio;
+        ctx.scale(ratio, ratio);
+        ctx.clearRect(0, 0, width, height);
+        ctx.strokeStyle = getCss("--line");
+        ctx.fillStyle = getCss("--muted");
+        ctx.font = "13px system-ui";
+        const pad = 34;
+        ctx.beginPath();
+        ctx.moveTo(pad, 12);
+        ctx.lineTo(pad, height - pad);
+        ctx.lineTo(width - 12, height - pad);
+        ctx.stroke();
+        const valid = data.filter(d => d.value !== null && d.value !== "" && !Number.isNaN(Number(d.value)));
+        if (!valid.length) {
+          ctx.fillText("Dati insufficienti", pad + 12, height / 2);
+          return;
+        }
+        const max = maxValue || Math.max(...valid.map(d => Number(d.value)), 1);
+        const xFor = i => pad + (valid.length === 1 ? 0 : i * ((width - pad - 20) / (valid.length - 1)));
+        const yFor = v => height - pad - (Number(v) / max) * (height - pad - 24);
+        if (maxValue) {
+          ctx.strokeStyle = getCss("--primary");
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          valid.forEach((d, i) => i ? ctx.lineTo(xFor(i), yFor(d.value)) : ctx.moveTo(xFor(i), yFor(d.value)));
+          ctx.stroke();
+          ctx.fillStyle = getCss("--accent");
+          valid.forEach((d, i) => {
+            ctx.beginPath();
+            ctx.arc(xFor(i), yFor(d.value), 4, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        } else {
+          const barW = Math.max(18, (width - pad - 30) / valid.length - 8);
+          valid.forEach((d, i) => {
+            const x = pad + i * ((width - pad - 24) / valid.length) + 4;
+            const y = yFor(d.value);
+            ctx.fillStyle = getCss("--primary");
+            ctx.fillRect(x, y, barW, height - pad - y);
+            ctx.fillStyle = getCss("--muted");
+            ctx.save();
+            ctx.translate(x, height - 10);
+            ctx.rotate(-0.65);
+            ctx.fillText(String(d.label).slice(0, 16), 0, 0);
+            ctx.restore();
+          });
+        }
+      }
+
+      function groupByDate(entries, valueFn) {
+        const map = new Map();
+        entries.forEach(e => map.set(e.date, (map.get(e.date) || 0) + valueFn(e)));
+        return [...map].map(([label, value]) => ({ label: shortDate(label), value }));
+      }
+
+      function prnEffectiveness(entries) {
+        return entries.flatMap(e => (e.medications || []).filter(m => m.type === "bisogno" && m.effectiveness !== "").map(m => ({ label: `${shortDate(e.date)} ${m.name}`, value: Number(m.effectiveness) })));
+      }
+
+      function frequencyChartData(items) {
+        const counts = new Map();
+        items.filter(Boolean).forEach(item => counts.set(item, (counts.get(item) || 0) + 1));
+        return [...counts].sort((a, b) => b[1] - a[1]).slice(0, 10).map(([label, value]) => ({ label, value }));
+      }
+
+      function renderSettings() {
+        $("#themeMode").value = state.settings.theme;
+        $("#textSize").value = state.settings.textSize;
+        $("#highAnxiety").value = state.settings.highAnxiety;
+        $("#weekStart").value = state.settings.weekStart;
+        $("#listEmotions").value = state.lists.emotions.join("\n");
+        $("#listSymptoms").value = state.lists.symptoms.join("\n");
+        $("#listEvents").value = state.lists.events.join("\n");
+        $("#listStrategies").value = state.lists.strategies.join("\n");
+        $("#backupInfo").textContent = state.lastBackup ? `Ultimo backup: ${formatDateTime(state.lastBackup)}` : "Nessun backup registrato.";
+      }
+
+      function exportJson(isBackup = false) {
+        const payload = { version: 1, exportedAt: new Date().toISOString(), ...state };
+        download(`diario_salute_${today()}.json`, JSON.stringify(payload, null, 2), "application/json");
+        if (isBackup) {
+          state.lastBackup = new Date().toISOString();
+          localStorage.setItem(BACKUP_KEY, JSON.stringify(payload));
+          saveState();
+          renderSettings();
+          showToast("Backup JSON creato e copia interna aggiornata");
+        }
+      }
+
+      function exportCsv() {
+        const rows = [["id", "data", "ora", "umore", "ansia", "panico", "farmaci", "emozioni", "eventi", "note"]];
+        state.entries.forEach(e => rows.push([
+          e.id, e.date, e.time, e.mood, e.anxiety, e.panic?.present ? "si" : "no",
+          (e.medications || []).map(m => `${m.name} ${m.dose}${m.unit}`).join("; "),
+          [...(e.emotions || []), e.otherEmotion].filter(Boolean).join("; "),
+          [...(e.events || []), e.otherEvent].filter(Boolean).join("; "),
+          e.notes || ""
+        ]));
+        const csv = rows.map(row => row.map(cell => `"${String(cell ?? "").replaceAll('"', '""')}"`).join(",")).join("\n");
+        download(`diario_salute_${today()}.csv`, csv, "text/csv");
+      }
+
+      function handleImport(file) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const parsed = JSON.parse(reader.result);
+            if (!Array.isArray(parsed.entries) || !Array.isArray(parsed.meds)) throw new Error("Formato non valido");
+            pendingImport = parsed;
+            $("#importPreview").innerHTML = `
+              <p>File valido.</p>
+              <ul>
+                <li>${parsed.entries.length} registrazioni</li>
+                <li>${parsed.meds.length} farmaci</li>
+              </ul>
+              <p class="hint">Con "Unisci dati", se due elementi hanno lo stesso identificativo ti verra chiesto dato per dato quale mantenere.</p>
+            `;
+            $("#importDialog").showModal();
+          } catch (error) {
+            showToast("Importazione non riuscita: formato non valido");
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      function replaceImport() {
+        if (!pendingImport) return;
+        state.entries = pendingImport.entries || [];
+        state.meds = pendingImport.meds || [];
+        state.lists = { ...defaults, ...(pendingImport.lists || {}) };
+        state.settings = { ...state.settings, ...(pendingImport.settings || {}) };
+        state.lastBackup = pendingImport.lastBackup || state.lastBackup;
+        saveState();
+        applyTheme();
+        closeDialogs();
+        refreshAll();
+        showToast("Dati sovrascritti");
+      }
+
+      function mergeImport() {
+        if (!pendingImport) return;
+        mergeArrayById("registrazione", state.entries, pendingImport.entries || []);
+        mergeArrayById("farmaco", state.meds, pendingImport.meds || []);
+        state.lists = mergeLists(state.lists, pendingImport.lists || {});
+        saveState();
+        closeDialogs();
+        refreshAll();
+        showToast("Dati uniti");
+      }
+
+      function mergeArrayById(label, target, incoming) {
+        incoming.forEach(item => {
+          const index = target.findIndex(existing => existing.id === item.id);
+          if (index === -1) {
+            target.push(item);
+            return;
+          }
+          const keepIncoming = confirm(`Conflitto su ${label} ${item.id}. Vuoi usare il dato importato? Annulla mantiene quello gia presente.`);
+          if (keepIncoming) target[index] = item;
+        });
+      }
+
+      function mergeLists(current, incoming) {
+        const merged = { ...current };
+        Object.keys(defaults).forEach(key => {
+          merged[key] = [...new Set([...(current[key] || []), ...((incoming && incoming[key]) || [])])];
+        });
+        return merged;
+      }
+
+      function restoreBackup() {
+        const raw = localStorage.getItem(BACKUP_KEY);
+        if (!raw) return showToast("Nessuna copia interna disponibile");
+        pendingImport = JSON.parse(raw);
+        $("#importPreview").innerHTML = `<p>Copia interna trovata. Vuoi ripristinarla?</p>`;
+        $("#importDialog").showModal();
+      }
+
+      function prepareSummary() {
+        const from = $("#summaryFrom").value || "0000-01-01";
+        const to = $("#summaryTo").value || "9999-12-31";
+        const entries = state.entries.filter(e => e.date >= from && e.date <= to).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+        $("#summaryNotes").innerHTML = entries.filter(e => e.notes).map(e => `
+          <label class="chip"><input type="checkbox" name="summaryNote" value="${escapeAttr(e.id)}"> ${formatDate(e.date)} ${escapeHtml(e.notes.slice(0, 80))}</label>
+        `).join("") || `<div class="empty">Nessuna nota nel periodo.</div>`;
+        buildSummary();
+      }
+
+      function buildSummary() {
+        const from = $("#summaryFrom").value || "0000-01-01";
+        const to = $("#summaryTo").value || "9999-12-31";
+        const entries = state.entries.filter(e => e.date >= from && e.date <= to).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
+        const selectedNotes = checkedValues("summaryNote");
+        const notes = entries.filter(e => selectedNotes.includes(e.id) && e.notes);
+        const avg = key => {
+          const values = entries.map(key).filter(v => Number.isFinite(Number(v)));
+          return values.length ? (values.reduce((a, b) => a + Number(b), 0) / values.length).toFixed(1) : "-";
+        };
+        const sideEffects = topItems(entries.flatMap(e => (e.medications || []).flatMap(m => splitList(m.sideEffects)))).join(", ") || "-";
+        const prn = entries.flatMap(e => (e.medications || []).filter(m => m.type === "bisogno"));
+        const html = `
+          <h1>Riepilogo per il medico</h1>
+          <p>Periodo: ${escapeHtml(from)} - ${escapeHtml(to)}. Diario personale, dato descrittivo, non conclusione clinica.</p>
+          <section><h2>Farmaci registrati</h2><ul>${state.meds.map(m => `<li>${escapeHtml(m.name)} ${escapeHtml(m.dose || "")} ${escapeHtml(m.unit || "")} - ${escapeHtml(m.status || "attivo")}</li>`).join("") || "<li>Nessun farmaco registrato</li>"}</ul></section>
+          <section><h2>Aderenza descrittiva</h2><p>Assunzioni annotate nel periodo: ${entries.flatMap(e => e.medications || []).length}. Questo non misura automaticamente l'aderenza prescritta.</p></section>
+          <section><h2>Modifiche di dose annotate</h2><ul>${state.meds.flatMap(m => (m.doseChanges || []).map(c => `<li>${escapeHtml(m.name)} - ${escapeHtml(c.date)} - ${escapeHtml(c.dose)} - ${escapeHtml(c.note)}</li>`)).join("") || "<li>Nessuna modifica annotata</li>"}</ul></section>
+          <section><h2>Medie</h2><p>Ansia: ${avg(e => e.anxiety)} · Umore: ${avg(e => e.mood)} · Sonno: ${avg(e => e.sleep?.quality)} · Energia: ${avg(e => e.functioning?.energy)}</p></section>
+          <section><h2>Panico ed effetti</h2><p>Attacchi di panico: ${entries.filter(e => e.panic?.present).length}. Effetti indesiderati piu frequenti: ${escapeHtml(sideEffects)}</p></section>
+          <section><h2>Farmaci al bisogno</h2><p>Assunzioni: ${prn.length}. Efficacia media percepita: ${average(prn.map(m => m.effectiveness))}</p></section>
+          <section><h2>Eventi e strategie</h2><p>Eventi frequenti: ${escapeHtml(topItems(entries.flatMap(e => e.events || [])).join(", ") || "-")}</p><p>Strategie: ${escapeHtml(topItems(entries.flatMap(e => (e.strategies || []).map(s => s.name))).join(", ") || "-")}</p></section>
+          <section><h2>Note selezionate</h2>${notes.map(e => `<p><b>${formatDate(e.date)} ${e.time}</b><br>${escapeHtml(e.notes)}</p>`).join("") || "<p>Nessuna nota selezionata.</p>"}</section>
+          <section><h2>Domande per il medico</h2><p>${escapeHtml($("#doctorQuestions").value || " ")}</p></section>
+        `;
+        $("#summaryOutput").innerHTML = html;
+        $("#printArea").innerHTML = html;
+      }
+
+      function printEntry(entry) {
+        const html = `<h1>Registrazione del ${formatDate(entry.date)} alle ${entry.time}</h1><pre>${escapeHtml(entryToText(entry))}</pre>`;
+        $("#printArea").innerHTML = html;
+        window.print();
+      }
+
+      function entryToText(entry) {
+        return [
+          `Data: ${formatDate(entry.date)} ${entry.time}`,
+          `Umore: ${entry.mood}/10`,
+          `Ansia: ${entry.anxiety}/10`,
+          `Panico: ${entry.panic?.present ? "si" : "no"}`,
+          `Emozioni: ${[...(entry.emotions || []), entry.otherEmotion].filter(Boolean).join(", ")}`,
+          `Farmaci: ${(entry.medications || []).map(m => `${m.name} ${m.dose}${m.unit} ${m.time}`).join("; ")}`,
+          `Eventi: ${[...(entry.events || []), entry.otherEvent].filter(Boolean).join(", ")}`,
+          `Note: ${entry.notes || ""}`
+        ].join("\n");
+      }
+
+      function refreshAll() {
+        setupForm();
+        renderEntries();
+        renderMeds();
+        renderCharts();
+        renderSettings();
+        fillQuickMedSelect();
+      }
+
+      function fillQuickMedSelect() {
+        $("#quickMedSelect").innerHTML = medOptions("");
+        fillQuickScheduleSelect();
+      }
+
+      function fillQuickScheduleSelect() {
+        const med = state.meds.find(m => m.id === $("#quickMedSelect").value);
+        const schedules = med ? ((med.schedules && med.schedules.length ? med.schedules : defaultScheduleFromMed(med))) : [];
+        $("#quickMedSchedule").innerHTML = schedules.length
+          ? schedules.map((schedule, index) => `<option value="${index}">${escapeHtml(schedule.label || schedule.time || "Dose")} · ${escapeHtml(schedule.dose || "")} ${escapeHtml(schedule.unit || "")}</option>`).join("")
+          : `<option value="">Nessuna dose predefinita</option>`;
+        applyQuickSchedule();
+      }
+
+      function applyQuickSchedule() {
+        const med = state.meds.find(m => m.id === $("#quickMedSelect").value);
+        if (!med) return;
+        const schedules = med.schedules && med.schedules.length ? med.schedules : defaultScheduleFromMed(med);
+        const schedule = schedules[Number($("#quickMedSchedule").value)] || schedules[0] || {};
+        $("#quickMedDose").value = schedule.dose || med.dose || "";
+        $("#quickMedTime").value = /^\d\d:\d\d$/.test(schedule.time || "") ? schedule.time : ($("#quickMedTime").value || nowTime());
+      }
+
+      function openQuickMed() {
+        fillQuickMedSelect();
+        $("#quickMedTime").value = nowTime();
+        const first = $("#quickMedSelect").value;
+        const med = state.meds.find(m => m.id === first);
+        $("#quickMedDose").value = med?.dose || "";
+        $("#quickMedDialog").showModal();
+      }
+
+      function addQuickMedToForm() {
+        const medId = $("#quickMedSelect").value;
+        const med = state.meds.find(m => m.id === medId);
+        if (!med) return showToast("Configura prima un farmaco");
+        const schedules = med.schedules && med.schedules.length ? med.schedules : defaultScheduleFromMed(med);
+        const schedule = schedules[Number($("#quickMedSchedule").value)] || {};
+        addTakenMedRow({
+          medId,
+          dose: $("#quickMedDose").value || schedule.dose || med.dose,
+          unit: schedule.unit || med.unit,
+          time: $("#quickMedTime").value || nowTime(),
+          type: "bisogno",
+          reason: $("#quickMedReason").value
+        });
+        closeDialogs();
+        showToast("Farmaco aggiunto alla registrazione");
+      }
+
+      function download(filename, content, type) {
+        const blob = new Blob([content], { type });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function fillSelect(selector, values, allLabel) {
+        const select = $(selector);
+        if (!select) return;
+        const current = select.value;
+        select.innerHTML = `<option value="">${allLabel}</option>` + values.map(v => `<option value="${escapeAttr(v)}">${escapeHtml(v)}</option>`).join("");
+        select.value = current;
+      }
+
+      function options(values, selected = "") {
+        return `<option value="">Seleziona</option>` + values.map(v => `<option value="${escapeAttr(v)}" ${v === selected ? "selected" : ""}>${escapeHtml(v)}</option>`).join("");
+      }
+
+      function splitList(text = "") {
+        return String(text).split(/[;,]/).map(s => s.trim()).filter(Boolean);
+      }
+
+      function scheduleSummary(med) {
+        const schedules = med.schedules && med.schedules.length ? med.schedules : defaultScheduleFromMed(med);
+        if (!schedules.length) return [med.dose, med.unit, med.schedule].filter(Boolean).join(" ");
+        return schedules.map(s => [s.label, s.time, s.dose, s.unit].filter(Boolean).join(" ")).join(" · ");
+      }
+
+      function topItems(items) {
+        return frequencyChartData(items).map(d => d.label);
+      }
+
+      function average(values) {
+        const nums = values.map(Number).filter(Number.isFinite);
+        return nums.length ? (nums.reduce((a, b) => a + b, 0) / nums.length).toFixed(1) : "-";
+      }
+
+      function formatDate(date) {
+        if (!date) return "";
+        return new Date(date + "T12:00:00").toLocaleDateString("it-IT");
+      }
+
+      function shortDate(date) {
+        return new Date(date + "T12:00:00").toLocaleDateString("it-IT", { day: "2-digit", month: "2-digit" });
+      }
+
+      function formatDateTime(iso) {
+        return new Date(iso).toLocaleString("it-IT");
+      }
+
+      function getCss(name) {
+        return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+      }
+
+      function escapeHtml(value = "") {
+        return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+      }
+
+      function escapeAttr(value = "") {
+        return escapeHtml(value);
+      }
+
+      function closeDialogs() {
+        $$("dialog").forEach(dialog => dialog.open && dialog.close());
+      }
+
+      function bindEvents() {
+        $$(".nav button").forEach(button => button.addEventListener("click", () => setSection(button.dataset.section)));
+        $("#themeToggle").addEventListener("click", () => {
+          state.settings.theme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+          $("#themeMode").value = state.settings.theme;
+          saveState();
+          applyTheme();
+        });
+        ["mood", "anxiety", "sleepQuality"].forEach(id => $(`#${id}`).addEventListener("input", updateOutputs));
+        $("#bedTime").addEventListener("change", calculateSleep);
+        $("#wakeTime").addEventListener("change", calculateSleep);
+        $("#panic").addEventListener("change", toggleConditionalFields);
+        $("#entryForm").addEventListener("change", toggleConditionalFields);
+        $("#entryForm").addEventListener("input", () => localStorage.setItem(DRAFT_KEY, JSON.stringify(collectEntry())));
+        $("#entryForm").addEventListener("submit", event => {
+          event.preventDefault();
+          const entry = collectEntry();
+          if (!entry.date || !entry.time) return showToast("Data e ora sono obbligatorie");
+          const index = state.entries.findIndex(e => e.id === entry.id);
+          if (index >= 0) state.entries[index] = entry;
+          else state.entries.push(entry);
+          saveState();
+          localStorage.removeItem(DRAFT_KEY);
+          setupForm();
+          showToast("Registrazione salvata");
+        });
+        $("#newEntryBtn").addEventListener("click", () => setupForm());
+        $("#resetFormBtn").addEventListener("click", () => {
+          if (confirm("Svuotare la bozza corrente?")) setupForm();
+        });
+        $("#addTakenMedBtn").addEventListener("click", () => addTakenMedRow());
+        $("#addStrategyBtn").addEventListener("click", () => addStrategyRow());
+        $("#quickMedBtn").addEventListener("click", openQuickMed);
+        $("#quickMedSelect").addEventListener("change", event => {
+          fillQuickScheduleSelect();
+        });
+        $("#quickMedSchedule").addEventListener("change", applyQuickSchedule);
+        $("#quickMedForm").addEventListener("submit", event => {
+          event.preventDefault();
+          addQuickMedToForm();
+        });
+        ["searchText", "filterFrom", "filterTo", "filterMed", "filterPanic", "filterAnxiety", "filterEmotion", "filterEvent"].forEach(id => $(`#${id}`).addEventListener("input", renderEntries));
+        $("#addMedBtn").addEventListener("click", () => openMedDialog());
+        $("#showSuspendedBtn").addEventListener("click", () => renderMeds(true));
+        $("#addMedScheduleBtn").addEventListener("click", () => addMedScheduleRow());
+        $("#medForm").addEventListener("submit", event => {
+          event.preventDefault();
+          const med = collectMed();
+          if (!med.name) return showToast("Il nome del farmaco e obbligatorio");
+          const index = state.meds.findIndex(m => m.id === med.id);
+          if (index >= 0) state.meds[index] = med;
+          else state.meds.push(med);
+          saveState();
+          closeDialogs();
+          renderMeds();
+          showToast("Farmaco salvato");
+        });
+        $("#addDoseChangeBtn").addEventListener("click", () => addDoseChangeRow());
+        $("#chartRange").addEventListener("change", renderCharts);
+        $("#refreshChartsBtn").addEventListener("click", renderCharts);
+        $("#doctorSummaryBtn").addEventListener("click", () => {
+          $("#summaryFrom").value ||= state.entries[0]?.date || today();
+          $("#summaryTo").value ||= today();
+          prepareSummary();
+          $("#summaryDialog").showModal();
+        });
+        $("#prepareSummaryBtn").addEventListener("click", prepareSummary);
+        $("#summaryNotes").addEventListener("change", buildSummary);
+        $("#doctorQuestions").addEventListener("input", buildSummary);
+        $("#printSummaryBtn").addEventListener("click", () => {
+          buildSummary();
+          window.print();
+        });
+        $("#copySummaryBtn").addEventListener("click", async () => {
+          buildSummary();
+          await navigator.clipboard.writeText($("#summaryOutput").innerText);
+          showToast("Riepilogo copiato");
+        });
+        ["themeMode", "textSize", "highAnxiety", "weekStart"].forEach(id => $(`#${id}`).addEventListener("change", () => {
+          state.settings.theme = $("#themeMode").value;
+          state.settings.textSize = $("#textSize").value;
+          state.settings.highAnxiety = Number($("#highAnxiety").value || 7);
+          state.settings.weekStart = $("#weekStart").value;
+          saveState();
+          applyTheme();
+        }));
+        $("#saveListsBtn").addEventListener("click", () => {
+          state.lists.emotions = lines($("#listEmotions").value);
+          state.lists.symptoms = lines($("#listSymptoms").value);
+          state.lists.events = lines($("#listEvents").value);
+          state.lists.strategies = lines($("#listStrategies").value);
+          saveState();
+          setupForm();
+          showToast("Liste salvate");
+        });
+        $("#exportJsonBtn").addEventListener("click", () => exportJson(false));
+        $("#backupBtn").addEventListener("click", () => exportJson(true));
+        $("#exportCsvBtn").addEventListener("click", exportCsv);
+        $("#importFile").addEventListener("change", event => handleImport(event.target.files[0]));
+        $("#mergeImportBtn").addEventListener("click", mergeImport);
+        $("#replaceImportBtn").addEventListener("click", () => {
+          if (confirm("Sovrascrivere tutti i dati correnti con il file importato?")) replaceImport();
+        });
+        $("#restoreBackupBtn").addEventListener("click", restoreBackup);
+        $("#clearAllBtn").addEventListener("click", () => {
+          if (!confirm("Cancellare tutti i dati del diario?")) return;
+          if (!confirm("Conferma definitiva: questa azione non si puo annullare.")) return;
+          localStorage.removeItem(STORAGE_KEY);
+          localStorage.removeItem(DRAFT_KEY);
+          Object.assign(state, initialState());
+          refreshAll();
+          showToast("Dati cancellati");
+        });
+        $$(".closeDialog").forEach(button => button.addEventListener("click", closeDialogs));
+        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyTheme);
+      }
+
+      function lines(text) {
+        return text.split("\n").map(s => s.trim()).filter(Boolean);
+      }
+
+      function restoreDraftIfPresent() {
+        try {
+          const raw = localStorage.getItem(DRAFT_KEY);
+          if (!raw) return setupForm();
+          const draft = JSON.parse(raw);
+          if (confirm("Vuoi riprendere la bozza non salvata?")) setupForm(draft);
+          else setupForm();
+        } catch {
+          setupForm();
+        }
+      }
+
+      applyTheme();
+      bindEvents();
+      restoreDraftIfPresent();
+      refreshAll();
+    })();
+  </script>
+</body>
+</html>
