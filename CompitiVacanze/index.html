@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Compiti Configurabili</title>
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Compiti">
+<meta name="theme-color" content="#ff8a00">
+<style>
+:root{--bg:#fff8df;--card:#fff;--ink:#243046;--muted:#64748b;--brand:#ff8a00;--green:#21a67a;--red:#ef4444;--blue:#60a5fa;--purple:#8b5cf6;--yellow:#ffd166;--shadow:0 12px 30px rgba(40,40,80,.15);--radius:24px}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at 20% 0,#fff3b0,transparent 35%),linear-gradient(135deg,#fff8df,#e7f7ff);color:var(--ink)}
+button,input,select{font:inherit}button{border:0;border-radius:18px;padding:12px 16px;background:#fff;box-shadow:0 4px 0 rgba(0,0,0,.08);cursor:pointer;font-weight:800}button:active{transform:translateY(2px);box-shadow:0 2px 0 rgba(0,0,0,.08)}button:disabled{opacity:.5;cursor:not-allowed}
+.app{max-width:1180px;margin:auto;padding:18px}.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}.title{display:flex;gap:12px;align-items:center}.mascot{font-size:48px;filter:drop-shadow(0 6px 0 rgba(0,0,0,.08))}.h1{font-size:clamp(28px,5vw,54px);font-weight:1000;letter-spacing:-1px}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{background:#fff}.tab.active{background:var(--ink);color:white}
+.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px;margin-top:18px}.card{background:rgba(255,255,255,.86);border:3px solid rgba(255,255,255,.95);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}.hero{background:linear-gradient(135deg,#fff,#fff2bf)}
+.level-wrap{position:relative;padding-top:32px}.bigprogress{height:38px;background:#e5e7eb;border-radius:999px;overflow:hidden;border:4px solid #fff;position:relative}.bigprogress span{display:block;height:100%;width:0;background:linear-gradient(90deg,#34d399,#facc15,#fb7185);border-radius:999px;transition:.4s}.milestone{position:absolute;top:0;transform:translateX(-50%);font-size:29px;line-height:1;filter:drop-shadow(0 3px 0 rgba(0,0,0,.10));z-index:2}.milestone.one{left:33.333%}.milestone.two{left:66.666%}.milestone.empty{filter:grayscale(1);opacity:.42}.level-meta{display:flex;justify-content:space-between;gap:10px;margin-top:8px;font-weight:900;color:#475569}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}.stat{padding:14px;background:#fff;border-radius:20px;text-align:center}.stat b{font-size:30px}
+.books{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.book{padding:14px;border-radius:22px;background:#fff;box-shadow:0 5px 16px rgba(0,0,0,.08)}.book h3{margin:0 0 8px}.mini{height:16px;background:#e5e7eb;border-radius:999px;overflow:hidden}.mini span{display:block;height:100%;background:var(--green);width:0}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.primary{background:var(--brand);color:#fff}.success{background:var(--green);color:#fff}.danger{background:var(--red);color:#fff}.purple{background:var(--purple);color:#fff}.blue{background:var(--blue);color:#fff}
+.empty-state{padding:28px;border-radius:24px;background:#fff;border:4px dashed #facc15;text-align:center}.empty-state .big{font-size:52px}.empty-state h2{margin:6px 0}
+.page-list{display:flex;gap:8px;flex-wrap:wrap;max-height:360px;overflow:auto;padding:6px}.page{min-width:50px;text-align:center;padding:10px;border-radius:16px;background:#f1f5f9;border:3px solid transparent;font-weight:900}.page.done{background:#bbf7d0;text-decoration:line-through;color:#166534}.page.special{border-color:#8b5cf6;background:#ede9fe}.page.selected{outline:5px solid #facc15}.page.appdone{background:linear-gradient(135deg,#bbf7d0,#ede9fe);text-decoration:line-through;color:#166534}
+.suggestions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.suggestion{background:#fff;border:4px dashed #facc15;border-radius:20px;padding:12px;font-size:20px;font-weight:1000}.suggestion.doneSuggestion{background:#bbf7d0;border-style:solid;border-color:#21a67a;color:#166534;text-decoration:line-through;opacity:.9}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:5}.modal.show{display:flex}.modal-card{max-width:950px;width:100%;max-height:92vh;overflow:auto;background:#fff;border-radius:30px;padding:20px;box-shadow:var(--shadow)}.close{float:right}
+.months{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}.month{background:#fff;border-radius:22px;padding:12px}.month h3{text-align:center;margin:4px 0 8px}.weekdays,.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.weekday{text-align:center;color:var(--muted);font-weight:800}.day{aspect-ratio:1;border-radius:12px;background:#fff7cc;display:flex;align-items:center;justify-content:center;font-weight:900;position:relative;border:2px solid #fff}.day.off{background:#bfdbfe;color:#1e3a8a}.day.doneDay:after{content:'✓';position:absolute;right:3px;bottom:1px;font-size:14px;color:#166534}.day.empty{background:transparent;border:0}.day.out{opacity:.35}
+.logrow{display:grid;grid-template-columns:1fr 90px 1fr auto;gap:8px;align-items:center;margin:8px 0}.parent-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.small{font-size:13px;color:var(--muted)}textarea{width:100%;height:150px;border-radius:16px;border:2px solid #cbd5e1;padding:10px}.field{display:flex;flex-direction:column;gap:5px;margin:8px 0}input,select{border:2px solid #cbd5e1;border-radius:14px;padding:10px}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.row3{display:grid;grid-template-columns:90px 1fr 1fr;gap:10px}.session-card,.book-admin{border:2px solid #e2e8f0;border-radius:18px;padding:12px;margin:10px 0;background:#fff}.session-card.active{border-color:#21a67a;background:#ecfdf5}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:10}.confetti i{position:absolute;top:-20px;font-style:normal;animation:fall 1.8s linear forwards}@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}.toast{position:fixed;left:50%;top:18px;transform:translateX(-50%);background:#fff;border:4px solid #facc15;border-radius:26px;padding:18px 24px;box-shadow:var(--shadow);z-index:20;font-weight:1000;font-size:22px;display:none;text-align:center}.toast.show{display:block}
+@media(max-width:850px){.grid,.parent-grid,.row2,.row3{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.logrow{grid-template-columns:1fr}.h1{font-size:34px}.milestone{font-size:25px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="title"><div class="mascot" id="mainEmoji">🦊</div><div><div class="h1" id="appTitle">Compiti</div><div class="small" id="periodText">Nessuna configurazione</div></div></div>
+    <div class="tabs"><button class="tab active" data-tab="kid">Bambino</button><button class="tab" data-tab="calendar">Calendario</button><button class="tab" data-tab="parent">Genitore</button><button class="tab" data-tab="sessions">Configurazioni</button></div>
+  </div>
+
+  <section id="kid" class="screen">
+    <div id="kidContent"></div>
+  </section>
+
+  <section id="calendar" class="screen" style="display:none">
+    <div class="card">
+      <h2>Calendario compiti</h2>
+      <p>Premi su un giorno per cambiarlo: giallo = compiti, blu = riposo. Sabati e domeniche sono blu di default nelle nuove configurazioni.</p>
+      <div id="calendarEmpty"></div>
+      <div class="months" id="months"></div>
+    </div>
+  </section>
+
+  <section id="parent" class="screen" style="display:none">
+    <div id="parentContent"></div>
+  </section>
+
+  <section id="sessions" class="screen" style="display:none">
+    <div class="grid">
+      <div class="card">
+        <h2>Configurazioni / sessioni</h2>
+        <p class="small">Ogni configurazione contiene periodo, libri, calendario, pagine completate e storico.</p>
+        <div id="sessionsList"></div>
+      </div>
+      <div class="card">
+        <h2>Crea configurazione da zero</h2>
+        <div class="field"><label>Nome configurazione</label><input id="newSessionName" placeholder="Es. Compiti vacanze di Natale"></div>
+        <div class="row2">
+          <div class="field"><label>Titolo app</label><input id="newSessionTitle" placeholder="Compiti Natale"></div>
+          <div class="field"><label>Emoji app</label><input id="newSessionEmoji" value="🦊" maxlength="3"></div>
+        </div>
+        <div class="row2">
+          <div class="field"><label>Data inizio</label><input id="newSessionStart" type="date"></div>
+          <div class="field"><label>Data fine</label><input id="newSessionEnd" type="date"></div>
+        </div>
+        <div class="actions"><button class="success" id="createSession">Crea e apri</button></div>
+        <h3>Backup globale</h3>
+        <textarea id="globalBackup"></textarea>
+        <div class="actions"><button id="exportAll">Esporta tutto</button><button id="importAll">Importa tutto</button></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<div class="modal" id="pagesModal"><div class="modal-card"><button class="close" id="closePages">Chiudi</button><h2>Segna le pagine fatte</h2><p class="small">Viola = serve app/genitore. Verde = fatta. Se tocchi una pagina già fatta, viene rimessa da fare.</p><div id="allPages"></div><div class="actions"><button class="success" id="savePages">Salva pagine selezionate</button></div></div></div>
+<div class="confetti" id="confetti"></div><div class="toast" id="toast"></div>
+
+<script>
+const KEY='compitiMultiSessioneV1';
+let store=loadStore();
+
+function emptyStore(){return {activeId:null,sessions:{}}}
+function clone(x){return JSON.parse(JSON.stringify(x))}
+function loadStore(){const s=localStorage.getItem(KEY);if(s){try{return migrateStore(JSON.parse(s))}catch(e){}}return emptyStore()}
+function migrateStore(s){s=s||emptyStore();s.sessions=s.sessions||{};s.activeId=s.activeId||Object.keys(s.sessions)[0]||null;return s}
+function saveStore(){localStorage.setItem(KEY,JSON.stringify(store))}
+function currentSession(){return store.activeId?store.sessions[store.activeId]:null}
+function currentYear(){return new Date().getFullYear()}
+function uid(){return 's'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function dateKey(d){const y=d.getFullYear();const m=String(d.getMonth()+1).padStart(2,'0');const day=String(d.getDate()).padStart(2,'0');return `${y}-${m}-${day}`}
+function parseLocalDate(s){const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)}
+function formatDateIT(s){if(!s)return '';const [y,m,d]=s.split('-');return `${d}/${m}/${y}`}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function monthName(d){return d.toLocaleDateString('it-IT',{month:'long',year:'numeric'})}
+function slug(s){return (s||'libro').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')||'libro'}
+function defaultOffDaysFor(startStr,endStr){const a=[];let d=parseLocalDate(startStr),end=parseLocalDate(endStr);while(d<=end){const dow=d.getDay();if(dow===0||dow===6)a.push(dateKey(d));d=addDays(d,1)}return a}
+function createEmptySession({name,title,emoji,startDate,endDate}){return {id:uid(),name:name||title||'Nuova configurazione',config:{title:title||name||'Compiti',emoji:emoji||'🦊',startDate,endDate},books:{},done:{},logs:{},offDays:defaultOffDaysFor(startDate,endDate)}}
+function s(){return currentSession()}
+
+function allItems(){const cur=s();if(!cur)return [];return Object.entries(cur.books).flatMap(([id,b])=>b.pages.map(p=>({book:id,page:p,special:(b.special||[]).includes(p)})))}
+function isDone(id,p){const cur=s();return !!cur&&(cur.done[id]||[]).includes(p)}
+function setDone(id,p,val){const cur=s();cur.done[id]=cur.done[id]||[];if(val&&!isDone(id,p))cur.done[id].push(p);if(!val)cur.done[id]=cur.done[id].filter(x=>x!==p);cur.done[id].sort((a,b)=>a-b)}
+function workDaysLeft(){const cur=s();if(!cur)return [];const today=new Date();const t=new Date(today.getFullYear(),today.getMonth(),today.getDate());const start=parseLocalDate(cur.config.startDate),end=parseLocalDate(cur.config.endDate);let now=t<start?start:t,days=[];while(now<=end){const k=dateKey(now);if(!cur.offDays.includes(k))days.push(k);now=addDays(now,1)}return days}
+function pagesPerDay(){const left=allItems().filter(x=>!isDone(x.book,x.page)).length;const days=workDaysLeft().length||1;return Math.max(1,Math.ceil(left/days))}
+function levelInfo(){const total=allItems().length,done=allItems().filter(x=>isDone(x.book,x.page)).length,size=Math.max(1,Math.ceil((total||1)/10));let level=Math.min(10,Math.floor(done/size)+1);if(done>=total&&total>0)level=10;const start=(level-1)*size,doneInLevel=done>=total&&total>0?Math.min(size,total-start):Math.max(0,done-start),levelTotal=Math.min(size,total-start)||size,pct=total===0?0:(done>=total?100:Math.min(100,doneInLevel/levelTotal*100));return{total,done,size,level,levelTotal,doneInLevel,pct}}
+
+function showTab(tab){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.tab===tab));document.querySelectorAll('.screen').forEach(x=>x.style.display='none');document.getElementById(tab).style.display='block';render()}
+function render(){renderHeader();renderKid();renderCalendar();renderParent();renderSessions();saveStore()}
+function renderHeader(){const cur=s();document.getElementById('appTitle').textContent=cur?cur.config.title:'Compiti';document.getElementById('mainEmoji').textContent=cur?(cur.config.emoji||'🦊'):'🦊';document.getElementById('periodText').textContent=cur?`${formatDateIT(cur.config.startDate)} → ${formatDateIT(cur.config.endDate)}`:'Crea una configurazione da zero'}
+function emptyPrompt(msg){return `<div class="empty-state"><div class="big">✨</div><h2>${msg}</h2><p>Vai in <b>Configurazioni</b> per creare o aprire una sessione.</p><button class="success" onclick="showTab('sessions')">Apri configurazioni</button></div>`}
+function renderKid(){const cur=s();const el=document.getElementById('kidContent');if(!cur){el.innerHTML=emptyPrompt('Nessuna configurazione aperta');return}if(Object.keys(cur.books).length===0){el.innerHTML=`<div class="empty-state"><div class="big">${cur.config.emoji||'🦊'}</div><h2>${cur.name}</h2><p>Configurazione creata. Ora aggiungi il primo libro nella modalità genitore.</p><button class="purple" onclick="showTab('parent')">Aggiungi libro</button></div>`;return}const info=levelInfo();el.innerHTML=`<div class="grid"><div class="card hero"><h2>Livello in corso</h2><div class="level-wrap"><div id="star1" class="milestone one ${info.pct<33.333?'empty':''}">⭐</div><div id="star2" class="milestone two ${info.pct<66.666?'empty':''}">⭐</div><div class="bigprogress"><span style="width:${info.pct}%"></span></div></div><div class="level-meta"><span>${info.doneInLevel}/${info.levelTotal} pagine nel livello ${info.level}</span><span>${Math.round(info.pct)}%</span></div><div class="stats"><div class="stat"><b>${info.done}</b><br>fatte</div><div class="stat"><b>${info.total-info.done}</b><br>da fare</div><div class="stat"><b>${info.level}/10</b><br>livello</div></div><div class="actions"><button class="primary" id="doManual">✋ Faccio da solo</button><button class="success" id="doSuggest">🎲 Fai tu!</button><button class="purple" id="openPages">📚 Segna pagine</button></div><div id="suggestions" class="suggestions"></div></div><div class="card"><h2>Oggi</h2><div class="stat"><b>${pagesPerDay()}</b><br>pagine consigliate</div><div class="stat" style="margin-top:10px"><b>${workDaysLeft().length}</b><br>giorni compiti rimasti</div><p class="small">Calcolo: pagine rimanenti / giorni gialli rimasti.</p></div></div><div class="card" style="margin-top:18px"><h2>I miei libri</h2><div class="books" id="bookCards">${bookCardsHtml()}</div></div>`;wireKidButtons()}
+function bookCardsHtml(){const cur=s();return Object.entries(cur.books).map(([id,b])=>{let d=b.pages.filter(p=>isDone(id,p)).length;return `<div class="book"><h3>${b.emoji||'📘'} ${b.name}</h3><div><b>${d}</b> / ${b.pages.length} pagine</div><div class="mini"><span style="width:${b.pages.length?d/b.pages.length*100:0}%"></span></div><p class="small">Da fare: ${b.pages.length-d}</p></div>`}).join('')}
+
+function renderCalendar(){const cur=s();document.getElementById('calendarEmpty').innerHTML='';document.getElementById('months').innerHTML='';if(!cur){document.getElementById('calendarEmpty').innerHTML=emptyPrompt('Nessun calendario');return}const wrap=document.getElementById('months'),start=parseLocalDate(cur.config.startDate),end=parseLocalDate(cur.config.endDate);let cursor=new Date(start.getFullYear(),start.getMonth(),1),last=new Date(end.getFullYear(),end.getMonth(),1);while(cursor<=last){let m=document.createElement('div');m.className='month';m.innerHTML=`<h3>${monthName(cursor)}</h3><div class="weekdays">${['L','M','M','G','V','S','D'].map(x=>`<div class="weekday">${x}</div>`).join('')}</div>`;let grid=document.createElement('div'),first=new Date(cursor.getFullYear(),cursor.getMonth(),1),days=new Date(cursor.getFullYear(),cursor.getMonth()+1,0).getDate(),pad=(first.getDay()+6)%7,week=document.createElement('div');week.className='week';for(let i=0;i<pad;i++){let e=document.createElement('div');e.className='day empty';week.appendChild(e)}for(let day=1;day<=days;day++){if(week.children.length===7){grid.appendChild(week);week=document.createElement('div');week.className='week'}let d=new Date(cursor.getFullYear(),cursor.getMonth(),day),k=dateKey(d),inPeriod=d>=start&&d<=end,cell=document.createElement('div');cell.className='day '+(!inPeriod?'out ':'')+(cur.offDays.includes(k)?'off ':'')+(cur.logs[k]?.pages?.length?'doneDay':'');cell.textContent=day;if(inPeriod)cell.onclick=()=>{if(cur.offDays.includes(k))cur.offDays=cur.offDays.filter(x=>x!==k);else cur.offDays.push(k);render()};week.appendChild(cell)}while(week.children.length<7){let e=document.createElement('div');e.className='day empty';week.appendChild(e)}grid.appendChild(week);m.appendChild(grid);wrap.appendChild(m);cursor=new Date(cursor.getFullYear(),cursor.getMonth()+1,1)}}
+
+function renderParent(){const cur=s();const el=document.getElementById('parentContent');if(!cur){el.innerHTML=emptyPrompt('Nessuna configurazione da gestire');return}const info=levelInfo(),left=allItems().filter(x=>!isDone(x.book,x.page)).length;el.innerHTML=`<div class="parent-grid"><div class="card"><h2>Statistiche genitore</h2><p><b>Configurazione:</b> ${cur.name}</p><p><b>Pagine totali:</b> ${allItems().length}</p><p><b>Pagine mancanti:</b> ${left}</p><p><b>Livello:</b> ${info.level}/10</p><p><b>Pagine consigliate/giorno:</b> ${pagesPerDay()}</p><p><b>Giorni compiti rimasti:</b> ${workDaysLeft().length}</p><h3>Lista pagine</h3>${listsHtml()}<h3>Storico giornaliero</h3><div id="logs">${logsHtml()}</div></div><div class="card"><h2>Configurazione periodo</h2><div class="field"><label>Nome configurazione</label><input id="cfgName" value="${escapeAttr(cur.name)}"></div><div class="row2"><div class="field"><label>Titolo app</label><input id="cfgTitle" value="${escapeAttr(cur.config.title)}"></div><div class="field"><label>Emoji app</label><input id="cfgEmoji" value="${escapeAttr(cur.config.emoji||'🦊')}" maxlength="3"></div></div><div class="row2"><div class="field"><label>Data inizio</label><input id="cfgStart" type="date" value="${cur.config.startDate}"></div><div class="field"><label>Data fine</label><input id="cfgEnd" type="date" value="${cur.config.endDate}"></div></div><div class="actions"><button class="success" id="saveConfig">Salva periodo</button></div><h2>Gestione libri</h2><div class="row3"><div class="field"><label>Emoji</label><input id="bookEmoji" value="📘" maxlength="3"></div><div class="field"><label>Nome libro</label><input id="bookName" placeholder="Es. Inglese"></div><div class="field"><label>ID</label><input id="bookId" placeholder="automatico"></div></div><div class="field"><label>Pagine iniziali o da aggiungere</label><input id="bookPages" placeholder="1-10,15,20-22"></div><div class="field"><label>Pagine speciali con genitore/app</label><input id="bookSpecial" placeholder="3,7,12"></div><div class="actions"><button class="success" id="addOrUpdateBook">Aggiungi/Aggiorna libro</button></div><div id="bookAdminList">${bookAdminHtml()}</div><h2>Pagine veloci</h2><div class="field"><label>Libro</label><select id="adminBook">${adminBookOptions()}</select></div><div class="field"><label>Pagine da aggiungere/rimuovere</label><input id="adminPages" placeholder="12,13,20-25"></div><div class="actions"><button class="success" id="addPages">Aggiungi</button><button class="danger" id="removePages">Rimuovi</button></div><h2>Backup sessione</h2><textarea id="sessionBackup"></textarea><div class="actions"><button id="exportSession">Esporta sessione</button><button id="importSession">Importa sessione</button><button class="danger" id="resetProgress">Reset avanzamento</button></div></div></div>`;wireParentButtons()}
+function escapeAttr(s){return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}
+function listsHtml(){const cur=s();return Object.entries(cur.books).map(([id,b])=>`<p><b>${b.emoji||'📘'} ${b.name}</b><br><span class="small">Tutte: ${b.pages.join(', ')||'nessuna'}<br>Speciali: ${(b.special||[]).join(', ')||'nessuna'}<br>Fatte: ${(cur.done[id]||[]).join(', ')||'nessuna'}<br>Da fare: ${b.pages.filter(p=>!isDone(id,p)).join(', ')||'nessuna'}</span></p>`).join('')||'<p class="small">Nessun libro.</p>'}
+function logsHtml(){const cur=s();return Object.entries(cur.logs).sort().map(([k,v])=>`<div class="logrow"><b>${k}</b><span>${v.count||0} righe</span><span>${(v.pages||[]).join(', ')}</span><button onclick="delete s().logs['${k}'];render()">Rimuovi</button></div>`).join('')||'<p class="small">Nessuno storico.</p>'}
+function bookAdminHtml(){const cur=s();return Object.entries(cur.books).map(([id,b])=>`<div class="book-admin"><b>${b.emoji||'📘'} ${b.name}</b><div class="small">ID: ${id} · ${b.pages.length} pagine</div><div class="actions"><button onclick="fillBookForm('${id}')">Modifica</button><button class="danger" onclick="deleteBook('${id}')">Elimina</button></div></div>`).join('')||'<p class="small">Aggiungi il primo libro.</p>'}
+function adminBookOptions(){const cur=s();return Object.entries(cur.books).map(([id,b])=>`<option value="${id}">${b.emoji||'📘'} ${b.name}</option>`).join('')}
+function renderSessions(){const list=document.getElementById('sessionsList');list.innerHTML=Object.entries(store.sessions).map(([id,ss])=>`<div class="session-card ${id===store.activeId?'active':''}"><b>${ss.config.emoji||'🦊'} ${ss.name}</b><div class="small">${formatDateIT(ss.config.startDate)} → ${formatDateIT(ss.config.endDate)} · ${Object.keys(ss.books).length} libri</div><div class="actions"><button class="success" onclick="openSession('${id}')">Apri</button><button onclick="duplicateSession('${id}')">Duplica</button><button class="danger" onclick="deleteSession('${id}')">Elimina</button></div></div>`).join('')||'<p class="small">Nessuna configurazione salvata.</p>'}
+function parsePages(txt){let out=[];(txt||'').split(',').map(x=>x.trim()).filter(Boolean).forEach(part=>{if(part.includes('-')){let [a,b]=part.split('-').map(Number);if(a>b)[a,b]=[b,a];for(let i=a;i<=b;i++)out.push(i)}else out.push(Number(part))});return [...new Set(out.filter(Number.isFinite))].sort((a,b)=>a-b)}
+
+function wireKidButtons(){document.getElementById('openPages').onclick=()=>{renderPages();document.getElementById('pagesModal').classList.add('show')};document.getElementById('doManual').onclick=()=>{const x=document.getElementById('suggestions');if(x)x.innerHTML=''};document.getElementById('doSuggest').onclick=()=>{let left=allItems().filter(x=>!isDone(x.book,x.page));let n=Math.min(pagesPerDay(),left.length),pick=[];while(pick.length<n&&left.length){let i=Math.floor(Math.random()*left.length);pick.push(left.splice(i,1)[0])}document.getElementById('suggestions').innerHTML=pick.map(x=>{let b=s().books[x.book];return `<button class="suggestion" data-book="${x.book}" data-page="${x.page}" onclick="toggleSuggestedPage(this)">${b.emoji||'📘'} ${b.name} pag. ${x.page}${x.special?' 👪':''}</button>`}).join('')}}
+function renderPages(){let el=document.getElementById('allPages');el.innerHTML='';Object.entries(s().books).forEach(([id,b])=>{let sec=document.createElement('div');sec.innerHTML=`<h3>${b.emoji||'📘'} ${b.name}</h3>`;let list=document.createElement('div');list.className='page-list';b.pages.forEach(p=>{let d=document.createElement('button');d.className='page '+(isDone(id,p)?((b.special||[]).includes(p)?'appdone':'done'):'')+((b.special||[]).includes(p)?' special':'');d.textContent=p+((b.special||[]).includes(p)?' 👪':'');d.onclick=()=>{d.classList.toggle('selected')};d.dataset.book=id;d.dataset.page=p;list.appendChild(d)});sec.appendChild(list);el.appendChild(sec)})}
+document.getElementById('closePages').onclick=()=>document.getElementById('pagesModal').classList.remove('show');
+document.getElementById('savePages').onclick=()=>{let before=levelInfo();let today=dateKey(new Date()),changed=[];document.querySelectorAll('#allPages .page.selected').forEach(btn=>{let id=btn.dataset.book,p=Number(btn.dataset.page),was=isDone(id,p);setDone(id,p,!was);changed.push(`${was?'Rimessa da fare':'Fatta'}: ${s().books[id].name} ${p}`)});if(changed.length){s().logs[today]=s().logs[today]||{pages:[],count:0};s().logs[today].pages=[...new Set([...(s().logs[today].pages||[]),...changed])];s().logs[today].count=s().logs[today].pages.length}document.getElementById('pagesModal').classList.remove('show');render();maybeLevelUp(before)}
+function toggleSuggestedPage(btn){let before=levelInfo(),id=btn.dataset.book,p=Number(btn.dataset.page),was=isDone(id,p),b=s().books[id];setDone(id,p,!was);let today=dateKey(new Date());s().logs[today]=s().logs[today]||{pages:[],count:0};s().logs[today].pages=[...new Set([...(s().logs[today].pages||[]),`${was?'Rimessa da fare':'Fatta'}: ${b.name} ${p}`])];s().logs[today].count=s().logs[today].pages.length;if(was){btn.classList.remove('doneSuggestion');btn.innerHTML=`${b.emoji||'📘'} ${b.name} pag. ${p}${(b.special||[]).includes(p)?' 👪':''}`}else{btn.classList.add('doneSuggestion');btn.innerHTML=`✅ ${b.emoji||'📘'} ${b.name} pag. ${p}${(b.special||[]).includes(p)?' 👪':''}`}render();maybeLevelUp(before)}
+
+function wireParentButtons(){document.getElementById('saveConfig').onclick=()=>{const start=document.getElementById('cfgStart').value,end=document.getElementById('cfgEnd').value;if(!start||!end||parseLocalDate(start)>parseLocalDate(end)){alert('Date non valide');return}s().name=document.getElementById('cfgName').value||'Configurazione';s().config.title=document.getElementById('cfgTitle').value||'Compiti';s().config.emoji=document.getElementById('cfgEmoji').value||'🦊';s().config.startDate=start;s().config.endDate=end;s().offDays=s().offDays.filter(k=>k>=start&&k<=end);render()};document.getElementById('addOrUpdateBook').onclick=()=>{let name=document.getElementById('bookName').value.trim();if(!name){alert('Inserisci il nome libro');return}let id=slug(document.getElementById('bookId').value.trim()||name),pages=parsePages(document.getElementById('bookPages').value),special=parsePages(document.getElementById('bookSpecial').value),emoji=document.getElementById('bookEmoji').value||'📘',existing=s().books[id]||{pages:[]};s().books[id]={name,emoji,pages:[...new Set([...existing.pages,...pages])].sort((a,b)=>a-b),special};render()};document.getElementById('addPages').onclick=()=>{let id=document.getElementById('adminBook').value;if(!id)return;s().books[id].pages=[...new Set([...s().books[id].pages,...parsePages(document.getElementById('adminPages').value)])].sort((a,b)=>a-b);render()};document.getElementById('removePages').onclick=()=>{let id=document.getElementById('adminBook').value,rm=parsePages(document.getElementById('adminPages').value);s().books[id].pages=s().books[id].pages.filter(p=>!rm.includes(p));s().done[id]=(s().done[id]||[]).filter(p=>!rm.includes(p));render()};document.getElementById('exportSession').onclick=()=>document.getElementById('sessionBackup').value=JSON.stringify({version:1,session:s()},null,2);document.getElementById('importSession').onclick=()=>{try{let data=JSON.parse(document.getElementById('sessionBackup').value);let ss=data.session||data;if(!ss.id)ss.id=uid();store.sessions[ss.id]=ss;store.activeId=ss.id;render()}catch(e){alert('Dati non validi')}};document.getElementById('resetProgress').onclick=()=>{if(confirm('Azzerare avanzamento e storico di questa configurazione?')){s().done={};s().logs={};render()}}}
+function fillBookForm(id){let b=s().books[id];document.getElementById('bookEmoji').value=b.emoji||'📘';document.getElementById('bookName').value=b.name;document.getElementById('bookId').value=id;document.getElementById('bookPages').value=b.pages.join(',');document.getElementById('bookSpecial').value=(b.special||[]).join(',')}
+function deleteBook(id){if(confirm('Eliminare questo libro?')){delete s().books[id];delete s().done[id];render()}}
+
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+document.getElementById('createSession').onclick=()=>{const name=document.getElementById('newSessionName').value.trim(),title=document.getElementById('newSessionTitle').value.trim()||name,emoji=document.getElementById('newSessionEmoji').value||'🦊',startDate=document.getElementById('newSessionStart').value,endDate=document.getElementById('newSessionEnd').value;if(!name||!startDate||!endDate||parseLocalDate(startDate)>parseLocalDate(endDate)){alert('Compila nome e date valide');return}let ss=createEmptySession({name,title,emoji,startDate,endDate});store.sessions[ss.id]=ss;store.activeId=ss.id;render();showTab('parent')};
+function openSession(id){store.activeId=id;render();showTab('kid')}
+function duplicateSession(id){let old=store.sessions[id],copy=clone(old);copy.id=uid();copy.name=old.name+' copia';store.sessions[copy.id]=copy;store.activeId=copy.id;render()}
+function deleteSession(id){if(confirm('Eliminare questa configurazione?')){delete store.sessions[id];if(store.activeId===id)store.activeId=Object.keys(store.sessions)[0]||null;render()}}
+document.getElementById('exportAll').onclick=()=>document.getElementById('globalBackup').value=JSON.stringify({version:1,store},null,2);
+document.getElementById('importAll').onclick=()=>{try{let data=JSON.parse(document.getElementById('globalBackup').value);store=migrateStore(data.store||data);render()}catch(e){alert('Dati non validi')}};
+
+function celebrate(){const c=document.getElementById('confetti');for(let i=0;i<70;i++){let e=document.createElement('i');e.textContent=['🎉','🍭','🌈','🏆','🚀'][Math.floor(Math.random()*5)];e.style.left=Math.random()*100+'vw';e.style.animationDelay=Math.random()/2+'s';c.appendChild(e);setTimeout(()=>e.remove(),2200)}}
+function toast(msg){let t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function maybeLevelUp(before){let after=levelInfo();if(after.level>before.level){celebrate();toast(`🎉 Livello ${before.level} completato!<br>🚀 Benvenuto al livello ${after.level}!`)}else if(after.pct>=66.666&&before.pct<66.666){celebrate();toast('⭐ Seconda stellina conquistata!')}else if(after.pct>=33.333&&before.pct<33.333){celebrate();toast('⭐ Prima stellina conquistata!')}}
+
+if(!store.activeId){showTab('sessions')}else{render()}
+</script>
+</body>
+</html>
