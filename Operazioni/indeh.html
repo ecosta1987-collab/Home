@@ -1,1 +1,1002 @@
-;
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Missione Matematica — 100 Operazioni</title>
+
+  <style>
+    :root {
+      --bg:#f7fbff;
+      --card:#ffffff;
+      --ink:#1e2a3a;
+      --muted:#637083;
+      --primary:#5b6cff;
+      --primary-dark:#3f4ee0;
+      --success:#1f9d66;
+      --warning:#d9821c;
+      --shadow:0 12px 30px rgba(48,71,94,.14);
+      --radius:24px;
+    }
+
+    * { box-sizing:border-box; }
+
+    body {
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(circle at 10% 10%, #fff5c9 0 8%, transparent 9%),
+        radial-gradient(circle at 90% 16%, #dff7ff 0 7%, transparent 8%),
+        radial-gradient(circle at 85% 85%, #ece6ff 0 8%, transparent 9%),
+        var(--bg);
+      color:var(--ink);
+      min-height:100vh;
+    }
+
+    button,input { font:inherit; }
+
+    .app {
+      max-width:980px;
+      margin:0 auto;
+      padding:20px;
+    }
+
+    .topbar {
+      display:flex;
+      gap:14px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      margin-bottom:18px;
+    }
+
+    .brand {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:900;
+      font-size:clamp(1.25rem,3vw,1.8rem);
+    }
+
+    .brand-badge {
+      width:52px;
+      height:52px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      background:#fff;
+      box-shadow:var(--shadow);
+      font-size:28px;
+    }
+
+    .top-actions {
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .pill {
+      border:0;
+      border-radius:999px;
+      background:#fff;
+      color:var(--ink);
+      padding:10px 14px;
+      box-shadow:0 6px 18px rgba(48,71,94,.10);
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .progress-card {
+      background:#fff;
+      border-radius:20px;
+      padding:14px 16px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+
+    .progress-row {
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:center;
+      font-weight:800;
+      margin-bottom:8px;
+      flex-wrap:wrap;
+    }
+
+    .progress-track {
+      height:16px;
+      background:#e9eef7;
+      border-radius:999px;
+      overflow:hidden;
+    }
+
+    .progress-fill {
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg,#5b6cff,#7d67ff);
+      transition:width .35s ease;
+    }
+
+    .game-card {
+      background:rgba(255,255,255,.96);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:clamp(22px,5vw,48px);
+      text-align:center;
+    }
+
+    .level-bubble {
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      background:#eef0ff;
+      color:#3f4ee0;
+      border-radius:999px;
+      padding:8px 13px;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+
+    .mission {
+      font-size:clamp(1rem,2.2vw,1.18rem);
+      color:var(--muted);
+      font-weight:750;
+      margin:0 auto 12px;
+      max-width:620px;
+    }
+
+    .equation {
+      font-size:clamp(3rem,11vw,6.5rem);
+      font-weight:1000;
+      letter-spacing:-.04em;
+      margin:12px 0 22px;
+      line-height:1.05;
+    }
+
+    .answer-wrap {
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .answer {
+      width:min(280px,82vw);
+      font-size:clamp(2rem,7vw,3.2rem);
+      text-align:center;
+      padding:15px 20px;
+      border:4px solid #dbe2ee;
+      border-radius:20px;
+      font-weight:900;
+      background:#fff;
+    }
+
+    .main-btn {
+      border:0;
+      border-radius:20px;
+      background:var(--primary);
+      color:#fff;
+      font-weight:950;
+      padding:18px 24px;
+      cursor:pointer;
+      font-size:1.15rem;
+      min-width:160px;
+      box-shadow:0 8px 0 var(--primary-dark);
+    }
+
+    .main-btn:active {
+      transform:translateY(4px);
+      box-shadow:0 4px 0 var(--primary-dark);
+    }
+
+    .feedback {
+      min-height:52px;
+      margin:18px auto 4px;
+      font-size:1.2rem;
+      font-weight:900;
+      display:grid;
+      place-items:center;
+      max-width:620px;
+    }
+
+    .feedback.good { color:var(--success); }
+    .feedback.try { color:var(--warning); }
+    .feedback.hint { color:#4a5d75; }
+
+    .helper-row {
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    .helper-btn {
+      border:0;
+      border-radius:16px;
+      padding:11px 14px;
+      background:#f2f6fb;
+      color:#344459;
+      font-weight:850;
+      cursor:pointer;
+    }
+
+    .stars {
+      font-size:1.7rem;
+      letter-spacing:4px;
+      min-height:34px;
+      margin:8px 0 0;
+    }
+
+    .pause-box {
+      display:none;
+      margin-top:20px;
+      background:#f9f7ff;
+      border:2px dashed #b9afff;
+      border-radius:18px;
+      padding:16px;
+      color:#4b456b;
+      font-weight:800;
+    }
+
+    .pause-box.show { display:block; }
+
+    .level-map {
+      margin-top:18px;
+      background:#fff;
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px;
+    }
+
+    .level-map h2 {
+      font-size:1.05rem;
+      margin:0 0 12px;
+    }
+
+    .levels {
+      display:grid;
+      grid-template-columns:repeat(10,1fr);
+      gap:8px;
+    }
+
+    .level-dot {
+      aspect-ratio:1;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      background:#eef2f8;
+      color:#68778a;
+      font-weight:950;
+    }
+
+    .level-dot.done {
+      background:#e6f7ef;
+      color:#167b51;
+    }
+
+    .level-dot.current {
+      background:#5b6cff;
+      color:white;
+      box-shadow:0 0 0 4px rgba(91,108,255,.15);
+    }
+
+    .overlay {
+      position:fixed;
+      inset:0;
+      background:rgba(24,34,49,.38);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:20;
+    }
+
+    .overlay.show { display:flex; }
+
+    .modal {
+      background:#fff;
+      border-radius:26px;
+      padding:28px;
+      max-width:560px;
+      width:100%;
+      box-shadow:0 24px 70px rgba(0,0,0,.22);
+      text-align:center;
+    }
+
+    .modal h2 {
+      font-size:2rem;
+      margin:0 0 8px;
+    }
+
+    .modal p {
+      color:var(--muted);
+      font-weight:700;
+      line-height:1.5;
+    }
+
+    .focus-mode .level-map { display:none; }
+
+    .focus-mode .game-card {
+      max-width:720px;
+      margin:0 auto;
+    }
+
+    .confetti {
+      position:fixed;
+      top:-20px;
+      font-size:24px;
+      pointer-events:none;
+      animation:fall 1.5s linear forwards;
+      z-index:50;
+    }
+
+    @keyframes fall {
+      to {
+        transform:translateY(110vh) rotate(540deg);
+        opacity:.2;
+      }
+    }
+
+    @media (max-width:700px) {
+      .levels {
+        grid-template-columns:repeat(5,1fr);
+      }
+
+      .answer-wrap {
+        flex-direction:column;
+      }
+
+      .main-btn {
+        width:min(280px,82vw);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<main class="app" id="app">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-badge">🚀</div>
+      <span>Missione Matematica</span>
+    </div>
+
+    <div class="top-actions">
+      <button class="pill" id="focusBtn">🎯 Modalità focus</button>
+      <button class="pill" id="soundBtn">🔊 Suoni</button>
+      <button class="pill" id="resetBtn">↺ Ricomincia</button>
+    </div>
+  </div>
+
+  <section class="progress-card">
+    <div class="progress-row">
+      <span id="progressText">Operazione 1 di 100</span>
+      <span id="scoreText">⭐ 0 stelle</span>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </section>
+
+  <section class="game-card">
+
+    <div class="level-bubble" id="levelBubble">
+      🟢 Livello 1 · Partenza facile
+    </div>
+
+    <p class="mission">
+      Una missione alla volta. Nessuna fretta: conta, pensa e prova!
+    </p>
+
+    <div class="equation" id="equation">
+      7 + 5 = ?
+    </div>
+
+    <form id="answerForm" class="answer-wrap">
+      <input
+        id="answerInput"
+        class="answer"
+        type="number"
+        inputmode="numeric"
+        min="0"
+        max="999"
+        placeholder="?"
+      />
+
+      <button class="main-btn" type="submit">
+        Controlla ✓
+      </button>
+    </form>
+
+    <div id="feedback" class="feedback hint">
+      💡 Puoi usare le dita, fare un disegno o contare piano.
+    </div>
+
+    <div class="helper-row">
+      <button class="helper-btn" id="hintBtn">
+        💡 Piccolo aiuto
+      </button>
+
+      <button class="helper-btn" id="breakBtn">
+        🧘 Mini-pausa
+      </button>
+    </div>
+
+    <div class="stars" id="stars"></div>
+
+    <div class="pause-box" id="pauseBox">
+      🌿 Guarda lontano per 10 secondi, fai 3 respiri tranquilli,
+      poi torna quando vuoi. Il gioco resta qui.
+    </div>
+
+  </section>
+
+  <section class="level-map">
+    <h2>🗺️ 10 livelli · 10 missioni ciascuno</h2>
+    <div class="levels" id="levels"></div>
+  </section>
+
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div style="font-size:64px" id="modalEmoji">🎉</div>
+    <h2 id="modalTitle">Livello completato!</h2>
+    <p id="modalText"></p>
+
+    <button class="main-btn" id="nextLevelBtn">
+      Continua 🚀
+    </button>
+  </div>
+</div>
+
+<script>
+const TOTAL = 100;
+const PER_LEVEL = 10;
+
+const levelNames = [
+  "Partenza facile",
+  "Numeri sprint",
+  "Super calcoli",
+  "Quasi a 100",
+  "Campione del 100",
+  "Salto oltre 100",
+  "Turbo cervello",
+  "Missione 200",
+  "Grandi numeri",
+  "Maestro delle centinaia"
+];
+
+const maxByLevel = [
+  20, 30, 50, 70, 100,
+  120, 150, 200, 500, 999
+];
+
+const state = {
+  index: 0,
+  stars: 0,
+  correctInLevel: 0,
+  tries: 0,
+  sound: true,
+  focus: false,
+  questions: []
+};
+
+const $ = id => document.getElementById(id);
+
+const equation = $("equation");
+const input = $("answerInput");
+const feedback = $("feedback");
+const progressFill = $("progressFill");
+const progressText = $("progressText");
+const scoreText = $("scoreText");
+const levelBubble = $("levelBubble");
+const stars = $("stars");
+const overlay = $("overlay");
+const modalTitle = $("modalTitle");
+const modalText = $("modalText");
+const modalEmoji = $("modalEmoji");
+
+
+function seededRandom(seed) {
+  let x = Math.sin(seed * 999) * 10000;
+  return x - Math.floor(x);
+}
+
+
+function makeQuestions() {
+
+  const qs = [];
+
+  for (let level = 0; level < 10; level++) {
+
+    const max = maxByLevel[level];
+
+    for (let j = 0; j < PER_LEVEL; j++) {
+
+      const seed = level * 100 + j * 7 + 13;
+
+      const isAdd =
+        (j % 2 === 0) !==
+        (level % 2 === 1 && j === 9);
+
+      let a;
+      let b;
+      let ans;
+
+      if (isAdd) {
+
+        a = Math.max(
+          1,
+          Math.floor(seededRandom(seed) * max)
+        );
+
+        b = Math.max(
+          1,
+          Math.floor(
+            seededRandom(seed + 1) *
+            (max - a + 1)
+          )
+        );
+
+        if (a + b > max) {
+          b = Math.max(0, max - a);
+        }
+
+        ans = a + b;
+
+      } else {
+
+        a = Math.max(
+          2,
+          Math.floor(seededRandom(seed + 2) * max)
+        );
+
+        b = Math.floor(
+          seededRandom(seed + 3) *
+          (a + 1)
+        );
+
+        ans = a - b;
+      }
+
+      qs.push({
+        a: a,
+        b: b,
+        op: isAdd ? "+" : "−",
+        answer: ans,
+        level: level
+      });
+    }
+  }
+
+  return qs;
+}
+
+
+function renderLevels() {
+
+  const wrap = $("levels");
+  wrap.innerHTML = "";
+
+  const currentLevel =
+    Math.min(
+      9,
+      Math.floor(state.index / PER_LEVEL)
+    );
+
+  for (let i = 0; i < 10; i++) {
+
+    const d = document.createElement("div");
+
+    d.className =
+      "level-dot" +
+      (i < currentLevel
+        ? " done"
+        : i === currentLevel
+        ? " current"
+        : "");
+
+    d.textContent = i + 1;
+
+    wrap.appendChild(d);
+  }
+}
+
+
+function render() {
+
+  if (state.index >= TOTAL) {
+    finishGame();
+    return;
+  }
+
+  const q = state.questions[state.index];
+  const level = q.level;
+
+  equation.textContent =
+    `${q.a} ${q.op} ${q.b} = ?`;
+
+  const icon =
+    level < 3
+      ? "🟢"
+      : level < 7
+      ? "🟡"
+      : "🟣";
+
+  levelBubble.textContent =
+    `${icon} Livello ${level + 1} · ${levelNames[level]}`;
+
+  progressText.textContent =
+    `Operazione ${state.index + 1} di ${TOTAL}`;
+
+  progressFill.style.width =
+    `${(state.index / TOTAL) * 100}%`;
+
+  scoreText.textContent =
+    `⭐ ${state.stars} stelle`;
+
+  stars.textContent =
+    "⭐".repeat(
+      Math.min(state.correctInLevel, 10)
+    );
+
+  feedback.className =
+    "feedback hint";
+
+  feedback.textContent =
+    state.index === 0
+      ? "💡 Puoi usare le dita, fare un disegno o contare piano."
+      : "✨ Tocca a te! Una sola missione alla volta.";
+
+  input.value = "";
+  state.tries = 0;
+
+  input.focus();
+
+  renderLevels();
+}
+
+
+function speakTone(ok = true) {
+
+  if (!state.sound) return;
+
+  try {
+
+    const ctx =
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.value =
+      ok ? 660 : 240;
+
+    gain.gain.value = .05;
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start();
+
+    setTimeout(() => {
+      osc.stop();
+      ctx.close();
+    }, ok ? 120 : 90);
+
+  } catch(e) {}
+}
+
+
+function confetti() {
+
+  const chars =
+    ["⭐","✨","🎈","🚀"];
+
+  for (let i = 0; i < 14; i++) {
+
+    const s =
+      document.createElement("span");
+
+    s.className = "confetti";
+
+    s.textContent =
+      chars[i % chars.length];
+
+    s.style.left =
+      (5 + Math.random() * 90) + "vw";
+
+    s.style.animationDelay =
+      (Math.random() * .25) + "s";
+
+    document.body.appendChild(s);
+
+    setTimeout(
+      () => s.remove(),
+      1900
+    );
+  }
+}
+
+
+$("answerForm").addEventListener(
+  "submit",
+  function(e) {
+
+    e.preventDefault();
+
+    const q =
+      state.questions[state.index];
+
+    const value =
+      Number(input.value);
+
+    if (input.value === "") {
+
+      feedback.className =
+        "feedback try";
+
+      feedback.textContent =
+        "✏️ Scrivi un numero e poi premi Controlla.";
+
+      return;
+    }
+
+    if (value === q.answer) {
+
+      speakTone(true);
+
+      state.stars++;
+      state.correctInLevel++;
+
+      feedback.className =
+        "feedback good";
+
+      feedback.textContent =
+        state.tries === 0
+          ? "🌟 Perfetto! Stella conquistata!"
+          : "🎉 Giusto! Ottimo recupero!";
+
+      scoreText.textContent =
+        `⭐ ${state.stars} stelle`;
+
+      setTimeout(function() {
+
+        state.index++;
+
+        if (
+          state.index % PER_LEVEL === 0 &&
+          state.index < TOTAL
+        ) {
+          showLevelModal();
+        } else {
+          render();
+        }
+
+      }, 650);
+
+    } else {
+
+      speakTone(false);
+
+      state.tries++;
+
+      feedback.className =
+        "feedback try";
+
+      feedback.textContent =
+        state.tries === 1
+          ? "🙂 Quasi! Riprova con calma. Nessuna stella si perde."
+          : "💪 Sei vicino. Usa “Piccolo aiuto” se vuoi.";
+
+      input.select();
+    }
+  }
+);
+
+
+$("hintBtn").addEventListener(
+  "click",
+  function() {
+
+    const q =
+      state.questions[state.index];
+
+    feedback.className =
+      "feedback hint";
+
+    if (q.op === "+") {
+
+      feedback.textContent =
+        q.b <= 10
+          ? `💡 Parti da ${q.a} e fai ${q.b} passi in avanti.`
+          : `💡 Spezza ${q.b} in decine e unità. Aggiungi prima le decine, poi le unità.`;
+
+    } else {
+
+      feedback.textContent =
+        q.b <= 10
+          ? `💡 Parti da ${q.a} e fai ${q.b} passi indietro.`
+          : `💡 Togli prima le decine di ${q.b}, poi le unità.`;
+    }
+  }
+);
+
+
+$("breakBtn").addEventListener(
+  "click",
+  function() {
+
+    const box =
+      $("pauseBox");
+
+    box.classList.toggle("show");
+
+    $("breakBtn").textContent =
+      box.classList.contains("show")
+        ? "✅ Torno al gioco"
+        : "🧘 Mini-pausa";
+  }
+);
+
+
+$("focusBtn").addEventListener(
+  "click",
+  function() {
+
+    state.focus =
+      !state.focus;
+
+    $("app")
+      .classList
+      .toggle(
+        "focus-mode",
+        state.focus
+      );
+
+    $("focusBtn").textContent =
+      state.focus
+        ? "👀 Mostra mappa"
+        : "🎯 Modalità focus";
+  }
+);
+
+
+$("soundBtn").addEventListener(
+  "click",
+  function() {
+
+    state.sound =
+      !state.sound;
+
+    $("soundBtn").textContent =
+      state.sound
+        ? "🔊 Suoni"
+        : "🔇 Suoni off";
+  }
+);
+
+
+$("resetBtn").addEventListener(
+  "click",
+  function() {
+
+    if (
+      confirm(
+        "Vuoi davvero ricominciare dalla prima operazione?"
+      )
+    ) {
+
+      state.index = 0;
+      state.stars = 0;
+      state.correctInLevel = 0;
+
+      render();
+    }
+  }
+);
+
+
+function showLevelModal() {
+
+  const completed =
+    Math.floor(
+      state.index / PER_LEVEL
+    );
+
+  confetti();
+
+  modalEmoji.textContent = "🏆";
+
+  modalTitle.textContent =
+    `Livello ${completed} completato!`;
+
+  modalText.textContent =
+    `Hai finito 10 missioni. Ora puoi fare una mini-pausa oppure partire per il livello ${completed + 1}.`;
+
+  $("nextLevelBtn").textContent =
+    "Vai al prossimo livello 🚀";
+
+  overlay.classList.add("show");
+
+  state.correctInLevel = 0;
+}
+
+
+$("nextLevelBtn").addEventListener(
+  "click",
+  function() {
+
+    overlay.classList.remove("show");
+
+    render();
+  }
+);
+
+
+function finishGame() {
+
+  progressFill.style.width =
+    "100%";
+
+  progressText.textContent =
+    "100 operazioni completate!";
+
+  equation.textContent =
+    "🏆 100 / 100";
+
+  levelBubble.textContent =
+    "🌈 Missione completata";
+
+  feedback.className =
+    "feedback good";
+
+  feedback.textContent =
+    "Incredibile! Hai completato tutte le 100 operazioni!";
+
+  $("answerForm").style.display =
+    "none";
+
+  renderLevels();
+  confetti();
+
+  modalEmoji.textContent =
+    "🚀";
+
+  modalTitle.textContent =
+    "Super missione completata!";
+
+  modalText.textContent =
+    `Hai affrontato 100 operazioni e raccolto ${state.stars} stelle. Puoi essere fiero del tuo impegno!`;
+
+  $("nextLevelBtn").textContent =
+    "Gioca di nuovo ↺";
+
+  $("nextLevelBtn").onclick =
+    function() {
+      location.reload();
+    };
+
+  overlay.classList.add("show");
+}
+
+
+state.questions =
+  makeQuestions();
+
+render();
+</script>
+
+</body>
+</html>
