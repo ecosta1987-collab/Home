@@ -35,6 +35,7 @@ html{
 body{
   margin:0;
   min-height:100vh;
+
   font-family:
     system-ui,
     -apple-system,
@@ -192,7 +193,7 @@ button:focus-visible{
   font-weight:800;
   font-size:clamp(1rem,3vw,1.15rem);
   margin:10px auto 18px;
-  max-width:620px;
+  max-width:700px;
 }
 
 .readingText{
@@ -205,16 +206,14 @@ button:focus-visible{
 }
 
 .readingText.sentence{
-  font-size:clamp(1.8rem,7vw,3.7rem);
+  font-size:clamp(1.65rem,6vw,3.4rem);
   line-height:1.3;
 }
 
-.syllableA{
-  color:#5148d7;
-}
-
-.syllableB{
-  color:#167e5a;
+.readingText.story{
+  font-size:clamp(1.35rem,4.7vw,2.45rem);
+  line-height:1.48;
+  max-width:800px;
 }
 
 .controls{
@@ -253,7 +252,7 @@ button:focus-visible{
 /* ANSWERS */
 
 .answers{
-  max-width:700px;
+  max-width:740px;
   margin:0 auto;
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -265,11 +264,12 @@ button:focus-visible{
   border:3px solid #e4e8ee;
   border-radius:21px;
   background:white;
-  padding:12px;
+  padding:12px 16px;
   cursor:pointer;
   font-weight:950;
-  font-size:clamp(1.25rem,5vw,2rem);
+  font-size:clamp(1.18rem,4vw,1.8rem);
   color:var(--ink);
+
   transition:
     transform .12s,
     border-color .12s,
@@ -388,8 +388,6 @@ button:focus-visible{
   place-items:center;
   border-radius:50%;
 }
-
-/* STARS */
 
 .stars{
   min-height:38px;
@@ -517,175 +515,179 @@ button:focus-visible{
 
 <main class="app" id="app">
 
-  <header class="header">
+<header class="header">
 
-    <div class="brand">
-      <div class="logo">🌳</div>
+  <div class="brand">
 
-      <div>
-        <div class="title">
-          Il Bosco delle Parole
-        </div>
+    <div class="logo">
+      🌳
+    </div>
 
-        <div class="subtitle">
-          100 piccole missioni di lettura
-        </div>
+    <div>
+
+      <div class="title">
+        Il Bosco delle Parole
       </div>
-    </div>
 
-    <div class="headerButtons">
-
-      <button
-        class="smallButton"
-        id="focusButton"
-      >
-        🎯 Focus
-      </button>
-
-      <button
-        class="smallButton"
-        id="resetButton"
-      >
-        ↺ Ricomincia
-      </button>
+      <div class="subtitle">
+        100 piccole missioni di lettura
+      </div>
 
     </div>
 
-  </header>
+  </div>
 
+  <div class="headerButtons">
 
-  <section class="progressCard">
-
-    <div class="progressTop">
-
-      <span id="progressText">
-        Missione 1 di 100
-      </span>
-
-      <span id="starText">
-        ⭐ 0
-      </span>
-
-    </div>
-
-    <div class="progressTrack">
-
-      <div
-        class="progressBar"
-        id="progressBar"
-      ></div>
-
-    </div>
-
-  </section>
-
-
-  <section class="game">
-
-    <div
-      class="missionBadge"
-      id="missionBadge"
+    <button
+      class="smallButton"
+      id="focusButton"
     >
-      🐰 Missione del Coniglio
-    </div>
+      🎯 Focus
+    </button>
 
-
-    <div
-      class="animal"
-      id="animalEmoji"
+    <button
+      class="smallButton"
+      id="resetButton"
     >
-      🐰
-    </div>
+      ↺ Ricomincia
+    </button>
+
+  </div>
+
+</header>
 
 
-    <div
-      class="instruction"
-      id="instruction"
-    >
-      Leggi la sillaba.
-    </div>
+<section class="progressCard">
 
+  <div class="progressTop">
 
-    <div
-      class="readingText"
-      id="readingText"
-    >
-      MA
-    </div>
+    <span id="progressText">
+      Missione 1 di 100
+    </span>
 
+    <span id="starText">
+      ⭐ 0
+    </span>
 
-    <div class="controls">
+  </div>
 
-      <button
-        class="listenButton"
-        id="listenButton"
-      >
-        🔊 Ascolta
-      </button>
-
-
-      <button
-        class="helpButton"
-        id="helpButton"
-      >
-        💡 Aiutino
-      </button>
-
-
-      <button
-        class="pauseButton"
-        id="pauseButton"
-      >
-        🌿 Pausa
-      </button>
-
-    </div>
-
+  <div class="progressTrack">
 
     <div
-      class="answers"
-      id="answers"
+      class="progressBar"
+      id="progressBar"
     ></div>
 
+  </div>
 
-    <div
-      class="feedback normal"
-      id="feedback"
+</section>
+
+
+<section class="game">
+
+  <div
+    class="missionBadge"
+    id="missionBadge"
+  >
+    🐰 Missione del Coniglio
+  </div>
+
+
+  <div
+    class="animal"
+    id="animalEmoji"
+  >
+    🐰
+  </div>
+
+
+  <div
+    class="instruction"
+    id="instruction"
+  >
+    Leggi.
+  </div>
+
+
+  <div
+    class="readingText"
+    id="readingText"
+  >
+    MA
+  </div>
+
+
+  <div class="controls">
+
+    <button
+      class="listenButton"
+      id="listenButton"
     >
-      Una parola alla volta. Nessuna fretta.
-    </div>
+      🔊 Ascolta
+    </button>
 
-
-    <div
-      class="stars"
-      id="levelStars"
-    ></div>
-
-
-    <div
-      class="pauseBox"
-      id="pauseBox"
+    <button
+      class="helpButton"
+      id="helpButton"
     >
-      🌿 Mini-pausa: guarda lontano,
-      muovi un po' le mani e fai tre respiri.
-      Torna quando ti senti pronto.
-    </div>
+      💡 Aiutino
+    </button>
 
-  </section>
+    <button
+      class="pauseButton"
+      id="pauseButton"
+    >
+      🌿 Pausa
+    </button>
+
+  </div>
 
 
-  <section class="map">
+  <div
+    class="answers"
+    id="answers"
+  ></div>
 
-    <div class="mapTitle">
-      🗺️ Gli amici del bosco
-    </div>
 
-    <div
-      class="animalsMap"
-      id="animalsMap"
-    ></div>
+  <div
+    class="feedback normal"
+    id="feedback"
+  >
+    Una parola alla volta. Nessuna fretta.
+  </div>
 
-  </section>
+
+  <div
+    class="stars"
+    id="levelStars"
+  ></div>
+
+
+  <div
+    class="pauseBox"
+    id="pauseBox"
+  >
+    🌿 Mini-pausa: guarda lontano,
+    muovi un po' le mani e fai tre respiri.
+    Torna quando ti senti pronto.
+  </div>
+
+</section>
+
+
+<section class="map">
+
+  <div class="mapTitle">
+    🗺️ Gli amici del bosco
+  </div>
+
+  <div
+    class="animalsMap"
+    id="animalsMap"
+  ></div>
+
+</section>
 
 </main>
 
@@ -725,10 +727,19 @@ button:focus-visible{
 <script>
 
 /* ======================================================
-   IL BOSCO DELLE PAROLE
-   100 attività - 10 animali - 10 missioni ciascuno
+   CONFIGURAZIONE
    ====================================================== */
 
+const TOTAL = 100;
+const PER_LEVEL = 10;
+
+const STORAGE_KEY =
+  "bosco-parole-progress-v2";
+
+
+/* ======================================================
+   ANIMALI
+   ====================================================== */
 
 const animals = [
 
@@ -753,7 +764,7 @@ const animals = [
   {
     emoji:"🐸",
     name:"Rana",
-    title:"Salta sulla parola"
+    title:"Trova la parola"
   },
 
   {
@@ -765,19 +776,19 @@ const animals = [
   {
     emoji:"🐻",
     name:"Orso",
-    title:"Prime frasi"
+    title:"Chi fa cosa?"
   },
 
   {
     emoji:"🦉",
     name:"Gufo",
-    title:"Chi fa cosa?"
+    title:"Leggo e capisco"
   },
 
   {
     emoji:"🦌",
     name:"Cerbiatto",
-    title:"Capisco la frase"
+    title:"Cerca gli indizi"
   },
 
   {
@@ -789,24 +800,21 @@ const animals = [
   {
     emoji:"🦁",
     name:"Leone",
-    title:"Grande missione finale"
+    title:"L'avventura finale"
   }
 
 ];
 
 
-/*
-  type:
-  "read"     = leggi e scegli
-  "picture"  = parola -> emoji
-  "question" = comprensione
-*/
-
+/* ======================================================
+   100 ATTIVITÀ
+   ====================================================== */
 
 const activities = [
 
+
 /* ======================================================
-   LIVELLO 1 - CONIGLIO
+   1 - CONIGLIO
    SILLABE
    ====================================================== */
 
@@ -902,103 +910,103 @@ const activities = [
 
 
 /* ======================================================
-   LIVELLO 2 - SCOIATTOLO
-   PAROLE SEMPLICI
+   2 - SCOIATTOLO
+   PRIME PAROLE
    ====================================================== */
 
 {
  type:"picture",
  text:"MELA",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["🍎","🐱","☀️"],
  correct:"🍎",
- help:"ME - LA. MELA."
+ help:"ME - LA."
 },
 
 {
  type:"picture",
  text:"SOLE",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["🌙","☀️","🐟"],
  correct:"☀️",
- help:"SO - LE. SOLE."
+ help:"SO - LE."
 },
 
 {
  type:"picture",
  text:"LUNA",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["🌙","🌳","🍐"],
  correct:"🌙",
- help:"LU - NA. LUNA."
+ help:"LU - NA."
 },
 
 {
  type:"picture",
  text:"PANE",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["🍞","🐶","🚗"],
  correct:"🍞",
- help:"PA - NE. PANE."
+ help:"PA - NE."
 },
 
 {
  type:"picture",
  text:"CANE",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["🐶","🐸","🍎"],
  correct:"🐶",
- help:"CA - NE. CANE."
+ help:"CA - NE."
 },
 
 {
  type:"picture",
  text:"GATTO",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["🐭","🐱","🐻"],
  correct:"🐱",
- help:"GAT - TO. GATTO."
+ help:"GAT - TO."
 },
 
 {
  type:"picture",
  text:"PESCE",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["🐟","🐦","🐰"],
  correct:"🐟",
- help:"PE - SCE. PESCE."
+ help:"PE - SCE."
 },
 
 {
  type:"picture",
  text:"RANA",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["🐸","🦊","🐼"],
  correct:"🐸",
- help:"RA - NA. RANA."
+ help:"RA - NA."
 },
 
 {
  type:"picture",
  text:"CASA",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["🏠","🌈","🚲"],
  correct:"🏠",
- help:"CA - SA. CASA."
+ help:"CA - SA."
 },
 
 {
  type:"picture",
  text:"MANO",
- instruction:"Leggi la parola. Quale immagine è?",
+ instruction:"Leggi la parola. Quale immagine rappresenta?",
  answers:["👂","✋","👃"],
  correct:"✋",
- help:"MA - NO. MANO."
+ help:"MA - NO."
 },
 
 
 /* ======================================================
-   LIVELLO 3 - RICCIO
+   3 - RICCIO
    PAROLE DEL BOSCO
    ====================================================== */
 
@@ -1094,104 +1102,105 @@ const activities = [
 
 
 /* ======================================================
-   LIVELLO 4 - RANA
-   SCELTA DELLA PAROLA
+   4 - RANA
+   IMMAGINE -> PAROLA
+   La soluzione NON è scritta nella domanda
    ====================================================== */
 
 {
- type:"question",
+ type:"choice",
  text:"🐱",
- instruction:"Quale parola dice GATTO?",
+ instruction:"Quale parola corrisponde all'immagine?",
  answers:["GATTO","TETTO","GOMMA"],
  correct:"GATTO",
- help:"Inizia con GAT."
+ help:"Inizia con GAT..."
 },
 
 {
- type:"question",
+ type:"choice",
  text:"🐶",
- instruction:"Quale parola dice CANE?",
- answers:["CANE","PANE","LUNA"],
+ instruction:"Quale parola corrisponde all'immagine?",
+ answers:["PANE","CANE","LUNA"],
  correct:"CANE",
- help:"CA - NE."
+ help:"Inizia con CA..."
 },
 
 {
- type:"question",
+ type:"choice",
  text:"🌳",
- instruction:"Quale parola dice ALBERO?",
- answers:["ALBERO","AEREO","APE"],
+ instruction:"Quale parola corrisponde all'immagine?",
+ answers:["AEREO","APE","ALBERO"],
  correct:"ALBERO",
- help:"È una parola lunga: AL-BE-RO."
+ help:"AL - BE - RO."
 },
 
 {
- type:"question",
+ type:"choice",
  text:"🍎",
- instruction:"Quale parola dice MELA?",
- answers:["MELA","MOTO","MARE"],
+ instruction:"Quale parola corrisponde all'immagine?",
+ answers:["MARE","MELA","MOTO"],
  correct:"MELA",
  help:"ME - LA."
 },
 
 {
- type:"question",
+ type:"choice",
  text:"☀️",
- instruction:"Quale parola dice SOLE?",
- answers:["SALE","SOLE","SEME"],
+ instruction:"Quale parola corrisponde all'immagine?",
+ answers:["SALE","SEME","SOLE"],
  correct:"SOLE",
  help:"SO - LE."
 },
 
 {
- type:"question",
+ type:"choice",
  text:"🐟",
- instruction:"Quale parola dice PESCE?",
- answers:["PESCE","PANE","PIEDE"],
+ instruction:"Quale parola corrisponde all'immagine?",
+ answers:["PANE","PESCE","PIEDE"],
  correct:"PESCE",
  help:"PE - SCE."
 },
 
 {
- type:"question",
+ type:"choice",
  text:"🌸",
- instruction:"Quale parola dice FIORE?",
- answers:["FIUME","FIORE","FORNO"],
+ instruction:"Quale parola corrisponde all'immagine?",
+ answers:["FIUME","FORNO","FIORE"],
  correct:"FIORE",
  help:"FIO - RE."
 },
 
 {
- type:"question",
+ type:"choice",
  text:"🏠",
- instruction:"Quale parola dice CASA?",
- answers:["COSA","CASA","CANE"],
+ instruction:"Quale parola corrisponde all'immagine?",
+ answers:["CASA","COSA","CANE"],
  correct:"CASA",
  help:"CA - SA."
 },
 
 {
- type:"question",
+ type:"choice",
  text:"🌙",
- instruction:"Quale parola dice LUNA?",
- answers:["LANA","LUNA","LUCE"],
+ instruction:"Quale parola corrisponde all'immagine?",
+ answers:["LANA","LUCE","LUNA"],
  correct:"LUNA",
  help:"LU - NA."
 },
 
 {
- type:"question",
+ type:"choice",
  text:"🦋",
- instruction:"Quale parola dice FARFALLA?",
- answers:["FARFALLA","FAMIGLIA","FORMICA"],
+ instruction:"Quale parola corrisponde all'immagine?",
+ answers:["FORMICA","FAMIGLIA","FARFALLA"],
  correct:"FARFALLA",
  help:"FAR - FAL - LA."
 },
 
 
 /* ======================================================
-   LIVELLO 5 - VOLPE
-   PAROLE PIÙ LUNGHE
+   5 - VOLPE
+   PAROLE LUNGHE
    ====================================================== */
 
 {
@@ -1286,9 +1295,27 @@ const activities = [
 
 
 /* ======================================================
-   LIVELLO 6 - ORSO
-   PRIME FRASI
+   6 - ORSO
+   STESSA FRASE, DOMANDE DIVERSE
    ====================================================== */
+
+{
+ type:"question",
+ text:"La luna brilla.",
+ instruction:"Chi brilla?",
+ answers:["La luna","Il sole","Il gatto"],
+ correct:"La luna",
+ help:"Cerca chi compie l'azione."
+},
+
+{
+ type:"question",
+ text:"La luna brilla.",
+ instruction:"Cosa fa la luna?",
+ answers:["Brilla","Salta","Dorme"],
+ correct:"Brilla",
+ help:"Cerca l'azione."
+},
 
 {
  type:"question",
@@ -1296,472 +1323,465 @@ const activities = [
  instruction:"Chi dorme?",
  answers:["Il gatto","Il cane","La rana"],
  correct:"Il gatto",
- help:"Rileggi la prima parola dopo IL."
+ help:"Chi fa l'azione?"
+},
+
+{
+ type:"question",
+ text:"Il gatto dorme.",
+ instruction:"Cosa fa il gatto?",
+ answers:["Dorme","Corre","Vola"],
+ correct:"Dorme",
+ help:"Cerca l'azione."
 },
 
 {
  type:"question",
  text:"La rana salta.",
  instruction:"Chi salta?",
- answers:["La rana","Il gatto","Il pesce"],
+ answers:["La rana","Il pesce","La volpe"],
  correct:"La rana",
- help:"La risposta è all'inizio della frase."
+ help:"Chi compie l'azione?"
+},
+
+{
+ type:"question",
+ text:"La rana salta.",
+ instruction:"Cosa fa la rana?",
+ answers:["Salta","Nuota","Dorme"],
+ correct:"Salta",
+ help:"Cerca l'azione."
+},
+
+{
+ type:"question",
+ text:"Il cane corre.",
+ instruction:"Chi corre?",
+ answers:["Il cane","Il gatto","Il bambino"],
+ correct:"Il cane",
+ help:"Chi fa l'azione?"
 },
 
 {
  type:"question",
  text:"Il cane corre.",
  instruction:"Cosa fa il cane?",
- answers:["Corre","Dorme","Nuota"],
+ answers:["Corre","Mangia","Vola"],
  correct:"Corre",
- help:"Leggi la parola dopo CANE."
+ help:"Cerca il verbo."
+},
+
+{
+ type:"question",
+ text:"L'ape vola.",
+ instruction:"Chi vola?",
+ answers:["L'ape","La rana","Il pesce"],
+ correct:"L'ape",
+ help:"Chi compie l'azione?"
 },
 
 {
  type:"question",
  text:"L'ape vola.",
  instruction:"Cosa fa l'ape?",
- answers:["Vola","Mangia","Dorme"],
+ answers:["Vola","Corre","Dorme"],
  correct:"Vola",
- help:"È l'ultima parola."
-},
-
-{
- type:"question",
- text:"Il pesce nuota.",
- instruction:"Chi nuota?",
- answers:["Il pesce","Il leone","La volpe"],
- correct:"Il pesce",
- help:"Rileggi lentamente."
-},
-
-{
- type:"question",
- text:"La volpe cammina.",
- instruction:"Cosa fa la volpe?",
- answers:["Cammina","Vola","Nuota"],
- correct:"Cammina",
- help:"Guarda l'ultima parola."
-},
-
-{
- type:"question",
- text:"Il sole brilla.",
- instruction:"Cosa brilla?",
- answers:["Il sole","La luna","La casa"],
- correct:"Il sole",
- help:"La risposta viene prima di BRILLA."
-},
-
-{
- type:"question",
- text:"La luna splende.",
- instruction:"Cosa splende?",
- answers:["La luna","Il pane","Il cane"],
- correct:"La luna",
- help:"Leggi dall'inizio."
-},
-
-{
- type:"question",
- text:"Il bambino ride.",
- instruction:"Cosa fa il bambino?",
- answers:["Ride","Corre","Mangia"],
- correct:"Ride",
- help:"L'azione è alla fine."
-},
-
-{
- type:"question",
- text:"La mamma legge.",
- instruction:"Cosa fa la mamma?",
- answers:["Legge","Salta","Nuota"],
- correct:"Legge",
  help:"Cerca l'azione."
 },
 
 
 /* ======================================================
-   LIVELLO 7 - GUFO
-   CHI FA COSA
+   7 - GUFO
+   CHI / COSA / DOVE
    ====================================================== */
 
 {
  type:"question",
- text:"Il coniglio mangia una carota.",
- instruction:"Cosa mangia il coniglio?",
- answers:["Una carota","Una mela","Il pane"],
- correct:"Una carota",
- help:"Cerca la parola dopo MANGIA."
+ text:"Anna legge un libro sul divano.",
+ instruction:"Chi legge?",
+ answers:["Anna","Il libro","Il divano"],
+ correct:"Anna",
+ help:"Cerca la persona che compie l'azione."
 },
 
 {
  type:"question",
- text:"La bambina beve acqua.",
- instruction:"Cosa beve la bambina?",
- answers:["Acqua","Latte","Succo"],
- correct:"Acqua",
- help:"È l'ultima parola."
-},
-
-{
- type:"question",
- text:"Marco apre la porta.",
- instruction:"Cosa apre Marco?",
- answers:["La porta","La finestra","Il libro"],
- correct:"La porta",
- help:"Leggi dopo APRE."
-},
-
-{
- type:"question",
- text:"Sara legge un libro.",
- instruction:"Cosa legge Sara?",
- answers:["Un libro","Una mela","Una palla"],
+ text:"Anna legge un libro sul divano.",
+ instruction:"Cosa legge Anna?",
+ answers:["Un libro","Il divano","Anna"],
  correct:"Un libro",
  help:"Cerca cosa viene dopo LEGGE."
 },
 
 {
  type:"question",
- text:"Il cane prende la palla.",
- instruction:"Cosa prende il cane?",
- answers:["La palla","La scarpa","Il pane"],
- correct:"La palla",
- help:"È alla fine della frase."
+ text:"Anna legge un libro sul divano.",
+ instruction:"Dove legge Anna?",
+ answers:["Sul divano","Nel libro","Con Anna"],
+ correct:"Sul divano",
+ help:"Cerca il luogo."
 },
 
 {
  type:"question",
- text:"Il papà guida la macchina.",
- instruction:"Cosa guida il papà?",
- answers:["La macchina","La bici","La barca"],
- correct:"La macchina",
- help:"Leggi le ultime due parole."
+ text:"Marco mangia una mela in cucina.",
+ instruction:"Chi mangia?",
+ answers:["Marco","Una mela","La cucina"],
+ correct:"Marco",
+ help:"Chi compie l'azione?"
 },
 
 {
  type:"question",
- text:"Anna accarezza il gatto.",
- instruction:"Chi accarezza Anna?",
- answers:["Il gatto","Il cane","Il pesce"],
- correct:"Il gatto",
- help:"La risposta è alla fine."
-},
-
-{
- type:"question",
- text:"Il bambino apre l'ombrello.",
- instruction:"Cosa apre il bambino?",
- answers:["L'ombrello","La porta","La scatola"],
- correct:"L'ombrello",
- help:"Guarda l'ultima parola."
-},
-
-{
- type:"question",
- text:"La nonna prepara la torta.",
- instruction:"Cosa prepara la nonna?",
- answers:["La torta","La pasta","Il pane"],
- correct:"La torta",
- help:"Leggi dopo PREPARA."
-},
-
-{
- type:"question",
- text:"Luca calcia la palla.",
- instruction:"Cosa calcia Luca?",
- answers:["La palla","La sedia","La mela"],
- correct:"La palla",
- help:"L'ultima parola ti aiuta."
-},
-
-
-/* ======================================================
-   LIVELLO 8 - CERBIATTO
-   COMPRENSIONE
-   ====================================================== */
-
-{
- type:"question",
- text:"Fuori piove. Marta prende l'ombrello.",
- instruction:"Perché Marta prende l'ombrello?",
- answers:["Perché piove","Perché ha fame","Per dormire"],
- correct:"Perché piove",
- help:"La prima frase dà l'indizio."
-},
-
-{
- type:"question",
- text:"Paolo ha sete. Beve un bicchiere d'acqua.",
- instruction:"Perché Paolo beve?",
- answers:["Ha sete","Ha sonno","Ha freddo"],
- correct:"Ha sete",
- help:"Leggi la prima frase."
-},
-
-{
- type:"question",
- text:"Il gatto vede un topo e corre.",
- instruction:"Cosa vede il gatto?",
- answers:["Un topo","Un cane","Un pesce"],
- correct:"Un topo",
- help:"Cerca la parola dopo VEDE."
-},
-
-{
- type:"question",
- text:"Emma mette il cappotto perché fa freddo.",
- instruction:"Che tempo fa?",
- answers:["Fa freddo","Fa caldo","Piove forte"],
- correct:"Fa freddo",
- help:"La frase lo dice alla fine."
-},
-
-{
- type:"question",
- text:"Il bambino spegne la luce e va a letto.",
- instruction:"Dove va il bambino?",
- answers:["A letto","A scuola","Al parco"],
- correct:"A letto",
- help:"È scritto alla fine."
-},
-
-{
- type:"question",
- text:"La rana salta nello stagno.",
- instruction:"Dove salta la rana?",
- answers:["Nello stagno","Sul tetto","In casa"],
- correct:"Nello stagno",
- help:"Cerca la parola dopo SALTA."
-},
-
-{
- type:"question",
- text:"Giulia apre il frigo e prende il latte.",
- instruction:"Cosa prende Giulia?",
- answers:["Il latte","Il pane","L'acqua"],
- correct:"Il latte",
- help:"Leggi le ultime parole."
-},
-
-{
- type:"question",
- text:"Il sole tramonta. Il cielo diventa arancione.",
- instruction:"Di che colore diventa il cielo?",
- answers:["Arancione","Verde","Nero"],
- correct:"Arancione",
- help:"La risposta è scritta nella seconda frase."
-},
-
-{
- type:"question",
- text:"Leo mette le scarpe e va al parco.",
- instruction:"Dove va Leo?",
- answers:["Al parco","A letto","Al mare"],
- correct:"Al parco",
- help:"Leggi l'ultima parte."
-},
-
-{
- type:"question",
- text:"La mamma taglia una mela e la mette nel piatto.",
- instruction:"Cosa mette nel piatto?",
- answers:["Una mela","Una pera","Una torta"],
+ text:"Marco mangia una mela in cucina.",
+ instruction:"Cosa mangia Marco?",
+ answers:["Una mela","La cucina","Marco"],
  correct:"Una mela",
- help:"La prima parte della frase ti aiuta."
+ help:"Cerca cosa viene dopo MANGIA."
+},
+
+{
+ type:"question",
+ text:"Marco mangia una mela in cucina.",
+ instruction:"Dove mangia Marco?",
+ answers:["In cucina","Nella mela","Da Marco"],
+ correct:"In cucina",
+ help:"Cerca il luogo."
+},
+
+{
+ type:"question",
+ text:"Sara porta la palla al parco.",
+ instruction:"Chi porta la palla?",
+ answers:["Sara","La palla","Il parco"],
+ correct:"Sara",
+ help:"Chi compie l'azione?"
+},
+
+{
+ type:"question",
+ text:"Sara porta la palla al parco.",
+ instruction:"Cosa porta Sara?",
+ answers:["La palla","Il parco","Sara"],
+ correct:"La palla",
+ help:"Cerca l'oggetto."
+},
+
+{
+ type:"question",
+ text:"Sara porta la palla al parco.",
+ instruction:"Dove va Sara?",
+ answers:["Al parco","Nella palla","A casa"],
+ correct:"Al parco",
+ help:"Cerca il luogo."
+},
+
+{
+ type:"question",
+ text:"Il papà guida la macchina verso casa.",
+ instruction:"Cosa guida il papà?",
+ answers:["La macchina","La casa","La strada"],
+ correct:"La macchina",
+ help:"Cerca cosa viene dopo GUIDA."
 },
 
 
 /* ======================================================
-   LIVELLO 9 - PANDA
-   MINI STORIE
+   8 - CERBIATTO
+   DISTRAZIONI PIÙ PLAUSIBILI
    ====================================================== */
 
 {
  type:"question",
- text:"Nina ha un aquilone. Va al parco con il papà. Il vento fa volare l'aquilone molto in alto.",
+ text:"Anna legge un libro prima di andare a letto.",
+ instruction:"Cosa legge Anna?",
+ answers:["Un libro","Il letto","Anna"],
+ correct:"Un libro",
+ help:"Cerca cosa viene dopo LEGGE."
+},
+
+{
+ type:"question",
+ text:"Anna legge un libro prima di andare a letto.",
+ instruction:"Dove va Anna dopo aver letto?",
+ answers:["A letto","Nel libro","Da Anna"],
+ correct:"A letto",
+ help:"Cerca cosa succede dopo."
+},
+
+{
+ type:"question",
+ text:"Luca mette il cappotto perché fuori fa freddo.",
+ instruction:"Cosa mette Luca?",
+ answers:["Il cappotto","Il freddo","Fuori"],
+ correct:"Il cappotto",
+ help:"Cerca l'oggetto."
+},
+
+{
+ type:"question",
+ text:"Luca mette il cappotto perché fuori fa freddo.",
+ instruction:"Perché Luca mette il cappotto?",
+ answers:["Perché fa freddo","Perché è fuori","Perché ha un cappotto"],
+ correct:"Perché fa freddo",
+ help:"La frase contiene la causa."
+},
+
+{
+ type:"question",
+ text:"Marta prende l'ombrello e cammina sotto la pioggia.",
+ instruction:"Cosa prende Marta?",
+ answers:["L'ombrello","La pioggia","Marta"],
+ correct:"L'ombrello",
+ help:"Cerca l'oggetto."
+},
+
+{
+ type:"question",
+ text:"Marta prende l'ombrello e cammina sotto la pioggia.",
+ instruction:"Che tempo fa?",
+ answers:["Piove","C'è il sole","Nevica"],
+ correct:"Piove",
+ help:"La parola PIOGGIA è un indizio."
+},
+
+{
+ type:"question",
+ text:"Paolo ha sete e beve un bicchiere d'acqua.",
+ instruction:"Cosa beve Paolo?",
+ answers:["Acqua","Un bicchiere","La sete"],
+ correct:"Acqua",
+ help:"Cerca cosa c'è nel bicchiere."
+},
+
+{
+ type:"question",
+ text:"Paolo ha sete e beve un bicchiere d'acqua.",
+ instruction:"Perché Paolo beve?",
+ answers:["Perché ha sete","Perché ha un bicchiere","Perché ha acqua"],
+ correct:"Perché ha sete",
+ help:"La causa è all'inizio."
+},
+
+{
+ type:"question",
+ text:"Giulia apre il frigorifero e prende il latte.",
+ instruction:"Cosa apre Giulia?",
+ answers:["Il frigorifero","Il latte","Giulia"],
+ correct:"Il frigorifero",
+ help:"Cerca cosa viene dopo APRE."
+},
+
+{
+ type:"question",
+ text:"Giulia apre il frigorifero e prende il latte.",
+ instruction:"Cosa prende Giulia?",
+ answers:["Il latte","Il frigorifero","La porta"],
+ correct:"Il latte",
+ help:"Cerca cosa viene dopo PRENDE."
+},
+
+
+/* ======================================================
+   9 - PANDA
+   MINI STORIE CON PIÙ DOMANDE
+   ====================================================== */
+
+/* STORIA 1 */
+
+{
+ type:"story",
+ text:"Nina ha un aquilone rosso. Va al parco con il papà. Il vento fa volare l'aquilone molto in alto.",
+ instruction:"Di che colore è l'aquilone?",
+ answers:["Rosso","Verde","Blu"],
+ correct:"Rosso",
+ help:"Rileggi la prima frase."
+},
+
+{
+ type:"story",
+ text:"Nina ha un aquilone rosso. Va al parco con il papà. Il vento fa volare l'aquilone molto in alto.",
  instruction:"Dove va Nina?",
- answers:["Al parco","A scuola","Al mare"],
+ answers:["Al parco","Dal papà","In alto"],
  correct:"Al parco",
  help:"Rileggi la seconda frase."
 },
 
 {
- type:"question",
- text:"Tommaso trova una lumaca in giardino. La guarda e poi la lascia andare.",
+ type:"story",
+ text:"Nina ha un aquilone rosso. Va al parco con il papà. Il vento fa volare l'aquilone molto in alto.",
+ instruction:"Cosa fa volare l'aquilone?",
+ answers:["Il vento","Il papà","Il parco"],
+ correct:"Il vento",
+ help:"Rileggi l'ultima frase."
+},
+
+
+/* STORIA 2 */
+
+{
+ type:"story",
+ text:"Tommaso trova una lumaca in giardino. La osserva per qualche minuto. Poi la lascia andare vicino ai fiori.",
  instruction:"Cosa trova Tommaso?",
- answers:["Una lumaca","Una rana","Una farfalla"],
+ answers:["Una lumaca","Il giardino","Un fiore"],
  correct:"Una lumaca",
- help:"È nella prima frase."
+ help:"Rileggi la prima frase."
 },
 
 {
- type:"question",
- text:"Mia prepara lo zaino. Dentro mette un libro e una matita. Poi va a scuola.",
- instruction:"Cosa mette nello zaino?",
- answers:["Un libro e una matita","Una palla","Una mela"],
- correct:"Un libro e una matita",
+ type:"story",
+ text:"Tommaso trova una lumaca in giardino. La osserva per qualche minuto. Poi la lascia andare vicino ai fiori.",
+ instruction:"Dove trova la lumaca?",
+ answers:["In giardino","Vicino ai fiori","Per qualche minuto"],
+ correct:"In giardino",
+ help:"Cerca il luogo nella prima frase."
+},
+
+{
+ type:"story",
+ text:"Tommaso trova una lumaca in giardino. La osserva per qualche minuto. Poi la lascia andare vicino ai fiori.",
+ instruction:"Cosa fa Tommaso alla fine?",
+ answers:["Lascia andare la lumaca","Trova i fiori","Entra in casa"],
+ correct:"Lascia andare la lumaca",
+ help:"Rileggi l'ultima frase."
+},
+
+
+/* STORIA 3 */
+
+{
+ type:"story",
+ text:"Mia prepara lo zaino per la scuola. Dentro mette un libro, una matita e una bottiglia d'acqua. Poi esce di casa.",
+ instruction:"Perché Mia prepara lo zaino?",
+ answers:["Per andare a scuola","Per andare a letto","Per giocare in casa"],
+ correct:"Per andare a scuola",
+ help:"Rileggi la prima frase."
+},
+
+{
+ type:"story",
+ text:"Mia prepara lo zaino per la scuola. Dentro mette un libro, una matita e una bottiglia d'acqua. Poi esce di casa.",
+ instruction:"Quale di queste cose mette nello zaino?",
+ answers:["Una matita","Una sedia","Una scarpa"],
+ correct:"Una matita",
+ help:"Rileggi la seconda frase."
+},
+
+
+/* STORIA 4 */
+
+{
+ type:"story",
+ text:"Il cane Bobo ha molto caldo. Cerca l'ombra di un grande albero. Quando la trova, si sdraia e riposa.",
+ instruction:"Perché Bobo cerca l'ombra?",
+ answers:["Perché ha caldo","Perché cerca un albero","Perché vuole correre"],
+ correct:"Perché ha caldo",
+ help:"La prima frase spiega il motivo."
+},
+
+{
+ type:"story",
+ text:"Il cane Bobo ha molto caldo. Cerca l'ombra di un grande albero. Quando la trova, si sdraia e riposa.",
+ instruction:"Cosa fa Bobo dopo aver trovato l'ombra?",
+ answers:["Si sdraia e riposa","Corre verso l'albero","Torna a casa"],
+ correct:"Si sdraia e riposa",
+ help:"Rileggi l'ultima frase."
+},
+
+
+/* ======================================================
+   10 - LEONE
+   UNA STORIA CONTINUA
+   ====================================================== */
+
+{
+ type:"story",
+ text:"Una mattina il piccolo leone Leo si sveglia presto. Fuori dalla tana splende il sole.",
+ instruction:"Quando si sveglia Leo?",
+ answers:["Presto","Di notte","Dopo pranzo"],
+ correct:"Presto",
+ help:"Cerca l'informazione nella prima frase."
+},
+
+{
+ type:"story",
+ text:"Una mattina il piccolo leone Leo si sveglia presto. Fuori dalla tana splende il sole.",
+ instruction:"Cosa splende fuori dalla tana?",
+ answers:["Il sole","La tana","Leo"],
+ correct:"Il sole",
  help:"Rileggi la seconda frase."
 },
 
 {
- type:"question",
- text:"Il cane Bobo ha caldo. Trova l'ombra di un albero e si sdraia.",
- instruction:"Perché Bobo cerca l'ombra?",
- answers:["Ha caldo","Ha fame","Ha paura"],
- correct:"Ha caldo",
- help:"La prima frase lo spiega."
+ type:"story",
+ text:"Leo cammina fino al fiume. Lì incontra una piccola rana verde che sembra triste.",
+ instruction:"Dove va Leo?",
+ answers:["Al fiume","Nella tana","Dalla rana"],
+ correct:"Al fiume",
+ help:"Cerca il luogo nella prima frase."
 },
 
 {
- type:"question",
- text:"Lia vede una farfalla blu. La farfalla vola sopra i fiori.",
- instruction:"Di che colore è la farfalla?",
- answers:["Blu","Rossa","Gialla"],
- correct:"Blu",
- help:"Leggi la prima frase."
+ type:"story",
+ text:"Leo cammina fino al fiume. Lì incontra una piccola rana verde che sembra triste.",
+ instruction:"Come sembra la rana?",
+ answers:["Triste","Verde","Piccola"],
+ correct:"Triste",
+ help:"Attenzione: verde e piccola descrivono la rana, ma la domanda chiede come si sente."
 },
 
 {
- type:"question",
- text:"Pietro ha una bicicletta nuova. Mette il casco e parte con la mamma.",
- instruction:"Cosa mette Pietro?",
- answers:["Il casco","Il cappello","Gli stivali"],
- correct:"Il casco",
- help:"È nella seconda frase."
+ type:"story",
+ text:"La rana racconta a Leo di aver perso la sua grande foglia verde vicino agli alberi.",
+ instruction:"Cosa ha perso la rana?",
+ answers:["Una foglia","Gli alberi","Il fiume"],
+ correct:"Una foglia",
+ help:"Cerca cosa viene dopo PERSO."
 },
 
 {
- type:"question",
- text:"Nel bosco vive un piccolo riccio. Di notte esce a cercare cibo.",
- instruction:"Quando esce il riccio?",
- answers:["Di notte","Al mattino","A pranzo"],
- correct:"Di notte",
- help:"Leggi la seconda frase."
-},
-
-{
- type:"question",
- text:"Sara pianta un seme. Ogni giorno gli dà acqua. Dopo alcuni giorni spunta una piantina.",
- instruction:"Cosa dà Sara al seme?",
- answers:["Acqua","Latte","Succo"],
- correct:"Acqua",
- help:"Guarda la seconda frase."
-},
-
-{
- type:"question",
- text:"Andrea porta il cane al parco. Il cane corre dietro a una palla rossa.",
- instruction:"Di che colore è la palla?",
- answers:["Rossa","Blu","Verde"],
- correct:"Rossa",
- help:"Leggi le ultime parole."
-},
-
-{
- type:"question",
- text:"La nonna prepara i biscotti. In cucina c'è un buon profumo. Luca ne mangia uno.",
- instruction:"Chi prepara i biscotti?",
- answers:["La nonna","Luca","Il papà"],
- correct:"La nonna",
+ type:"story",
+ text:"Leo cerca vicino agli alberi. Guarda sotto i cespugli e tra i fiori, ma non trova la foglia.",
+ instruction:"Dove cerca Leo?",
+ answers:["Vicino agli alberi","Nel fiume","Dentro la tana"],
+ correct:"Vicino agli alberi",
  help:"È scritto all'inizio."
 },
 
-
-/* ======================================================
-   LIVELLO 10 - LEONE
-   MISSIONE FINALE
-   ====================================================== */
-
 {
- type:"question",
- text:"Il piccolo leone Leo si sveglia presto.",
- instruction:"Quando si sveglia Leo?",
- answers:["Presto","Di notte","A mezzanotte"],
- correct:"Presto",
- help:"Leggi l'ultima parola."
-},
-
-{
- type:"question",
- text:"Leo esce dalla tana e vede il sole.",
- instruction:"Cosa vede Leo?",
- answers:["Il sole","La luna","La neve"],
- correct:"Il sole",
- help:"È alla fine."
-},
-
-{
- type:"question",
- text:"Vicino al fiume incontra una rana verde.",
- instruction:"Chi incontra Leo?",
- answers:["Una rana","Un gatto","Un pesce"],
- correct:"Una rana",
- help:"Cerca la parola dopo INCONTRA."
-},
-
-{
- type:"question",
- text:"La rana dice: «Ho perso la mia foglia!»",
- instruction:"Cosa ha perso la rana?",
- answers:["La foglia","La palla","La scarpa"],
- correct:"La foglia",
- help:"Lo dice la rana."
-},
-
-{
- type:"question",
- text:"Leo cerca tra i fiori e sotto gli alberi.",
- instruction:"Dove cerca Leo?",
- answers:["Tra i fiori e sotto gli alberi","In casa","A scuola"],
- correct:"Tra i fiori e sotto gli alberi",
- help:"La risposta è tutta nella frase."
-},
-
-{
- type:"question",
- text:"Una farfalla mostra a Leo una grande foglia verde.",
+ type:"story",
+ text:"Una farfalla vede Leo e gli mostra una grande foglia verde nascosta dietro un sasso.",
  instruction:"Chi aiuta Leo?",
- answers:["Una farfalla","Un cane","Un bambino"],
+ answers:["Una farfalla","Una foglia","Un sasso"],
  correct:"Una farfalla",
- help:"È la prima cosa nominata."
+ help:"Cerca chi compie l'azione MOSTRA."
 },
 
 {
- type:"question",
- text:"Leo porta la foglia alla rana.",
- instruction:"A chi porta la foglia?",
- answers:["Alla rana","Alla volpe","Al gufo"],
- correct:"Alla rana",
- help:"Leggi le ultime parole."
+ type:"story",
+ text:"Una farfalla vede Leo e gli mostra una grande foglia verde nascosta dietro un sasso.",
+ instruction:"Dove si trova la foglia?",
+ answers:["Dietro un sasso","Sopra la farfalla","Vicino al fiume"],
+ correct:"Dietro un sasso",
+ help:"Rileggi le ultime parole."
 },
 
 {
- type:"question",
- text:"La rana è felice e ringrazia Leo.",
- instruction:"Come si sente la rana?",
- answers:["Felice","Triste","Arrabbiata"],
- correct:"Felice",
- help:"La frase lo dice chiaramente."
+ type:"story",
+ text:"Leo porta la foglia alla rana. La rana sorride, lo ringrazia e torna felice verso lo stagno.",
+ instruction:"Perché la rana è felice?",
+ answers:["Ha ritrovato la foglia","Va verso lo stagno","Ha incontrato Leo"],
+ correct:"Ha ritrovato la foglia",
+ help:"Pensa a ciò che è successo nella storia."
 },
 
 {
- type:"question",
- text:"Leo torna a casa mentre il sole tramonta.",
- instruction:"Cosa sta facendo il sole?",
- answers:["Tramonta","Sorge","Piove"],
- correct:"Tramonta",
- help:"Leggi l'ultima parola."
-},
-
-{
- type:"question",
- text:"Leo ha aiutato un'amica ed è molto fiero.",
+ type:"story",
+ text:"Quando il sole tramonta, Leo torna alla tana. È stanco ma fiero perché ha aiutato una nuova amica.",
  instruction:"Perché Leo è fiero?",
- answers:["Ha aiutato un'amica","Ha perso una foglia","Ha dormito"],
- correct:"Ha aiutato un'amica",
- help:"Rileggi l'inizio della frase."
+ answers:["Perché ha aiutato un'amica","Perché è stanco","Perché il sole tramonta"],
+ correct:"Perché ha aiutato un'amica",
+ help:"Cerca la causa dopo PERCHÉ."
 }
 
 ];
@@ -1771,14 +1791,14 @@ const activities = [
    STATO
    ====================================================== */
 
-const STORAGE_KEY = "bosco-parole-progress-v1";
-
 let state = {
+
   index:0,
   stars:0,
   levelStars:0,
   focus:false,
   locked:false
+
 };
 
 
@@ -1786,8 +1806,10 @@ let state = {
    ELEMENTI
    ====================================================== */
 
-const $ = id =>
-  document.getElementById(id);
+const $ =
+  id =>
+    document.getElementById(id);
+
 
 const missionBadge =
   $("missionBadge");
@@ -1858,42 +1880,100 @@ function loadProgress(){
 
     const saved =
       JSON.parse(
-        localStorage.getItem(STORAGE_KEY)
+        localStorage.getItem(
+          STORAGE_KEY
+        )
       );
+
 
     if(
       saved &&
-      Number.isInteger(saved.index) &&
+      Number.isInteger(
+        saved.index
+      ) &&
       saved.index >= 0 &&
-      saved.index <= 100
+      saved.index <= TOTAL
     ){
 
       state.index =
         saved.index;
 
+
       state.stars =
-        Number(saved.stars) || 0;
+        Number(
+          saved.stars
+        ) || 0;
+
 
       state.levelStars =
-        state.index % 10;
+        state.index %
+        PER_LEVEL;
 
     }
 
-  }catch(e){}
+  }
+
+  catch(e){}
 
 }
 
 
 /* ======================================================
-   LIVELLI
+   LIVELLO
    ====================================================== */
 
 function getLevel(){
 
   return Math.min(
     9,
-    Math.floor(state.index / 10)
+    Math.floor(
+      state.index /
+      PER_LEVEL
+    )
   );
+
+}
+
+
+/* ======================================================
+   RANDOMIZZA RISPOSTE
+   ====================================================== */
+
+function shuffle(array){
+
+  const copy =
+    [...array];
+
+
+  for(
+    let i =
+      copy.length - 1;
+
+    i > 0;
+
+    i--
+  ){
+
+    const j =
+      Math.floor(
+        Math.random() *
+        (i + 1)
+      );
+
+
+    [
+      copy[i],
+      copy[j]
+    ] =
+    [
+      copy[j],
+      copy[i]
+    ];
+
+  }
+
+
+  return copy;
 
 }
 
@@ -1907,47 +1987,82 @@ function renderMap(){
   const map =
     $("animalsMap");
 
-  map.innerHTML = "";
+
+  map.innerHTML =
+    "";
+
 
   const currentLevel =
     getLevel();
+
 
   animals.forEach(
     (animal,index)=>{
 
       const item =
-        document.createElement("div");
+        document.createElement(
+          "div"
+        );
+
 
       item.className =
         "animalDot";
 
-      if(index < currentLevel){
-        item.classList.add("done");
+
+      if(
+        index < currentLevel
+      ){
+
+        item.classList.add(
+          "done"
+        );
+
       }
 
-      if(index === currentLevel){
-        item.classList.add("current");
+
+      if(
+        index === currentLevel
+      ){
+
+        item.classList.add(
+          "current"
+        );
+
       }
+
 
       item.textContent =
         animal.emoji;
 
-      if(index < currentLevel){
+
+      if(
+        index < currentLevel
+      ){
 
         const check =
-          document.createElement("span");
+          document.createElement(
+            "span"
+          );
+
 
         check.className =
           "check";
 
+
         check.textContent =
           "✓";
 
-        item.appendChild(check);
+
+        item.appendChild(
+          check
+        );
 
       }
 
-      map.appendChild(item);
+
+      map.appendChild(
+        item
+      );
 
     }
   );
@@ -1956,25 +2071,35 @@ function renderMap(){
 
 
 /* ======================================================
-   RENDER ATTIVITÀ
+   RENDER
    ====================================================== */
 
 function render(){
 
-  state.locked = false;
+  state.locked =
+    false;
 
-  if(state.index >= 100){
+
+  if(
+    state.index >= TOTAL
+  ){
 
     finishGame();
+
     return;
 
   }
 
+
   const activity =
-    activities[state.index];
+    activities[
+      state.index
+    ];
+
 
   const level =
     getLevel();
+
 
   const animal =
     animals[level];
@@ -1983,25 +2108,40 @@ function render(){
   missionBadge.textContent =
     `${animal.emoji} Missione ${level + 1}: ${animal.title}`;
 
+
   animalEmoji.textContent =
     animal.emoji;
 
+
   instruction.textContent =
     activity.instruction;
+
 
   readingText.textContent =
     activity.text;
 
 
-  if(activity.text.length > 16){
+  readingText.classList.remove(
+    "sentence",
+    "story"
+  );
+
+
+  if(
+    activity.type === "story"
+  ){
 
     readingText.classList.add(
-      "sentence"
+      "story"
     );
 
-  }else{
+  }
 
-    readingText.classList.remove(
+  else if(
+    activity.text.length > 16
+  ){
+
+    readingText.classList.add(
       "sentence"
     );
 
@@ -2009,10 +2149,12 @@ function render(){
 
 
   progressText.textContent =
-    `Missione ${state.index + 1} di 100`;
+    `Missione ${state.index + 1} di ${TOTAL}`;
+
 
   progressBar.style.width =
     `${state.index}%`;
+
 
   starText.textContent =
     `⭐ ${state.stars}`;
@@ -2027,13 +2169,29 @@ function render(){
   feedback.className =
     "feedback normal";
 
-  feedback.textContent =
-    "Una parola alla volta. Nessuna fretta.";
+
+  if(level <= 4){
+
+    feedback.textContent =
+      "Una parola alla volta. Nessuna fretta.";
+
+  }
+
+  else{
+
+    feedback.textContent =
+      "Leggi con calma e cerca gli indizi nella frase.";
+
+  }
 
 
-  renderAnswers(activity);
+  renderAnswers(
+    activity
+  );
+
 
   renderMap();
+
 
   saveProgress();
 
@@ -2044,34 +2202,54 @@ function render(){
    RISPOSTE
    ====================================================== */
 
-function renderAnswers(activity){
+function renderAnswers(
+  activity
+){
 
-  answers.innerHTML = "";
+  answers.innerHTML =
+    "";
 
-  activity.answers.forEach(
+
+  const randomizedAnswers =
+    shuffle(
+      activity.answers
+    );
+
+
+  randomizedAnswers.forEach(
     answer=>{
 
       const button =
-        document.createElement("button");
+        document.createElement(
+          "button"
+        );
+
 
       button.className =
         "answerButton";
 
+
       button.type =
         "button";
+
 
       button.textContent =
         answer;
 
+
       button.addEventListener(
         "click",
-        ()=>checkAnswer(
-          answer,
-          button
-        )
+        () =>
+          checkAnswer(
+            answer,
+            button
+          )
       );
 
-      answers.appendChild(button);
+
+      answers.appendChild(
+        button
+      );
 
     }
   );
@@ -2080,7 +2258,7 @@ function renderAnswers(activity){
 
 
 /* ======================================================
-   CONTROLLO RISPOSTA
+   RISPOSTA
    ====================================================== */
 
 function checkAnswer(
@@ -2088,86 +2266,124 @@ function checkAnswer(
   button
 ){
 
-  if(state.locked){
+  if(
+    state.locked
+  ){
     return;
   }
 
+
   const activity =
-    activities[state.index];
+    activities[
+      state.index
+    ];
 
 
-  if(answer === activity.correct){
+  if(
+    answer ===
+    activity.correct
+  ){
 
-    state.locked = true;
+    state.locked =
+      true;
+
 
     button.classList.add(
       "correct"
     );
 
+
     state.stars++;
+
     state.levelStars++;
+
 
     starText.textContent =
       `⭐ ${state.stars}`;
+
 
     levelStars.textContent =
       "⭐".repeat(
         state.levelStars
       );
 
+
     feedback.className =
       "feedback good";
+
 
     feedback.textContent =
       randomGoodMessage();
 
-    playTone(true);
+
+    playTone(
+      true
+    );
 
 
-    setTimeout(()=>{
+    setTimeout(
+      ()=>{
 
-      state.index++;
-
-      saveProgress();
-
-      if(
-        state.index % 10 === 0 &&
-        state.index < 100
-      ){
-
-        showLevelComplete();
-
-      }else{
-
-        render();
-
-      }
-
-    },750);
+        state.index++;
 
 
-  }else{
+        saveProgress();
+
+
+        if(
+          state.index %
+            PER_LEVEL ===
+            0 &&
+          state.index <
+            TOTAL
+        ){
+
+          showLevelComplete();
+
+        }
+
+        else{
+
+          render();
+
+        }
+
+      },
+      700
+    );
+
+  }
+
+  else{
 
     button.classList.add(
       "wrong"
     );
 
+
     feedback.className =
       "feedback try";
+
 
     feedback.textContent =
       randomTryMessage();
 
-    playTone(false);
+
+    playTone(
+      false
+    );
 
 
-    setTimeout(()=>{
+    setTimeout(
+      ()=>{
 
-      button.classList.remove(
-        "wrong"
-      );
+        button.classList.remove(
+          "wrong"
+        );
 
-    },650);
+      },
+      650
+    );
 
   }
 
@@ -2181,12 +2397,19 @@ function checkAnswer(
 function randomGoodMessage(){
 
   const messages = [
+
     "🌟 Grande! Missione riuscita!",
+
     "🎉 Esatto! Continua così!",
-    "🦋 Perfetto! Hai trovato la parola!",
+
+    "🦋 Perfetto! Hai trovato la risposta!",
+
     "🚀 Super lettore!",
+
     "✨ Giusto! Un'altra stella!"
+
   ];
+
 
   return messages[
     Math.floor(
@@ -2201,11 +2424,19 @@ function randomGoodMessage(){
 function randomTryMessage(){
 
   const messages = [
-    "🙂 Quasi! Prova ancora con calma.",
-    "🌱 Nessun problema. Rileggiamo.",
+
+    "🙂 Quasi! Rileggi con calma.",
+
+    "🌱 Nessun problema. Cerca un indizio nel testo.",
+
     "💪 Puoi riprovare: non perdi nulla.",
-    "👀 Guarda bene la parola e prova ancora."
+
+    "👀 Guarda bene la frase e prova ancora.",
+
+    "🧩 Quale parola del testo può aiutarti?"
+
   ];
+
 
   return messages[
     Math.floor(
@@ -2221,75 +2452,99 @@ function randomTryMessage(){
    AIUTO
    ====================================================== */
 
-$("helpButton").addEventListener(
-  "click",
-  ()=>{
+$("helpButton")
+  .addEventListener(
+    "click",
+    ()=>{
 
-    if(state.index >= 100){
-      return;
+      if(
+        state.index >= TOTAL
+      ){
+        return;
+      }
+
+
+      const activity =
+        activities[
+          state.index
+        ];
+
+
+      feedback.className =
+        "feedback normal";
+
+
+      feedback.textContent =
+        "💡 " +
+        activity.help;
+
     }
-
-    const activity =
-      activities[state.index];
-
-    feedback.className =
-      "feedback normal";
-
-    feedback.textContent =
-      "💡 " + activity.help;
-
-  }
-);
+  );
 
 
 /* ======================================================
    LETTURA VOCALE
    ====================================================== */
 
-$("listenButton").addEventListener(
-  "click",
-  speakCurrent
-);
+$("listenButton")
+  .addEventListener(
+    "click",
+    speakCurrent
+  );
 
 
 function speakCurrent(){
 
   if(
-    !("speechSynthesis" in window)
+    !(
+      "speechSynthesis"
+      in window
+    )
   ){
 
     feedback.textContent =
       "🔇 La voce non è disponibile su questo browser.";
 
     return;
+
+  }
+
+
+  if(
+    state.index >= TOTAL
+  ){
+    return;
   }
 
 
   const activity =
-    activities[state.index];
+    activities[
+      state.index
+    ];
+
 
   speechSynthesis.cancel();
 
 
-  const text =
-    activity.type === "question"
-      ? activity.text
-      : activity.text;
-
-
   const utterance =
     new SpeechSynthesisUtterance(
-      text
+      activity.text
     );
+
 
   utterance.lang =
     "it-IT";
 
+
   utterance.rate =
-    0.72;
+    activity.type === "story"
+      ? 0.78
+      : 0.72;
+
 
   utterance.pitch =
-    1.05;
+    1.03;
+
 
   speechSynthesis.speak(
     utterance
@@ -2302,7 +2557,9 @@ function speakCurrent(){
    SUONI
    ====================================================== */
 
-function playTone(correct){
+function playTone(
+  correct
+){
 
   try{
 
@@ -2312,36 +2569,58 @@ function playTone(correct){
         window.webkitAudioContext
       )();
 
+
     const oscillator =
       ctx.createOscillator();
+
 
     const gain =
       ctx.createGain();
 
+
     oscillator.type =
       "sine";
+
 
     oscillator.frequency.value =
       correct
         ? 660
         : 250;
 
+
     gain.gain.value =
       .04;
 
-    oscillator.connect(gain);
-    gain.connect(ctx.destination);
+
+    oscillator.connect(
+      gain
+    );
+
+
+    gain.connect(
+      ctx.destination
+    );
+
 
     oscillator.start();
 
-    setTimeout(()=>{
 
-      oscillator.stop();
-      ctx.close();
+    setTimeout(
+      ()=>{
 
-    },correct ? 130 : 90);
+        oscillator.stop();
 
-  }catch(e){}
+        ctx.close();
+
+      },
+      correct
+        ? 130
+        : 90
+    );
+
+  }
+
+  catch(e){}
 
 }
 
@@ -2350,84 +2629,107 @@ function playTone(correct){
    PAUSA
    ====================================================== */
 
-$("pauseButton").addEventListener(
-  "click",
-  ()=>{
+$("pauseButton")
+  .addEventListener(
+    "click",
+    ()=>{
 
-    const pauseBox =
-      $("pauseBox");
+      const pauseBox =
+        $("pauseBox");
 
-    pauseBox.classList.toggle(
-      "show"
-    );
 
-    $("pauseButton").textContent =
-      pauseBox.classList.contains(
+      pauseBox.classList.toggle(
         "show"
-      )
-        ? "✅ Torno"
-        : "🌿 Pausa";
+      );
 
-  }
-);
+
+      $("pauseButton")
+        .textContent =
+          pauseBox.classList
+            .contains(
+              "show"
+            )
+            ? "✅ Torno"
+            : "🌿 Pausa";
+
+    }
+  );
 
 
 /* ======================================================
-   MODALITÀ FOCUS
+   FOCUS
    ====================================================== */
 
-$("focusButton").addEventListener(
-  "click",
-  ()=>{
+$("focusButton")
+  .addEventListener(
+    "click",
+    ()=>{
 
-    state.focus =
-      !state.focus;
+      state.focus =
+        !state.focus;
 
-    $("app")
-      .classList
-      .toggle(
-        "focus",
-        state.focus
-      );
 
-    $("focusButton").textContent =
-      state.focus
-        ? "🗺️ Mappa"
-        : "🎯 Focus";
+      $("app")
+        .classList
+        .toggle(
+          "focus",
+          state.focus
+        );
 
-  }
-);
+
+      $("focusButton")
+        .textContent =
+          state.focus
+            ? "🗺️ Mappa"
+            : "🎯 Focus";
+
+    }
+  );
 
 
 /* ======================================================
    RESET
    ====================================================== */
 
-$("resetButton").addEventListener(
-  "click",
-  ()=>{
+$("resetButton")
+  .addEventListener(
+    "click",
+    ()=>{
 
-    const ok =
-      confirm(
-        "Vuoi ricominciare dal Coniglio e cancellare il progresso?"
+      const ok =
+        confirm(
+          "Vuoi ricominciare dal Coniglio e cancellare il progresso?"
+        );
+
+
+      if(
+        !ok
+      ){
+        return;
+      }
+
+
+      localStorage.removeItem(
+        STORAGE_KEY
       );
 
-    if(!ok){
-      return;
+
+      state.index =
+        0;
+
+
+      state.stars =
+        0;
+
+
+      state.levelStars =
+        0;
+
+
+      location.reload();
+
     }
-
-    localStorage.removeItem(
-      STORAGE_KEY
-    );
-
-    state.index = 0;
-    state.stars = 0;
-    state.levelStars = 0;
-
-    location.reload();
-
-  }
-);
+  );
 
 
 /* ======================================================
@@ -2437,12 +2739,15 @@ $("resetButton").addEventListener(
 function showLevelComplete(){
 
   const completedLevel =
-    state.index / 10;
+    state.index /
+    PER_LEVEL;
+
 
   const completedAnimal =
     animals[
       completedLevel - 1
     ];
+
 
   const nextAnimal =
     animals[
@@ -2457,21 +2762,26 @@ function showLevelComplete(){
     completedAnimal.emoji +
     " ⭐";
 
+
   modalTitle.textContent =
-    `Missione completata!`;
+    "Missione completata!";
+
 
   modalText.textContent =
     `Hai aiutato ${completedAnimal.name}! Ora ${nextAnimal.emoji} ${nextAnimal.name} ti aspetta con una nuova avventura.`;
 
+
   continueButton.textContent =
     `Vai da ${nextAnimal.emoji} ${nextAnimal.name}`;
+
 
   overlay.classList.add(
     "show"
   );
 
 
-  state.levelStars = 0;
+  state.levelStars =
+    0;
 
 }
 
@@ -2480,34 +2790,47 @@ function showLevelComplete(){
    CONTINUA
    ====================================================== */
 
-continueButton.addEventListener(
-  "click",
-  ()=>{
+continueButton
+  .addEventListener(
+    "click",
+    ()=>{
 
-    overlay.classList.remove(
-      "show"
-    );
-
-    if(state.index >= 100){
-
-      localStorage.removeItem(
-        STORAGE_KEY
+      overlay.classList.remove(
+        "show"
       );
 
-      state.index = 0;
-      state.stars = 0;
-      state.levelStars = 0;
+
+      if(
+        state.index >= TOTAL
+      ){
+
+        localStorage.removeItem(
+          STORAGE_KEY
+        );
+
+
+        state.index =
+          0;
+
+
+        state.stars =
+          0;
+
+
+        state.levelStars =
+          0;
+
+      }
+
+
+      render();
 
     }
-
-    render();
-
-  }
-);
+  );
 
 
 /* ======================================================
-   FINE
+   FINALE
    ====================================================== */
 
 function finishGame(){
@@ -2515,37 +2838,55 @@ function finishGame(){
   progressBar.style.width =
     "100%";
 
+
   progressText.textContent =
     "100 missioni completate!";
+
 
   missionBadge.textContent =
     "🏆 Grande Lettore del Bosco";
 
+
   animalEmoji.textContent =
     "🦁";
+
 
   instruction.textContent =
     "Hai aiutato tutti gli animali!";
 
+
   readingText.textContent =
     "MISSIONE COMPLETATA";
+
+
+  readingText.classList.remove(
+    "story"
+  );
+
 
   readingText.classList.add(
     "sentence"
   );
 
-  answers.innerHTML = "";
+
+  answers.innerHTML =
+    "";
+
 
   levelStars.textContent =
     "";
 
+
   feedback.className =
     "feedback good";
 
+
   feedback.textContent =
-    "🌟 Hai letto sillabe, parole, frasi e piccole storie!";
+    "🌟 Hai letto parole, frasi e storie e hai cercato gli indizi nel testo!";
+
 
   renderMap();
+
 
   confetti();
 
@@ -2553,14 +2894,18 @@ function finishGame(){
   modalEmoji.textContent =
     "🏆🌳";
 
+
   modalTitle.textContent =
     "Grande Lettore del Bosco!";
 
+
   modalText.textContent =
-    `Hai completato tutte le 100 missioni e conquistato ${state.stars} stelle. Gli animali del bosco festeggiano con te!`;
+    `Hai completato tutte le 100 missioni e conquistato ${state.stars} stelle. Hai imparato non soltanto a leggere, ma anche a capire ciò che leggi!`;
+
 
   continueButton.textContent =
     "Gioca di nuovo 🌳";
+
 
   overlay.classList.add(
     "show"
@@ -2576,12 +2921,15 @@ function finishGame(){
 function confetti(){
 
   const symbols = [
+
     "⭐",
     "🌿",
     "✨",
     "🦋",
     "🌸"
+
   ];
+
 
   for(
     let i = 0;
@@ -2594,8 +2942,10 @@ function confetti(){
         "span"
       );
 
+
     el.className =
       "confetti";
+
 
     el.textContent =
       symbols[
@@ -2605,20 +2955,28 @@ function confetti(){
         )
       ];
 
+
     el.style.left =
-      5 +
-      Math.random() *
-      90 +
+      (
+        5 +
+        Math.random() *
+        90
+      ) +
       "vw";
 
+
     el.style.animationDelay =
-      Math.random() *
-      .3 +
+      (
+        Math.random() *
+        .3
+      ) +
       "s";
+
 
     document.body.appendChild(
       el
     );
+
 
     setTimeout(
       ()=>el.remove(),
@@ -2631,10 +2989,28 @@ function confetti(){
 
 
 /* ======================================================
+   CONTROLLO ATTIVITÀ
+   ====================================================== */
+
+if(
+  activities.length !==
+  TOTAL
+){
+
+  console.error(
+    "ERRORE: devono esserci 100 attività. Attualmente sono:",
+    activities.length
+  );
+
+}
+
+
+/* ======================================================
    AVVIO
    ====================================================== */
 
 loadProgress();
+
 render();
 
 </script>
