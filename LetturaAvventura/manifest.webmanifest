@@ -1,0 +1,9 @@
+{
+  "name":"La Coppa dei Quattro Regni",
+  "short_name":"Coppa Magica",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#130f26",
+  "theme_color":"#241a44",
+  "lang":"it"
+}
