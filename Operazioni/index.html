@@ -22,43 +22,25 @@
       --radius:24px;
     }
 
-    * {
-      box-sizing:border-box;
-    }
+    * { box-sizing:border-box; }
 
-    html {
-      -webkit-text-size-adjust:100%;
-    }
+    html { -webkit-text-size-adjust:100%; }
 
     body {
       margin:0;
-      font-family:
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Arial,
-        sans-serif;
-
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
       background:
         radial-gradient(circle at 10% 10%, #fff5c9 0 8%, transparent 9%),
         radial-gradient(circle at 90% 16%, #dff7ff 0 7%, transparent 8%),
         radial-gradient(circle at 85% 85%, #ece6ff 0 8%, transparent 9%),
         var(--bg);
-
       color:var(--ink);
       min-height:100vh;
     }
 
-    button,
-    input {
-      font:inherit;
-    }
+    button,input { font:inherit; }
 
-    button {
-      -webkit-tap-highlight-color:transparent;
-    }
+    button { -webkit-tap-highlight-color:transparent; }
 
     .app {
       max-width:980px;
@@ -66,9 +48,7 @@
       padding:20px;
     }
 
-    .hidden {
-      display:none !important;
-    }
+    .hidden { display:none !important; }
 
     /* HEADER */
 
@@ -138,9 +118,7 @@
       line-height:1.5;
     }
 
-    .setup-section {
-      margin-top:28px;
-    }
+    .setup-section { margin-top:28px; }
 
     .setup-title {
       font-weight:950;
@@ -154,13 +132,8 @@
       gap:12px;
     }
 
-    .difficulty-grid {
-      grid-template-columns:repeat(3,1fr);
-    }
-
-    .operation-grid {
-      grid-template-columns:repeat(4,1fr);
-    }
+    .difficulty-grid { grid-template-columns:repeat(3,1fr); }
+    .operation-grid { grid-template-columns:repeat(4,1fr); }
 
     .choice-btn {
       border:3px solid #e5e9ef;
@@ -201,7 +174,8 @@
       box-shadow:0 8px 0 var(--primary-dark);
     }
 
-    .start-btn:active {
+    .start-btn:active,
+    .main-btn:active {
       transform:translateY(4px);
       box-shadow:0 4px 0 var(--primary-dark);
     }
@@ -358,11 +332,6 @@
       box-shadow:0 8px 0 var(--primary-dark);
     }
 
-    .main-btn:active {
-      transform:translateY(4px);
-      box-shadow:0 4px 0 var(--primary-dark);
-    }
-
     .feedback {
       min-height:58px;
       margin:18px auto 4px;
@@ -373,17 +342,9 @@
       max-width:620px;
     }
 
-    .feedback.good {
-      color:var(--success);
-    }
-
-    .feedback.try {
-      color:var(--warning);
-    }
-
-    .feedback.hint {
-      color:#4a5d75;
-    }
+    .feedback.good { color:var(--success); }
+    .feedback.try { color:var(--warning); }
+    .feedback.hint { color:#4a5d75; }
 
     .helper-row {
       display:flex;
@@ -421,9 +382,7 @@
       font-weight:800;
     }
 
-    .pause-box.show {
-      display:block;
-    }
+    .pause-box.show { display:block; }
 
     .level-complete-banner {
       display:none;
@@ -443,17 +402,11 @@
     }
 
     @keyframes pop {
-      from {
-        transform:scale(.96);
-        opacity:.5;
-      }
-      to {
-        transform:scale(1);
-        opacity:1;
-      }
+      from { transform:scale(.96); opacity:.5; }
+      to { transform:scale(1); opacity:1; }
     }
 
-    /* MAP */
+    /* MAPPA */
 
     .level-map {
       margin-top:18px;
@@ -465,7 +418,14 @@
 
     .level-map h2 {
       font-size:1.05rem;
-      margin:0 0 12px;
+      margin:0 0 6px;
+    }
+
+    .map-help {
+      margin:0 0 14px;
+      color:var(--muted);
+      font-weight:750;
+      font-size:.92rem;
     }
 
     .levels {
@@ -476,12 +436,38 @@
 
     .level-dot {
       aspect-ratio:1;
+      border:0;
       border-radius:14px;
-      display:grid;
-      place-items:center;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:2px;
       background:#eef2f8;
       color:#68778a;
       font-weight:950;
+      cursor:pointer;
+      transition:transform .15s ease, box-shadow .15s ease;
+      min-width:0;
+    }
+
+    .level-dot:hover { transform:scale(1.06); }
+    .level-dot:active { transform:scale(.96); }
+
+    .level-dot .level-number {
+      font-size:1rem;
+      line-height:1;
+    }
+
+    .level-dot .level-count {
+      font-size:.65rem;
+      opacity:.8;
+      line-height:1;
+    }
+
+    .level-dot.partial {
+      background:#fff6dd;
+      color:#9a6814;
     }
 
     .level-dot.done {
@@ -505,9 +491,7 @@
       text-align:center;
     }
 
-    .finish-emoji {
-      font-size:72px;
-    }
+    .finish-emoji { font-size:72px; }
 
     .finish-card h1 {
       font-size:clamp(2rem,8vw,3rem);
@@ -522,9 +506,7 @@
 
     /* FOCUS */
 
-    .focus-mode .level-map {
-      display:none;
-    }
+    .focus-mode .level-map { display:none; }
 
     .focus-mode .game-card {
       max-width:720px;
@@ -548,21 +530,11 @@
     }
 
     @media (max-width:700px) {
-      .difficulty-grid {
-        grid-template-columns:1fr;
-      }
+      .difficulty-grid { grid-template-columns:1fr; }
+      .operation-grid { grid-template-columns:1fr 1fr; }
+      .levels { grid-template-columns:repeat(5,1fr); }
 
-      .operation-grid {
-        grid-template-columns:1fr 1fr;
-      }
-
-      .levels {
-        grid-template-columns:repeat(5,1fr);
-      }
-
-      .answer-wrap {
-        flex-direction:column;
-      }
+      .answer-wrap { flex-direction:column; }
 
       .main-btn {
         width:min(280px,82vw);
@@ -582,20 +554,11 @@
     </div>
 
     <div class="top-actions">
-      <button class="pill hidden" id="focusBtn">
-        🎯 Modalità focus
-      </button>
-
-      <button class="pill hidden" id="soundBtn">
-        🔊 Suoni
-      </button>
-
-      <button class="pill hidden" id="resetBtn">
-        ↺ Ricomincia
-      </button>
+      <button class="pill hidden" id="focusBtn">🎯 Modalità focus</button>
+      <button class="pill hidden" id="soundBtn">🔊 Suoni</button>
+      <button class="pill hidden" id="resetBtn">↺ Ricomincia</button>
     </div>
   </div>
-
 
   <!-- CONFIGURAZIONE -->
 
@@ -608,195 +571,92 @@
       Le 100 missioni diventeranno gradualmente più difficili.
     </p>
 
-
     <div class="resume-box hidden" id="resumeBox">
       <strong>💾 Ho trovato una missione già iniziata.</strong>
-
       <div id="resumeText"></div>
 
       <div class="resume-actions">
-        <button
-          class="secondary-btn"
-          id="resumeBtn"
-        >
-          ▶️ Continua
-        </button>
-
-        <button
-          class="secondary-btn"
-          id="discardBtn"
-        >
-          🗑️ Nuova missione
-        </button>
+        <button class="secondary-btn" id="resumeBtn">▶️ Continua</button>
+        <button class="secondary-btn" id="discardBtn">🗑️ Nuova missione</button>
       </div>
     </div>
 
-
     <div class="setup-section">
-      <div class="setup-title">
-        1. Scegli la difficoltà iniziale
-      </div>
+      <div class="setup-title">1. Scegli la difficoltà iniziale</div>
 
       <div class="difficulty-grid">
-
-        <button
-          class="choice-btn selected"
-          data-difficulty="base"
-        >
+        <button class="choice-btn selected" data-difficulty="base">
           🌱 Base
-          <small>
-            numeri più semplici
-          </small>
+          <small>numeri più semplici</small>
         </button>
 
-        <button
-          class="choice-btn"
-          data-difficulty="intermedio"
-        >
+        <button class="choice-btn" data-difficulty="intermedio">
           ⚡ Intermedio
-          <small>
-            numeri più grandi
-          </small>
+          <small>numeri più grandi</small>
         </button>
 
-        <button
-          class="choice-btn"
-          data-difficulty="avanzato"
-        >
+        <button class="choice-btn" data-difficulty="avanzato">
           🚀 Avanzato
-          <small>
-            sfida con le centinaia
-          </small>
+          <small>sfida con le centinaia</small>
         </button>
-
       </div>
     </div>
 
-
     <div class="setup-section">
-
-      <div class="setup-title">
-        2. Scegli le operazioni
-      </div>
+      <div class="setup-title">2. Scegli le operazioni</div>
 
       <div class="operation-grid">
-
-        <button
-          class="choice-btn selected"
-          data-operation="+"
-        >
+        <button class="choice-btn selected" data-operation="+">
           ➕
           <small>Addizioni</small>
         </button>
 
-        <button
-          class="choice-btn selected"
-          data-operation="-"
-        >
+        <button class="choice-btn selected" data-operation="-">
           ➖
           <small>Sottrazioni</small>
         </button>
 
-        <button
-          class="choice-btn"
-          data-operation="*"
-        >
+        <button class="choice-btn" data-operation="*">
           ✖️
           <small>Moltiplicazioni</small>
         </button>
 
-        <button
-          class="choice-btn"
-          data-operation="/"
-        >
+        <button class="choice-btn" data-operation="/">
           ➗
           <small>Divisioni</small>
         </button>
-
       </div>
-
     </div>
 
-
-    <button
-      class="start-btn"
-      id="startBtn"
-    >
-      Inizia 100 missioni 🚀
-    </button>
-
+    <button class="start-btn" id="startBtn">Inizia 100 missioni 🚀</button>
   </section>
-
 
   <!-- GIOCO -->
 
-  <section
-    class="progress-card hidden"
-    id="progressCard"
-  >
-
+  <section class="progress-card hidden" id="progressCard">
     <div class="progress-row">
-
-      <span id="progressText">
-        Operazione 1 di 100
-      </span>
-
-      <span id="scoreText">
-        ⭐ 0 stelle
-      </span>
-
+      <span id="progressText">Operazione 1 di 100</span>
+      <span id="scoreText">⭐ 0 stelle</span>
     </div>
 
     <div class="progress-track">
-
-      <div
-        class="progress-fill"
-        id="progressFill"
-      ></div>
-
+      <div class="progress-fill" id="progressFill"></div>
     </div>
-
   </section>
 
+  <section class="game-card hidden" id="gameCard">
 
-  <section
-    class="game-card hidden"
-    id="gameCard"
-  >
+    <div class="level-bubble" id="levelBubble">🟢 Livello 1</div>
 
-    <div
-      class="level-bubble"
-      id="levelBubble"
-    >
-      🟢 Livello 1
-    </div>
-
-
-    <div
-      class="mode-row"
-      id="modeRow"
-    ></div>
-
+    <div class="mode-row" id="modeRow"></div>
 
     <p class="mission">
-      Una missione alla volta. Nessuna fretta:
-      pensa e prova!
+      Una missione alla volta. Nessuna fretta: pensa e prova!
     </p>
 
+    <div class="equation" id="equation">7 + 5 = ?</div>
 
-    <div
-      class="equation"
-      id="equation"
-    >
-      7 + 5 = ?
-    </div>
-
-
-    <form
-      id="answerForm"
-      class="answer-wrap"
-    >
-
+    <form id="answerForm" class="answer-wrap">
       <input
         id="answerInput"
         class="answer"
@@ -809,118 +669,66 @@
         placeholder="?"
       />
 
-
-      <button
-        class="main-btn"
-        type="submit"
-      >
-        Controlla ✓
-      </button>
-
+      <button class="main-btn" type="submit">Controlla ✓</button>
     </form>
 
-
-    <div
-      id="feedback"
-      class="feedback hint"
-    >
+    <div id="feedback" class="feedback hint">
       💡 Scrivi il risultato.
     </div>
 
-
     <div class="helper-row">
-
-      <button
-        class="helper-btn"
-        id="hintBtn"
-        type="button"
-      >
+      <button class="helper-btn" id="hintBtn" type="button">
         💡 Piccolo aiuto
       </button>
 
-
-      <button
-        class="helper-btn"
-        id="breakBtn"
-        type="button"
-      >
+      <button class="helper-btn" id="breakBtn" type="button">
         🧘 Mini-pausa
       </button>
-
     </div>
 
+    <div class="stars" id="stars"></div>
 
-    <div
-      class="stars"
-      id="stars"
-    ></div>
-
-
-    <div
-      class="pause-box"
-      id="pauseBox"
-    >
-      🌿 Guarda lontano per 10 secondi,
-      muovi un po' le mani e fai 3 respiri.
+    <div class="pause-box" id="pauseBox">
+      🌿 Guarda lontano per 10 secondi, muovi un po' le mani e fai 3 respiri.
       Torna quando vuoi.
     </div>
 
-
-    <div
-      class="level-complete-banner"
-      id="levelBanner"
-    >
+    <div class="level-complete-banner" id="levelBanner">
       🏆 Livello completato!
     </div>
 
   </section>
 
+  <!-- MAPPA -->
 
-  <section
-    class="level-map hidden"
-    id="levelMap"
-  >
+  <section class="level-map hidden" id="levelMap">
 
-    <h2>
-      🗺️ 10 livelli · 10 missioni ciascuno
-    </h2>
+    <h2>🗺️ 10 livelli · 10 missioni ciascuno</h2>
 
-    <div
-      class="levels"
-      id="levels"
-    ></div>
+    <p class="map-help">
+      👆 Tocca un livello per andare avanti o indietro.
+      Le stelle si guadagnano solo risolvendo gli esercizi e una sola volta per esercizio.
+    </p>
+
+    <div class="levels" id="levels"></div>
 
   </section>
-
 
   <!-- FINE -->
 
-  <section
-    class="finish-card hidden"
-    id="finishCard"
-  >
+  <section class="finish-card hidden" id="finishCard">
+    <div class="finish-emoji">🏆🚀</div>
 
-    <div class="finish-emoji">
-      🏆🚀
-    </div>
-
-    <h1>
-      Missione completata!
-    </h1>
+    <h1>Missione completata!</h1>
 
     <p id="finishText"></p>
 
-    <button
-      class="main-btn"
-      id="playAgainBtn"
-    >
+    <button class="main-btn" id="playAgainBtn">
       Nuova missione ↺
     </button>
-
   </section>
 
 </main>
-
 
 <script>
 
@@ -932,15 +740,13 @@ const TOTAL = 100;
 const PER_LEVEL = 10;
 
 const STORAGE_KEY =
-  "missione-matematica-v3";
-
+  "missione-matematica-v4";
 
 const difficultyNames = {
   base:"Base",
   intermedio:"Intermedio",
   avanzato:"Avanzato"
 };
-
 
 const operationNames = {
   "+":"Addizioni",
@@ -949,13 +755,11 @@ const operationNames = {
   "/":"Divisioni"
 };
 
-
 /* =====================================================
    STATO
    ===================================================== */
 
 const state = {
-
   difficulty:"base",
 
   operations:[
@@ -967,7 +771,14 @@ const state = {
 
   stars:0,
 
-  correctInLevel:0,
+  /*
+    Indici degli esercizi già risolti.
+
+    Questo impedisce di guadagnare
+    più stelle tornando indietro
+    e rifacendo lo stesso esercizio.
+  */
+  solved:[],
 
   tries:0,
 
@@ -978,9 +789,7 @@ const state = {
   questions:[],
 
   running:false
-
 };
-
 
 /* =====================================================
    ELEMENTI
@@ -990,61 +799,28 @@ const $ =
   id =>
     document.getElementById(id);
 
-
-const setupCard =
-  $("setupCard");
-
-const progressCard =
-  $("progressCard");
-
-const gameCard =
-  $("gameCard");
-
-const levelMap =
-  $("levelMap");
-
-const finishCard =
-  $("finishCard");
-
-const equation =
-  $("equation");
-
-const input =
-  $("answerInput");
-
-const feedback =
-  $("feedback");
-
-const progressFill =
-  $("progressFill");
-
-const progressText =
-  $("progressText");
-
-const scoreText =
-  $("scoreText");
-
-const levelBubble =
-  $("levelBubble");
-
-const stars =
-  $("stars");
-
-const modeRow =
-  $("modeRow");
-
-const levelBanner =
-  $("levelBanner");
-
+const setupCard = $("setupCard");
+const progressCard = $("progressCard");
+const gameCard = $("gameCard");
+const levelMap = $("levelMap");
+const finishCard = $("finishCard");
+const equation = $("equation");
+const input = $("answerInput");
+const feedback = $("feedback");
+const progressFill = $("progressFill");
+const progressText = $("progressText");
+const scoreText = $("scoreText");
+const levelBubble = $("levelBubble");
+const stars = $("stars");
+const modeRow = $("modeRow");
+const levelBanner = $("levelBanner");
 
 /* =====================================================
    SELEZIONE DIFFICOLTÀ
    ===================================================== */
 
 document
-  .querySelectorAll(
-    "[data-difficulty]"
-  )
+  .querySelectorAll("[data-difficulty]")
   .forEach(button => {
 
     button.addEventListener(
@@ -1052,36 +828,26 @@ document
       () => {
 
         document
-          .querySelectorAll(
-            "[data-difficulty]"
-          )
-          .forEach(b =>
-            b.classList.remove(
-              "selected"
-            )
+          .querySelectorAll("[data-difficulty]")
+          .forEach(
+            b => b.classList.remove("selected")
           );
 
-        button.classList.add(
-          "selected"
-        );
+        button.classList.add("selected");
 
         state.difficulty =
           button.dataset.difficulty;
-
       }
     );
 
   });
-
 
 /* =====================================================
    SELEZIONE OPERAZIONI
    ===================================================== */
 
 document
-  .querySelectorAll(
-    "[data-operation]"
-  )
+  .querySelectorAll("[data-operation]")
   .forEach(button => {
 
     button.addEventListener(
@@ -1092,18 +858,12 @@ document
           button.dataset.operation;
 
         const selected =
-          button
-            .classList
-            .contains(
-              "selected"
-            );
-
+          button.classList.contains("selected");
 
         if(
           selected &&
           state.operations.length === 1
         ){
-
           feedbackSetup(
             "Scegli almeno un tipo di operazione."
           );
@@ -1111,41 +871,26 @@ document
           return;
         }
 
-
         if(selected){
 
-          button
-            .classList
-            .remove(
-              "selected"
-            );
+          button.classList.remove("selected");
 
           state.operations =
-            state.operations
-              .filter(
-                item =>
-                  item !== op
-              );
+            state.operations.filter(
+              item => item !== op
+            );
 
         }else{
 
-          button
-            .classList
-            .add(
-              "selected"
-            );
+          button.classList.add("selected");
 
-          state.operations.push(
-            op
-          );
-
+          state.operations.push(op);
         }
 
       }
     );
 
   });
-
 
 function feedbackSetup(text){
 
@@ -1157,9 +902,7 @@ function feedbackSetup(text){
   }
 
   const div =
-    document.createElement(
-      "div"
-    );
+    document.createElement("div");
 
   div.id =
     "setupMessage";
@@ -1176,22 +919,14 @@ function feedbackSetup(text){
   div.textContent =
     text;
 
-  $("startBtn")
-    .before(
-      div
-    );
-
+  $("startBtn").before(div);
 }
-
 
 /* =====================================================
    RANDOM
    ===================================================== */
 
-function randomInt(
-  min,
-  max
-){
+function randomInt(min,max){
 
   return Math.floor(
     Math.random() *
@@ -1199,7 +934,6 @@ function randomInt(
   ) + min;
 
 }
-
 
 function randomFrom(array){
 
@@ -1212,24 +946,20 @@ function randomFrom(array){
 
 }
 
-
 /* =====================================================
    PROGRESSIONE
    ===================================================== */
 
-function progressRatio(
-  index
-){
+function progressRatio(index){
 
   return index /
     (TOTAL - 1);
 
 }
 
-
 /*
-  Questa funzione aumenta gradualmente
-  la difficoltà lungo le 100 operazioni.
+  La difficoltà cresce lungo
+  le 100 operazioni.
 */
 
 function getDifficultyLimits(
@@ -1240,13 +970,11 @@ function getDifficultyLimits(
   const p =
     progressRatio(index);
 
-
   if(
     difficulty === "base"
   ){
 
     return {
-
       addMax:
         Math.round(
           20 +
@@ -1270,19 +998,15 @@ function getDifficultyLimits(
             p * 7
           )
         )
-
     };
 
   }
 
-
   if(
-    difficulty ===
-    "intermedio"
+    difficulty === "intermedio"
   ){
 
     return {
-
       addMax:
         Math.round(
           100 +
@@ -1303,14 +1027,11 @@ function getDifficultyLimits(
             p * 6
           )
         )
-
     };
 
   }
 
-
   return {
-
     addMax:
       Math.round(
         300 +
@@ -1328,19 +1049,15 @@ function getDifficultyLimits(
         20 +
         p * 80
       )
-
   };
 
 }
-
 
 /* =====================================================
    GENERAZIONE OPERAZIONE
    ===================================================== */
 
-function generateQuestion(
-  index
-){
+function generateQuestion(index){
 
   const limits =
     getDifficultyLimits(
@@ -1348,42 +1065,31 @@ function generateQuestion(
       index
     );
 
-
   const op =
     randomFrom(
       state.operations
     );
 
-
   if(op === "+"){
-
     return generateAddition(
       limits,
       index
     );
-
   }
 
-
   if(op === "-"){
-
     return generateSubtraction(
       limits,
       index
     );
-
   }
 
-
   if(op === "*"){
-
     return generateMultiplication(
       limits,
       index
     );
-
   }
-
 
   return generateDivision(
     limits,
@@ -1391,7 +1097,6 @@ function generateQuestion(
   );
 
 }
-
 
 /* =====================================================
    ADDIZIONE
@@ -1405,12 +1110,10 @@ function generateAddition(
   const max =
     limits.addMax;
 
-
   const min =
     state.difficulty === "base"
       ? 1
       : 5;
-
 
   let a =
     randomInt(
@@ -1418,81 +1121,61 @@ function generateAddition(
       max
     );
 
-
   let b =
     randomInt(
       min,
       max
     );
 
-
-  /*
-    Nei primi esercizi limitiamo
-    la somma finale.
-  */
-
   const progression =
     progressRatio(index);
-
 
   if(
     progression < .25
   ){
 
+    const earlyMax =
+      Math.max(
+        min,
+        Math.floor(
+          max * .55
+        )
+      );
+
     a =
       randomInt(
         min,
-        Math.max(
-          min,
-          Math.floor(
-            max * .55
-          )
-        )
+        earlyMax
       );
 
     b =
       randomInt(
         min,
-        Math.max(
-          min,
-          Math.floor(
-            max * .55
-          )
-        )
+        earlyMax
       );
 
   }
 
-
   return {
-
     a,
     b,
-
     op:"+",
-
     symbol:"+",
-
-    answer:
-      a + b
-
+    answer:a + b
   };
 
 }
-
 
 /* =====================================================
    SOTTRAZIONE
    ===================================================== */
 
 function generateSubtraction(
-  limits,
-  index
+  limits
 ){
 
   const max =
     limits.addMax;
-
 
   let a =
     randomInt(
@@ -1500,56 +1183,36 @@ function generateSubtraction(
       max
     );
 
-
   let b =
     randomInt(
       0,
       a
     );
 
-
-  /*
-    Evita risultati negativi.
-  */
-
   if(b > a){
 
-    const tmp =
-      a;
-
-    a =
-      b;
-
-    b =
-      tmp;
+    const tmp = a;
+    a = b;
+    b = tmp;
 
   }
 
-
   return {
-
     a,
     b,
-
     op:"-",
-
     symbol:"−",
-
-    answer:
-      a - b
-
+    answer:a - b
   };
 
 }
-
 
 /* =====================================================
    MOLTIPLICAZIONE
    ===================================================== */
 
 function generateMultiplication(
-  limits,
-  index
+  limits
 ){
 
   let a =
@@ -1558,82 +1221,45 @@ function generateMultiplication(
       limits.multiplicationA
     );
 
-
   let b =
     randomInt(
       1,
       limits.multiplicationB
     );
 
-
-  /*
-    Alterniamo l'ordine
-    per non rendere prevedibile
-    la posizione del numero grande.
-  */
-
   if(
     Math.random() < .5
   ){
 
-    const temp =
-      a;
-
-    a =
-      b;
-
-    b =
-      temp;
+    const temp = a;
+    a = b;
+    b = temp;
 
   }
 
-
   return {
-
     a,
     b,
-
     op:"*",
-
     symbol:"×",
-
-    answer:
-      a * b
-
+    answer:a * b
   };
 
 }
-
 
 /* =====================================================
    DIVISIONE
    ===================================================== */
 
 function generateDivision(
-  limits,
-  index
+  limits
 ){
-
-  /*
-    Creiamo prima divisore
-    e risultato.
-
-    Poi:
-    dividendo =
-    divisore × risultato
-
-    In questo modo
-    la divisione è sempre esatta.
-  */
-
 
   let divisor;
   let result;
 
-
   if(
-    state.difficulty ===
-    "base"
+    state.difficulty === "base"
   ){
 
     divisor =
@@ -1656,10 +1282,8 @@ function generateDivision(
 
   }
 
-
   else if(
-    state.difficulty ===
-    "intermedio"
+    state.difficulty === "intermedio"
   ){
 
     divisor =
@@ -1678,7 +1302,6 @@ function generateDivision(
       );
 
   }
-
 
   else{
 
@@ -1702,28 +1325,19 @@ function generateDivision(
 
   }
 
-
   const dividend =
     divisor *
     result;
 
-
   return {
-
     a:dividend,
-
     b:divisor,
-
     op:"/",
-
     symbol:"÷",
-
     answer:result
-
   };
 
 }
-
 
 /* =====================================================
    GENERA 100 DOMANDE
@@ -1732,7 +1346,6 @@ function generateDivision(
 function makeQuestions(){
 
   const list = [];
-
 
   for(
     let i = 0;
@@ -1746,11 +1359,41 @@ function makeQuestions(){
 
   }
 
-
   return list;
 
 }
 
+/* =====================================================
+   ESERCIZI RISOLTI
+   ===================================================== */
+
+function isSolved(index){
+
+  return state.solved.includes(
+    index
+  );
+
+}
+
+function solvedInLevel(
+  levelIndex
+){
+
+  const first =
+    levelIndex *
+    PER_LEVEL;
+
+  const last =
+    first +
+    PER_LEVEL;
+
+  return state.solved.filter(
+    index =>
+      index >= first &&
+      index < last
+  ).length;
+
+}
 
 /* =====================================================
    SALVATAGGIO
@@ -1764,9 +1407,7 @@ function saveProgress(){
     return;
   }
 
-
   const save = {
-
     difficulty:
       state.difficulty,
 
@@ -1779,14 +1420,12 @@ function saveProgress(){
     stars:
       state.stars,
 
-    correctInLevel:
-      state.correctInLevel,
+    solved:
+      state.solved,
 
     questions:
       state.questions
-
   };
-
 
   localStorage.setItem(
     STORAGE_KEY,
@@ -1794,7 +1433,6 @@ function saveProgress(){
   );
 
 }
-
 
 /* =====================================================
    CARICAMENTO
@@ -1809,15 +1447,12 @@ function getSavedProgress(){
         STORAGE_KEY
       );
 
-
     if(!raw){
       return null;
     }
 
-
     const saved =
       JSON.parse(raw);
-
 
     if(
       !saved ||
@@ -1826,11 +1461,16 @@ function getSavedProgress(){
       ) ||
       saved.questions.length !== TOTAL
     ){
-
       return null;
-
     }
 
+    if(
+      !Array.isArray(
+        saved.solved
+      )
+    ){
+      saved.solved = [];
+    }
 
     return saved;
 
@@ -1844,7 +1484,6 @@ function getSavedProgress(){
 
 }
 
-
 /* =====================================================
    MOSTRA RIPRESA
    ===================================================== */
@@ -1854,11 +1493,9 @@ function showResumeIfAvailable(){
   const saved =
     getSavedProgress();
 
-
   if(!saved){
     return;
   }
-
 
   if(
     saved.index >= TOTAL
@@ -1866,13 +1503,9 @@ function showResumeIfAvailable(){
     return;
   }
 
-
   $("resumeBox")
     .classList
-    .remove(
-      "hidden"
-    );
-
+    .remove("hidden");
 
   const ops =
     saved.operations
@@ -1882,13 +1515,18 @@ function showResumeIfAvailable(){
       )
       .join(", ");
 
+  const solvedCount =
+    saved.solved
+      ? saved.solved.length
+      : 0;
 
-  $("resumeText")
-    .textContent =
-      ` Sei arrivato all'operazione ${saved.index + 1} di 100. Modalità: ${difficultyNames[saved.difficulty]}. Operazioni: ${ops}.`;
+  $("resumeText").textContent =
+    ` Sei all'operazione ${saved.index + 1} di 100. ` +
+    `Hai risolto ${solvedCount} esercizi. ` +
+    `Modalità: ${difficultyNames[saved.difficulty]}. ` +
+    `Operazioni: ${ops}.`;
 
 }
-
 
 /* =====================================================
    RIPRENDI
@@ -1902,43 +1540,37 @@ $("resumeBtn")
       const saved =
         getSavedProgress();
 
-
       if(!saved){
         return;
       }
 
-
       state.difficulty =
         saved.difficulty;
-
 
       state.operations =
         saved.operations;
 
-
       state.index =
         saved.index;
 
+      state.solved =
+        saved.solved || [];
 
+      /*
+        Le stelle corrispondono
+        sempre agli esercizi unici
+        già risolti.
+      */
       state.stars =
-        saved.stars || 0;
-
-
-      state.correctInLevel =
-        saved.correctInLevel || 0;
-
+        state.solved.length;
 
       state.questions =
         saved.questions;
 
-
-      startGame(
-        false
-      );
+      startGame(false);
 
     }
   );
-
 
 /* =====================================================
    SCARTA SALVATAGGIO
@@ -1953,16 +1585,12 @@ $("discardBtn")
         STORAGE_KEY
       );
 
-
       $("resumeBox")
         .classList
-        .add(
-          "hidden"
-        );
+        .add("hidden");
 
     }
   );
-
 
 /* =====================================================
    START
@@ -1985,105 +1613,67 @@ $("startBtn")
 
       }
 
-
       state.index = 0;
-
       state.stars = 0;
-
-      state.correctInLevel = 0;
+      state.solved = [];
 
       state.questions =
         makeQuestions();
 
-
-      startGame(
-        true
-      );
+      startGame(true);
 
     }
   );
-
 
 function startGame(
   saveImmediately = true
 ){
 
-  state.running =
-    true;
-
+  state.running = true;
 
   setupCard
     .classList
-    .add(
-      "hidden"
-    );
-
+    .add("hidden");
 
   finishCard
     .classList
-    .add(
-      "hidden"
-    );
-
+    .add("hidden");
 
   progressCard
     .classList
-    .remove(
-      "hidden"
-    );
-
+    .remove("hidden");
 
   gameCard
     .classList
-    .remove(
-      "hidden"
-    );
-
+    .remove("hidden");
 
   levelMap
     .classList
-    .remove(
-      "hidden"
-    );
-
+    .remove("hidden");
 
   $("focusBtn")
     .classList
-    .remove(
-      "hidden"
-    );
-
+    .remove("hidden");
 
   $("soundBtn")
     .classList
-    .remove(
-      "hidden"
-    );
-
+    .remove("hidden");
 
   $("resetBtn")
     .classList
-    .remove(
-      "hidden"
-    );
-
+    .remove("hidden");
 
   renderModeChips();
-
 
   if(
     saveImmediately
   ){
-
     saveProgress();
-
   }
-
 
   render();
 
 }
-
 
 /* =====================================================
    CHIP MODALITÀ
@@ -2091,28 +1681,22 @@ function startGame(
 
 function renderModeChips(){
 
-  modeRow.innerHTML =
-    "";
-
+  modeRow.innerHTML = "";
 
   const difficultyChip =
     document.createElement(
       "span"
     );
 
-
   difficultyChip.className =
     "mode-chip";
-
 
   difficultyChip.textContent =
     `🎚️ ${difficultyNames[state.difficulty]}`;
 
-
   modeRow.appendChild(
     difficultyChip
   );
-
 
   state.operations
     .forEach(
@@ -2123,14 +1707,11 @@ function renderModeChips(){
             "span"
           );
 
-
         chip.className =
           "mode-chip";
 
-
         chip.textContent =
           operationSymbol(op);
-
 
         modeRow.appendChild(
           chip
@@ -2140,7 +1721,6 @@ function renderModeChips(){
     );
 
 }
-
 
 /* =====================================================
    SIMBOLI
@@ -2164,9 +1744,8 @@ function operationSymbol(op){
 
 }
 
-
 /* =====================================================
-   LIVELLI
+   MAPPA LIVELLI
    ===================================================== */
 
 function renderLevels(){
@@ -2174,10 +1753,7 @@ function renderLevels(){
   const wrap =
     $("levels");
 
-
-  wrap.innerHTML =
-    "";
-
+  wrap.innerHTML = "";
 
   const currentLevel =
     Math.min(
@@ -2188,43 +1764,182 @@ function renderLevels(){
       )
     );
 
-
   for(
     let i = 0;
     i < 10;
     i++
   ){
 
-    const d =
+    const solvedCount =
+      solvedInLevel(i);
+
+    const button =
       document.createElement(
-        "div"
+        "button"
       );
 
+    button.type =
+      "button";
 
-    d.className =
-      "level-dot" +
-      (
-        i < currentLevel
-          ? " done"
-          :
-        i === currentLevel
-          ? " current"
-          : ""
+    let className =
+      "level-dot";
+
+    if(
+      solvedCount ===
+      PER_LEVEL
+    ){
+      className +=
+        " done";
+    }
+
+    else if(
+      solvedCount > 0
+    ){
+      className +=
+        " partial";
+    }
+
+    if(
+      i === currentLevel
+    ){
+      className +=
+        " current";
+    }
+
+    button.className =
+      className;
+
+    const number =
+      document.createElement(
+        "span"
       );
 
+    number.className =
+      "level-number";
 
-    d.textContent =
+    number.textContent =
       i + 1;
 
+    const count =
+      document.createElement(
+        "span"
+      );
+
+    count.className =
+      "level-count";
+
+    count.textContent =
+      `${solvedCount}/10`;
+
+    button.appendChild(
+      number
+    );
+
+    button.appendChild(
+      count
+    );
+
+    button.title =
+      `Vai al livello ${i + 1}`;
+
+    button.setAttribute(
+      "aria-label",
+      `Vai al livello ${i + 1}. ${solvedCount} esercizi risolti su 10.`
+    );
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        if(
+          i === currentLevel
+        ){
+          focusAnswer();
+          return;
+        }
+
+        requestLevelChange(i);
+
+      }
+    );
 
     wrap.appendChild(
-      d
+      button
     );
 
   }
 
 }
 
+/* =====================================================
+   CAMBIO LIVELLO
+   ===================================================== */
+
+function requestLevelChange(
+  levelIndex
+){
+
+  const currentLevel =
+    Math.floor(
+      state.index /
+      PER_LEVEL
+    );
+
+  const direction =
+    levelIndex > currentLevel
+      ? "avanti"
+      : "indietro";
+
+  const targetExercise =
+    levelIndex *
+    PER_LEVEL +
+    1;
+
+  const ok =
+    confirm(
+      `Vuoi andare ${direction} al livello ${levelIndex + 1}?\n\n` +
+      `Ripartirai dall'operazione ${targetExercise}.\n` +
+      `Le stelle già guadagnate resteranno salvate.`
+    );
+
+  if(!ok){
+    focusAnswer();
+    return;
+  }
+
+  goToLevel(
+    levelIndex
+  );
+
+}
+
+function goToLevel(
+  levelIndex
+){
+
+  state.index =
+    levelIndex *
+    PER_LEVEL;
+
+  state.tries = 0;
+
+  $("pauseBox")
+    .classList
+    .remove("show");
+
+  $("breakBtn")
+    .textContent =
+      "🧘 Mini-pausa";
+
+  levelBanner
+    .classList
+    .remove("show");
+
+  saveProgress();
+
+  render();
+
+}
 
 /* =====================================================
    RENDER
@@ -2237,17 +1952,14 @@ function render(){
   ){
 
     finishGame();
-
     return;
 
   }
-
 
   const q =
     state.questions[
       state.index
     ];
-
 
   const level =
     Math.floor(
@@ -2255,10 +1967,8 @@ function render(){
       PER_LEVEL
     );
 
-
   equation.textContent =
     `${q.a} ${q.symbol} ${q.b} = ?`;
-
 
   const icon =
     level < 3
@@ -2268,74 +1978,65 @@ function render(){
       ? "🟡"
       : "🟣";
 
-
   levelBubble.textContent =
     `${icon} Livello ${level + 1} di 10`;
-
 
   progressText.textContent =
     `Operazione ${state.index + 1} di ${TOTAL}`;
 
-
   progressFill.style.width =
     `${state.index}%`;
-
 
   scoreText.textContent =
     `⭐ ${state.stars} stelle`;
 
+  const solvedHere =
+    solvedInLevel(level);
 
   stars.textContent =
     "⭐".repeat(
       Math.min(
-        state.correctInLevel,
+        solvedHere,
         10
       )
     );
 
-
   feedback.className =
     "feedback hint";
 
+  if(
+    isSolved(
+      state.index
+    )
+  ){
 
-  feedback.textContent =
-    "✨ Tocca a te! Scrivi il risultato.";
+    feedback.textContent =
+      "✅ Questo esercizio è già stato risolto. Puoi rifarlo, ma non darà una seconda stella.";
 
+  }else{
 
-  input.value =
-    "";
+    feedback.textContent =
+      "✨ Tocca a te! Scrivi il risultato.";
 
+  }
 
-  state.tries =
-    0;
+  input.value = "";
 
+  state.tries = 0;
 
   renderLevels();
 
-
   saveProgress();
-
 
   focusAnswer();
 
 }
-
 
 /* =====================================================
    FOCUS TASTIERA
    ===================================================== */
 
 function focusAnswer(){
-
-  /*
-    Il browser mobile decide
-    se mostrare o meno la tastiera.
-
-    Questo mantiene però
-    il campo sempre attivo
-    il più possibile.
-  */
-
 
   requestAnimationFrame(
     () => {
@@ -2359,7 +2060,6 @@ function focusAnswer(){
 
 }
 
-
 /* =====================================================
    RISPOSTA
    ===================================================== */
@@ -2371,12 +2071,13 @@ $("answerForm")
 
       e.preventDefault();
 
+      const currentIndex =
+        state.index;
 
       const q =
         state.questions[
-          state.index
+          currentIndex
         ];
-
 
       if(
         input.value.trim() === ""
@@ -2385,10 +2086,8 @@ $("answerForm")
         feedback.className =
           "feedback try";
 
-
         feedback.textContent =
           "✏️ Scrivi un numero.";
-
 
         focusAnswer();
 
@@ -2396,65 +2095,88 @@ $("answerForm")
 
       }
 
-
       const value =
         Number(
           input.value
         );
-
 
       if(
         value ===
         q.answer
       ){
 
-        speakTone(
-          true
-        );
+        speakTone(true);
 
+        const firstTime =
+          !isSolved(
+            currentIndex
+          );
 
-        state.stars++;
+        if(firstTime){
 
-        state.correctInLevel++;
+          state.solved.push(
+            currentIndex
+          );
 
+          state.solved.sort(
+            (a,b) =>
+              a - b
+          );
+
+          state.stars =
+            state.solved.length;
+
+        }
 
         feedback.className =
           "feedback good";
 
+        if(firstTime){
 
-        feedback.textContent =
-          state.tries === 0
-            ? "🌟 Perfetto! Stella conquistata!"
-            : "🎉 Giusto! Ottimo recupero!";
+          feedback.textContent =
+            state.tries === 0
+              ? "🌟 Perfetto! Stella conquistata!"
+              : "🎉 Giusto! Stella conquistata!";
 
+        }else{
+
+          feedback.textContent =
+            "✅ Giusto! Questo esercizio era già stato risolto, quindi la stella era già tua.";
+
+        }
 
         scoreText.textContent =
           `⭐ ${state.stars} stelle`;
 
-
         state.index++;
 
-
         saveProgress();
-
 
         const justCompletedLevel =
           state.index %
           PER_LEVEL === 0;
-
 
         if(
           justCompletedLevel &&
           state.index < TOTAL
         ){
 
-          showLevelBanner();
+          const completedLevel =
+            state.index /
+            PER_LEVEL -
+            1;
 
-          state.correctInLevel =
-            0;
+          if(
+            solvedInLevel(
+              completedLevel
+            ) === PER_LEVEL
+          ){
+            showLevelBanner(
+              completedLevel + 1
+            );
+          }
 
         }
-
 
         setTimeout(
           () => {
@@ -2465,31 +2187,23 @@ $("answerForm")
           500
         );
 
-
       }
 
       else{
 
-        speakTone(
-          false
-        );
-
+        speakTone(false);
 
         state.tries++;
 
-
         feedback.className =
           "feedback try";
-
 
         feedback.textContent =
           state.tries === 1
             ? "🙂 Quasi! Riprova con calma."
             : "💪 Sei vicino. Usa il piccolo aiuto se vuoi.";
 
-
         input.select();
-
 
         focusAnswer();
 
@@ -2498,39 +2212,33 @@ $("answerForm")
     }
   );
 
-
 /* =====================================================
    BANNER LIVELLO
    ===================================================== */
 
-function showLevelBanner(){
+function showLevelBanner(
+  levelNumber
+){
 
   levelBanner.textContent =
-    `🏆 Livello ${state.index / PER_LEVEL} completato! Continua così!`;
-
+    `🏆 Livello ${levelNumber} completato: 10 esercizi risolti!`;
 
   levelBanner
     .classList
-    .add(
-      "show"
-    );
-
+    .add("show");
 
   setTimeout(
     () => {
 
       levelBanner
         .classList
-        .remove(
-          "show"
-        );
+        .remove("show");
 
     },
     1700
   );
 
 }
-
 
 /* =====================================================
    AIUTO
@@ -2546,10 +2254,8 @@ $("hintBtn")
           state.index
         ];
 
-
       feedback.className =
         "feedback hint";
-
 
       if(
         q.op === "+"
@@ -2558,10 +2264,9 @@ $("hintBtn")
         feedback.textContent =
           q.b <= 10
             ? `💡 Parti da ${q.a} e fai ${q.b} passi avanti.`
-            : `💡 Prova ad aggiungere prima le decine e poi le unità.`;
+            : "💡 Prova ad aggiungere prima le decine e poi le unità.";
 
       }
-
 
       else if(
         q.op === "-"
@@ -2570,10 +2275,9 @@ $("hintBtn")
         feedback.textContent =
           q.b <= 10
             ? `💡 Parti da ${q.a} e fai ${q.b} passi indietro.`
-            : `💡 Togli prima le decine, poi le unità.`;
+            : "💡 Togli prima le decine, poi le unità.";
 
       }
-
 
       else if(
         q.op === "*"
@@ -2584,7 +2288,6 @@ $("hintBtn")
 
       }
 
-
       else{
 
         feedback.textContent =
@@ -2592,12 +2295,10 @@ $("hintBtn")
 
       }
 
-
       focusAnswer();
 
     }
   );
-
 
 /* =====================================================
    PAUSA
@@ -2611,12 +2312,8 @@ $("breakBtn")
       const box =
         $("pauseBox");
 
-
       box.classList
-        .toggle(
-          "show"
-        );
-
+        .toggle("show");
 
       $("breakBtn")
         .textContent =
@@ -2625,7 +2322,6 @@ $("breakBtn")
           )
             ? "✅ Torno al gioco"
             : "🧘 Mini-pausa";
-
 
       if(
         !box.classList.contains(
@@ -2640,7 +2336,6 @@ $("breakBtn")
     }
   );
 
-
 /* =====================================================
    MODALITÀ FOCUS
    ===================================================== */
@@ -2653,7 +2348,6 @@ $("focusBtn")
       state.focus =
         !state.focus;
 
-
       $("app")
         .classList
         .toggle(
@@ -2661,19 +2355,16 @@ $("focusBtn")
           state.focus
         );
 
-
       $("focusBtn")
         .textContent =
           state.focus
             ? "👀 Mostra mappa"
             : "🎯 Modalità focus";
 
-
       focusAnswer();
 
     }
   );
-
 
 /* =====================================================
    SUONO
@@ -2687,19 +2378,16 @@ $("soundBtn")
       state.sound =
         !state.sound;
 
-
       $("soundBtn")
         .textContent =
           state.sound
             ? "🔊 Suoni"
             : "🔇 Suoni off";
 
-
       focusAnswer();
 
     }
   );
-
 
 function speakTone(
   ok = true
@@ -2711,7 +2399,6 @@ function speakTone(
     return;
   }
 
-
   try{
 
     const ctx =
@@ -2720,47 +2407,35 @@ function speakTone(
         window.webkitAudioContext
       )();
 
-
     const osc =
       ctx.createOscillator();
-
 
     const gain =
       ctx.createGain();
 
-
     osc.type =
       "sine";
-
 
     osc.frequency.value =
       ok
         ? 660
         : 240;
 
-
     gain.gain.value =
       .05;
 
-
-    osc.connect(
-      gain
-    );
-
+    osc.connect(gain);
 
     gain.connect(
       ctx.destination
     );
 
-
     osc.start();
-
 
     setTimeout(
       () => {
 
         osc.stop();
-
         ctx.close();
 
       },
@@ -2774,7 +2449,6 @@ function speakTone(
   catch(e){}
 
 }
-
 
 /* =====================================================
    RESET
@@ -2790,23 +2464,19 @@ $("resetBtn")
           "Vuoi cancellare il progresso e creare una nuova missione?"
         );
 
-
       if(!ok){
         focusAnswer();
         return;
       }
 
-
       localStorage.removeItem(
         STORAGE_KEY
       );
-
 
       location.reload();
 
     }
   );
-
 
 /* =====================================================
    FINE
@@ -2814,73 +2484,79 @@ $("resetBtn")
 
 function finishGame(){
 
-  state.running =
-    false;
+  /*
+    Arrivare all'operazione 100
+    non significa necessariamente
+    aver risolto tutti gli esercizi,
+    perché è possibile saltare livelli.
 
+    Se mancano esercizi, restiamo
+    nel gioco e mostriamo la mappa.
+  */
+
+  if(
+    state.solved.length <
+    TOTAL
+  ){
+
+    state.index =
+      TOTAL - 1;
+
+    feedback.className =
+      "feedback hint";
+
+    feedback.textContent =
+      `🗺️ Hai raggiunto la fine del percorso, ma hai risolto ${state.solved.length} esercizi su ${TOTAL}. Usa la mappa per tornare ai livelli che vuoi completare.`;
+
+    renderLevels();
+    saveProgress();
+    focusAnswer();
+
+    return;
+
+  }
+
+  state.running = false;
 
   localStorage.removeItem(
     STORAGE_KEY
   );
 
-
   progressCard
     .classList
-    .add(
-      "hidden"
-    );
-
+    .add("hidden");
 
   gameCard
     .classList
-    .add(
-      "hidden"
-    );
-
+    .add("hidden");
 
   levelMap
     .classList
-    .add(
-      "hidden"
-    );
-
+    .add("hidden");
 
   $("focusBtn")
     .classList
-    .add(
-      "hidden"
-    );
-
+    .add("hidden");
 
   $("soundBtn")
     .classList
-    .add(
-      "hidden"
-    );
-
+    .add("hidden");
 
   $("resetBtn")
     .classList
-    .add(
-      "hidden"
-    );
-
+    .add("hidden");
 
   finishCard
     .classList
-    .remove(
-      "hidden"
-    );
-
+    .remove("hidden");
 
   $("finishText")
     .textContent =
-      `Hai completato tutte le 100 operazioni e raccolto ${state.stars} stelle. Modalità ${difficultyNames[state.difficulty]}.`;
-
+      `Hai risolto tutte le ${TOTAL} operazioni e raccolto ${state.stars} stelle. Modalità ${difficultyNames[state.difficulty]}.`;
 
   confetti();
 
 }
-
 
 /* =====================================================
    NUOVA PARTITA
@@ -2896,22 +2572,19 @@ $("playAgainBtn")
     }
   );
 
-
 /* =====================================================
    CONFETTI
    ===================================================== */
 
 function confetti(){
 
-  const chars =
-    [
-      "⭐",
-      "✨",
-      "🎈",
-      "🚀",
-      "🏆"
-    ];
-
+  const chars = [
+    "⭐",
+    "✨",
+    "🎈",
+    "🚀",
+    "🏆"
+  ];
 
   for(
     let i = 0;
@@ -2924,16 +2597,13 @@ function confetti(){
         "span"
       );
 
-
     s.className =
       "confetti";
-
 
     s.textContent =
       randomFrom(
         chars
       );
-
 
     s.style.left =
       (
@@ -2943,7 +2613,6 @@ function confetti(){
       ) +
       "vw";
 
-
     s.style.animationDelay =
       (
         Math.random() *
@@ -2951,11 +2620,9 @@ function confetti(){
       ) +
       "s";
 
-
     document.body.appendChild(
       s
     );
-
 
     setTimeout(
       () => s.remove(),
@@ -2965,7 +2632,6 @@ function confetti(){
   }
 
 }
-
 
 /* =====================================================
    AVVIO
