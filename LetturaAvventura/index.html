@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#241a44" />
+  <title>La Coppa dei Quattro Regni</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <section id="setup-screen" class="screen active">
+      <div class="hero-card">
+        <div class="eyebrow">Avventura interattiva</div>
+        <h1>La Coppa dei Quattro Regni</h1>
+        <p>Scegli il tuo eroe, dagli un nome e parti per una missione tra calcio, magia e mondi costruiti a blocchi.</p>
+      </div>
+
+      <div class="panel">
+        <label class="field-label" for="player-name">Come si chiama il tuo eroe?</label>
+        <input id="player-name" class="name-input" maxlength="18" autocomplete="off" placeholder="Scrivi un nome" />
+
+        <div class="field-label avatar-title">Scegli il suo aspetto</div>
+        <div id="avatar-grid" class="avatar-grid" aria-label="Scegli un avatar"></div>
+
+        <button id="start-button" class="primary-button" disabled>Inizia l'avventura ✨</button>
+        <button id="continue-button" class="secondary-button hidden">Continua l'avventura</button>
+      </div>
+    </section>
+
+    <section id="game-screen" class="screen">
+      <header class="game-header">
+        <button id="home-button" class="icon-button" aria-label="Torna all'inizio">⌂</button>
+        <div class="progress-wrap">
+          <div class="progress-label"><span id="chapter-label">Capitolo 1</span><span id="scene-count">1/100</span></div>
+          <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+        </div>
+        <button id="audio-button" class="icon-button" aria-label="Ascolta la scena">🔊</button>
+      </header>
+
+      <article class="story-card">
+        <div id="scene-art" class="scene-art" role="img" aria-label="Illustrazione della scena"></div>
+        <div class="story-content">
+          <div class="story-meta"><span id="scene-kicker">Lo stadio incantato</span><span id="inventory-pill">🎒 0</span></div>
+          <h2 id="scene-title"></h2>
+          <p id="scene-text" class="story-text"></p>
+          <div id="choices" class="choices"></div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" aria-live="polite"></div>
+
+  <script src="story.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
