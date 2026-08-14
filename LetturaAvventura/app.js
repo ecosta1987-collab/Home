@@ -10,7 +10,7 @@
   function load(){try{return JSON.parse(localStorage.getItem(KEY)||'null')}catch{return null}}
   function save(){localStorage.setItem(KEY,JSON.stringify(state))}
   function avatar(){return A.avatars.find(a=>a.id===state.avatar)||A.avatars[0]}
-  function say(text){if(!('speechSynthesis'in window))return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text);u.lang='it-IT';u.rate=.88;speechSynthesis.speak(u)}
+  function say(text){if(!('speechSynthesis'in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='it-IT';u.rate=.88;speechSynthesis.speak(u)}
   function showToast(text){toast.textContent=text;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)}
   function personalize(text){return text.replaceAll('{{name}}',state.name||'il nostro eroe')}
   function updateStart(){startBtn.disabled=!(nameInput.value.trim().length>0&&selectedAvatar)}
@@ -23,16 +23,25 @@
 
   function enterGame(){setup.classList.remove('active');game.classList.add('active');renderScene()}
   startBtn.onclick=()=>{state={name:nameInput.value.trim(),avatar:selectedAvatar,scene:'s001',inventory:[],visited:[]};save();enterGame()};
-  const existing=load(); if(existing){continueBtn.classList.remove('hidden');continueBtn.onclick=()=>{state=existing;enterGame()}}
+  const existing=load();if(existing){continueBtn.classList.remove('hidden');continueBtn.onclick=()=>{state=existing;enterGame()}}
+
+  function renderArtwork(s){
+    const av=avatar();
+    sceneArt.innerHTML='';
+    sceneArt.setAttribute('aria-label',`${state.name}, ${av.style}. ${s.title}`);
+    const img=new Image();
+    img.className='scene-image';
+    img.alt=`${state.name}: ${personalize(s.title)}`;
+    img.src=s.image;
+    img.onload=()=>{sceneArt.innerHTML='';sceneArt.appendChild(img)};
+    img.onerror=()=>{sceneArt.innerHTML=`<div class="scene-fallback"><div class="scene-avatar">${av.emoji}</div><div>${s.art}</div></div>`};
+  }
 
   function renderScene(){
-    const s=A.scenes[state.scene]; if(!s)return;
+    const s=A.scenes[state.scene];if(!s)return;
     if(!state.visited.includes(state.scene))state.visited.push(state.scene);
     if(s.gain&&!state.inventory.includes(s.gain)){state.inventory.push(s.gain);showToast(`Hai trovato: ${s.gain} ✨`)}
-    save();
-    const av=avatar();
-    sceneArt.textContent=`${av.emoji}  ${s.art}`;
-    sceneArt.setAttribute('aria-label',`${state.name}, ${av.style}. ${s.title}`);
+    save();renderArtwork(s);
     sceneTitle.textContent=personalize(s.title);sceneText.textContent=personalize(s.text);sceneKicker.textContent=s.kicker;chapterLabel.textContent=s.chapter;
     sceneCount.textContent=`${state.visited.length}/${A.totalScenes}`;progressBar.style.width=`${Math.max(1,(state.visited.length/A.totalScenes)*100)}%`;inventoryPill.textContent=`🎒 ${state.inventory.length}`;
     choices.innerHTML='';
