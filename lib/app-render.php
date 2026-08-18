@@ -33,6 +33,10 @@ function render_legacy_app(string $appKey, bool $syncProgress=true): void {
     $file = dirname(__DIR__) . '/' . $appKey . '/index.html';
     if (!is_file($file)) { http_response_code(404); exit('App non trovata.'); }
     $html = file_get_contents($file);
+
+    $homeButton = '<style>#home-back-button{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;z-index:2147483647;display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border-radius:999px;background:#fff;color:#1f2937;text-decoration:none;font:700 15px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.18);border:1px solid rgba(0,0,0,.08)}#home-back-button:active{transform:translateY(1px)}@media(max-width:520px){#home-back-button{top:max(8px,env(safe-area-inset-top));left:8px;padding:9px 12px;font-size:14px}}</style><a id="home-back-button" href="/" aria-label="Torna alla Home">&#8592; Torna a Home</a>';
+    $html = preg_replace('/<body(.*?)>/i', '<body$1>' . $homeButton, $html, 1);
+
     if ($syncProgress) {
         $state = app_progress_state($profileId, $appKey);
         $bootstrap = '<script>window.HOME_APP_KEY=' . json_encode($appKey) . ';window.HOME_CSRF=' . json_encode(csrf_token()) . ';window.HOME_PROGRESS=' . json_encode($state, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) . ';</script><script src="/assets/profile-sync.js"></script>';
