@@ -27,9 +27,12 @@ $token = json_decode($tokenRaw, true);
 $idToken = $token['id_token'] ?? '';
 if (!$idToken) { http_response_code(401); exit('ID token Google mancante.'); }
 
-$verifyUrl = 'https://oauth2.googleapis.com/tokeninfo?id_token=' . rawurlencode($idToken);
-$verifyRaw = file_get_contents($verifyUrl);
-$google = $verifyRaw ? json_decode($verifyRaw, true) : null;
+$verify = curl_init('https://oauth2.googleapis.com/tokeninfo?id_token=' . rawurlencode($idToken));
+curl_setopt_array($verify, [CURLOPT_RETURNTRANSFER=>true, CURLOPT_TIMEOUT=>10]);
+$verifyRaw = curl_exec($verify);
+$verifyStatus = curl_getinfo($verify, CURLINFO_HTTP_CODE);
+curl_close($verify);
+$google = ($verifyStatus === 200 && $verifyRaw) ? json_decode($verifyRaw, true) : null;
 if (!$google || ($google['aud'] ?? '') !== $config['google_client_id'] || ($google['email_verified'] ?? 'false') !== 'true') {
     http_response_code(401); exit('Identità Google non verificata.');
 }
