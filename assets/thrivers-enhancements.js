@@ -21,22 +21,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const style = document.createElement('style');
   style.textContent = `
     #answersContainer.thrivers-grid-ready {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 6px;
+      overflow-x: hidden;
+      width: 100%;
     }
     .thrivers-score-grid {
       display: grid;
-      min-width: max-content;
+      width: 100%;
+      grid-template-columns: minmax(110px, 1.7fr) repeat(5, minmax(42px, 1fr));
       border: 1px solid #e5e7eb;
       border-radius: 16px;
       overflow: hidden;
       background: white;
     }
     .thrivers-grid-cell {
-      min-width: 118px;
+      min-width: 0;
       min-height: 58px;
-      padding: 10px;
+      padding: 8px 6px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -45,32 +45,35 @@ document.addEventListener('DOMContentLoaded', () => {
       text-align: center;
     }
     .thrivers-grid-cell.header {
-      min-height: 64px;
       background: #eef2ff;
       color: #3730a3;
       font-weight: 800;
-      position: sticky;
-      top: 0;
-      z-index: 1;
     }
-    .thrivers-grid-cell.score {
-      min-width: 92px;
-      background: #f8fafc;
+    .thrivers-grid-cell.child {
       justify-content: flex-start;
       text-align: left;
       font-weight: 800;
-      position: sticky;
-      left: 0;
-      z-index: 2;
+      background: #f8fafc;
+      overflow-wrap: anywhere;
     }
-    .thrivers-grid-cell.corner {
-      min-width: 92px;
-      left: 0;
-      z-index: 3;
+    .thrivers-score-head {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      line-height: 1.05;
+    }
+    .thrivers-score-head strong {
+      font-size: 17px;
+    }
+    .thrivers-score-head small {
+      font-size: 10px;
+      font-weight: 700;
+      color: #64748b;
     }
     .thrivers-radio-label {
       width: 100%;
-      min-height: 38px;
+      min-height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -85,9 +88,26 @@ document.addEventListener('DOMContentLoaded', () => {
       cursor: pointer;
     }
     @media (max-width: 700px) {
-      .thrivers-grid-cell { min-width: 104px; padding: 8px; }
-      .thrivers-grid-cell.score,
-      .thrivers-grid-cell.corner { min-width: 84px; }
+      .thrivers-score-grid {
+        grid-template-columns: minmax(88px, 1.6fr) repeat(5, minmax(38px, 1fr));
+      }
+      .thrivers-grid-cell {
+        padding: 7px 3px;
+        min-height: 54px;
+      }
+      .thrivers-grid-cell.child {
+        font-size: 13px;
+      }
+      .thrivers-score-head strong {
+        font-size: 15px;
+      }
+      .thrivers-score-head small {
+        font-size: 8px;
+      }
+      .thrivers-radio-label input[type="radio"] {
+        width: 22px;
+        height: 22px;
+      }
     }
   `;
   document.head.appendChild(style);
@@ -98,6 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const cell = document.createElement('div');
     cell.className = `thrivers-grid-cell ${className || ''}`.trim();
     if (text !== undefined) cell.textContent = text;
+    return cell;
+  }
+
+  function makeScoreHeader(score) {
+    const cell = makeCell('header');
+    const wrap = document.createElement('div');
+    wrap.className = 'thrivers-score-head';
+    const number = document.createElement('strong');
+    number.textContent = String(score);
+    const label = document.createElement('small');
+    label.textContent = scoreLabels[score - 1];
+    wrap.append(number, label);
+    cell.appendChild(wrap);
     return cell;
   }
 
@@ -116,15 +149,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const grid = document.createElement('div');
     grid.className = 'thrivers-score-grid';
-    grid.style.gridTemplateColumns = `92px repeat(${children.length}, minmax(118px, 1fr))`;
 
-    grid.appendChild(makeCell('header corner', 'Punteggio'));
-    children.forEach(child => grid.appendChild(makeCell('header', child.name)));
-
+    grid.appendChild(makeCell('header', 'Bambino'));
     for (let score = 1; score <= 5; score++) {
-      grid.appendChild(makeCell('score', `${score} · ${scoreLabels[score - 1]}`));
+      grid.appendChild(makeScoreHeader(score));
+    }
 
-      children.forEach(child => {
+    children.forEach(child => {
+      grid.appendChild(makeCell('child', child.name));
+
+      for (let score = 1; score <= 5; score++) {
         const cell = makeCell('');
         const label = document.createElement('label');
         label.className = 'thrivers-radio-label';
@@ -135,8 +169,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         cell.appendChild(label);
         grid.appendChild(cell);
-      });
-    }
+      }
+    });
 
     answersContainer.innerHTML = '';
     answersContainer.classList.add('thrivers-grid-ready');
