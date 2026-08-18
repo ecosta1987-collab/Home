@@ -40,6 +40,9 @@ function render_legacy_app(string $appKey, bool $syncProgress=true): void {
     if ($syncProgress) {
         $state = app_progress_state($profileId, $appKey);
         $bootstrap = '<script>window.HOME_APP_KEY=' . json_encode($appKey) . ';window.HOME_CSRF=' . json_encode(csrf_token()) . ';window.HOME_PROGRESS=' . json_encode($state, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) . ';</script><script src="/assets/profile-sync.js"></script>';
+        if ($appKey === 'Thrivers') {
+            $bootstrap .= '<script src="/assets/thrivers-enhancements.js"></script>';
+        }
         $html = preg_replace('/<head(.*?)>/i', '<head$1>' . $bootstrap, $html, 1);
     }
     echo $html;
