@@ -5,326 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Assessment punti di forza dei bambini</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f4f6fb;
-      color: #1f2937;
-    }
-
-    header {
-      background: #374151;
-      color: white;
-      padding: 24px 16px;
-      text-align: center;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 26px;
-    }
-
-    header p {
-      margin: 8px 0 0;
-      opacity: 0.85;
-    }
-
-    main {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-
-    section {
-      margin: 20px 0;
-      padding: 20px;
-      background: white;
-      border-radius: 18px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    h2 {
-      margin-top: 0;
-    }
-
-    label {
-      display: block;
-      margin: 12px 0;
-      font-weight: 600;
-    }
-
-    input[type="number"],
-    input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      margin-top: 6px;
-      font-size: 16px;
-      border: 1px solid #cbd5e1;
-      border-radius: 12px;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 12px 18px;
-      margin: 8px 6px 8px 0;
-      font-size: 16px;
-      font-weight: 700;
-      cursor: pointer;
-      background: #2563eb;
-      color: white;
-    }
-
-    button:disabled {
-      background: #94a3b8;
-      cursor: not-allowed;
-    }
-
-    button.secondary {
-      background: #64748b;
-    }
-
-    button.danger {
-      background: #dc2626;
-    }
-
-    .child-name-row {
-      margin-bottom: 12px;
-    }
-
-    #questionNumber {
-      color: #2563eb;
-      margin-bottom: 8px;
-    }
-
-    #questionCategory {
-      display: inline-block;
-      margin-bottom: 12px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: #eef2ff;
-      color: #3730a3;
-      font-weight: 700;
-      font-size: 14px;
-    }
-
-    #questionText {
-      font-size: 22px;
-      line-height: 1.35;
-      margin-top: 0;
-    }
-
-    .answer-card {
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 16px;
-      margin: 16px 0;
-      background: #f9fafb;
-    }
-
-    .answer-card h4 {
-      margin: 0 0 12px;
-      font-size: 20px;
-    }
-
-    .options {
-      display: grid;
-      gap: 8px;
-    }
-
-    .option {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      background: white;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      font-weight: 500;
-    }
-        .option input {
-      transform: scale(1.2);
-    }
-
-    .navigation {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-      gap: 10px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      border-bottom: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-
-    th {
-      background: #eef2ff;
-    }
-
-    canvas {
-      max-width: 700px;
-      margin: auto;
-      display: block;
-    }
-
-    @media (max-width:700px){
-
-      #questionText{
-        font-size:19px;
-      }
-
-      .navigation{
-        flex-direction:column;
-      }
-
-      button{
-        width:100%;
-      }
-
-    }
-
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f4f6fb;color:#1f2937}
+    header{background:#374151;color:white;padding:24px 16px;text-align:center}
+    header h1{margin:0;font-size:26px} header p{margin:8px 0 0;opacity:.85}
+    main{max-width:960px;margin:0 auto;padding:16px}
+    section{margin:20px 0;padding:20px;background:white;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+    .hidden{display:none} h2{margin-top:0}
+    label{display:block;margin:12px 0;font-weight:600}
+    input[type="number"],input[type="text"],input[type="date"]{width:100%;padding:12px;margin-top:6px;font-size:16px;border:1px solid #cbd5e1;border-radius:12px}
+    button{border:none;border-radius:999px;padding:12px 18px;margin:8px 6px 8px 0;font-size:16px;font-weight:700;cursor:pointer;background:#2563eb;color:white}
+    button:disabled{background:#94a3b8;cursor:not-allowed} button.secondary{background:#64748b} button.danger{background:#dc2626}
+    .child-name-row{margin-bottom:14px;padding:14px;border:1px solid #e5e7eb;border-radius:14px;background:#f9fafb}
+    .name-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    #questionNumber{color:#2563eb;margin-bottom:8px}
+    #questionCategory{display:inline-block;margin-bottom:12px;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#3730a3;font-weight:700;font-size:14px}
+    #questionText{font-size:22px;line-height:1.35;margin-top:0}
+    .answer-card,.saved-card{border:1px solid #e5e7eb;border-radius:16px;padding:16px;margin:16px 0;background:#f9fafb}
+    .answer-card h4,.saved-card h3{margin:0 0 12px}
+    .options{display:grid;gap:8px}.option{display:flex;align-items:center;gap:10px;padding:10px 12px;background:white;border-radius:12px;border:1px solid #e5e7eb;font-weight:500}.option input{transform:scale(1.2)}
+    .navigation{display:flex;justify-content:space-between;margin-top:20px;gap:10px}
+    table{width:100%;border-collapse:collapse;margin-top:20px} th,td{border-bottom:1px solid #ddd;padding:10px;text-align:left} th{background:#eef2ff}
+    canvas{max-width:700px;margin:auto;display:block}
+    .muted{color:#64748b;font-size:14px}.saved-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}.saved-actions{display:flex;gap:6px;flex-wrap:wrap}
+    @media(max-width:700px){#questionText{font-size:19px}.navigation,.name-grid{grid-template-columns:1fr;display:grid}.navigation{flex-direction:column}button{width:100%}.saved-actions{width:100%}.saved-actions button{width:100%}}
   </style>
-
 </head>
-
 <body>
-
 <header>
-
-<h1>Assessment dei Punti di Forza del Carattere</h1>
-
-<p>Valutazione contemporanea di più bambini</p>
-
+  <h1>Assessment dei Punti di Forza del Carattere</h1>
+  <p>Valutazione contemporanea di più bambini</p>
 </header>
-
 <main>
-
 <section id="setup">
+  <h2>Configurazione</h2>
+  <label>Data del questionario
+    <input id="questionnaireDate" type="date">
+  </label>
+  <label>Numero bambini
+    <input id="numChildren" type="number" min="1" max="10" value="1">
+  </label>
+  <div id="childrenNames"></div>
+  <button id="createChildren">Aggiorna elenco</button>
+  <button id="startButton">Inizia Assessment</button>
+</section>
 
-<h2>Configurazione</h2>
-
-<label>
-
-Numero bambini
-
-<input id="numChildren"
-type="number"
-min="1"
-max="10"
-value="2">
-
-</label>
-
-<div id="childrenNames"></div>
-
-<button id="createChildren">
-
-Aggiorna elenco
-
-</button>
-
-<button id="startButton">
-
-Inizia Assessment
-
-</button>
-
+<section id="savedAssessments">
+  <h2>Bambini e questionari salvati</h2>
+  <p class="muted">Ogni risultato completato viene salvato con nome, cognome e data del questionario.</p>
+  <div id="savedList"></div>
 </section>
 
 <section id="assessment" class="hidden">
-
-<div id="questionNumber"></div>
-
-<div id="questionCategory"></div>
-
-<h2 id="questionText"></h2>
-
-<div id="answersContainer"></div>
-
-<div class="navigation">
-
-<button id="previousButton">
-
-← Indietro
-
-</button>
-
-<button id="nextButton">
-
-Avanti →
-
-</button>
-
-</div>
-
+  <div id="questionNumber"></div>
+  <div id="questionCategory"></div>
+  <h2 id="questionText"></h2>
+  <div id="answersContainer"></div>
+  <div class="navigation">
+    <button id="previousButton">← Indietro</button>
+    <button id="nextButton">Avanti →</button>
+  </div>
 </section>
 
 <section id="results" class="hidden">
-
-<h2>Risultati</h2>
-
-<canvas id="radarChart"></canvas>
-
-<div id="summary"></div>
-
-<br>
-
-<button id="restartButton" class="secondary">
-
-Nuovo assessment
-
-</button>
-
+  <h2>Risultati</h2>
+  <p id="resultDate" class="muted"></p>
+  <canvas id="radarChart"></canvas>
+  <div id="summary"></div>
+  <br>
+  <button id="restartButton" class="secondary">Nuovo assessment</button>
 </section>
-
 </main>
 
 <script>
-
-const categories=[
-"Autostima",
-"Empatia",
-"Integrità",
-"Autocontrollo",
-"Curiosità",
-"Perseveranza",
-"Ottimismo"
-];
-
-const labels=[
-"Mai",
-"Raramente",
-"A volte",
-"Spesso",
-"Sempre"
-];
-
+const CURRENT_KEY="assessmentCarattereBambini";
+const ARCHIVE_KEY="thriversSavedChildrenV1";
+const categories=["Autostima","Empatia","Integrità","Autocontrollo","Curiosità","Perseveranza","Ottimismo"];
+const labels=["Mai","Raramente","A volte","Spesso","Sempre"];
 const questions=[
-
 {category:"Autostima",text:"Sa descrivere facilmente e con precisione i propri punti di forza e le proprie qualità positive."},
 {category:"Autostima",text:"È fiero delle proprie capacità e ama essere sé stesso."},
 {category:"Autostima",text:"Si concentra soprattutto sui propri punti di forza."},
 {category:"Autostima",text:"Parla di sé in modo prevalentemente positivo."},
 {category:"Autostima",text:"Ha hobby e interessi che valorizzano i suoi talenti."},
-
 {category:"Empatia",text:"Mostra sensibilità verso i bisogni e i sentimenti degli altri."},
 {category:"Empatia",text:"Riconosce quando qualcuno è in difficoltà."},
 {category:"Empatia",text:"Cerca di comprendere il punto di vista degli altri."},
@@ -335,43 +99,40 @@ const questions=[
 {category:"Integrità",text:"Prova dispiacere quando compie un'azione sbagliata."},
 {category:"Integrità",text:"Ha raramente bisogno che gli venga ricordato come comportarsi."},
 {category:"Integrità",text:"Fa la cosa giusta anche quando nessuno lo osserva."},
-
 {category:"Autocontrollo",text:"Controlla impulsi e desideri senza l'aiuto di un adulto."},
 {category:"Autocontrollo",text:"Si calma facilmente dopo essersi arrabbiato o agitato."},
 {category:"Autocontrollo",text:"Riconosce le proprie emozioni prima che prendano il sopravvento."},
 {category:"Autocontrollo",text:"Sa aspettare senza perdere il controllo."},
 {category:"Autocontrollo",text:"Mantiene l'attenzione su attività adeguate alla sua età."},
-
 {category:"Curiosità",text:"Fa molte domande per capire meglio il mondo."},
 {category:"Curiosità",text:"Gli piace trovare modi nuovi per risolvere i problemi."},
 {category:"Curiosità",text:"Ama imparare cose nuove."},
 {category:"Curiosità",text:"È incuriosito da attività nuove o insolite."},
 {category:"Curiosità",text:"Accetta di poter sbagliare e prova strategie diverse."},
-
 {category:"Perseveranza",text:"Affronta nuovi compiti senza eccessiva paura di sbagliare."},
 {category:"Perseveranza",text:"Sa che migliorare richiede impegno."},
 {category:"Perseveranza",text:"Continua a provarci anche quando qualcosa è difficile."},
 {category:"Perseveranza",text:"Se non riesce, riprova."},
 {category:"Perseveranza",text:"Considera gli errori come occasioni per imparare."},
-
 {category:"Ottimismo",text:"Esprime gratitudine per le cose positive."},
 {category:"Ottimismo",text:"Parla a sé stesso in modo positivo."},
 {category:"Ottimismo",text:"Perdona invece di incolpare gli altri."},
 {category:"Ottimismo",text:"Trova un aspetto positivo anche nelle difficoltà."},
 {category:"Ottimismo",text:"Considera gli insuccessi come temporanei."}
-
 ];
 
 let children=[];
 let answers={};
 let currentQuestion=0;
+let questionnaireDate="";
+let assessmentId="";
 let radar=null;
 
 const setup=document.getElementById("setup");
 const assessment=document.getElementById("assessment");
 const results=document.getElementById("results");
-
 const namesDiv=document.getElementById("childrenNames");
+const savedList=document.getElementById("savedList");
 
 document.getElementById("createChildren").onclick=createChildrenInputs;
 document.getElementById("startButton").onclick=startAssessment;
@@ -379,333 +140,183 @@ document.getElementById("previousButton").onclick=previousQuestion;
 document.getElementById("nextButton").onclick=nextQuestion;
 document.getElementById("restartButton").onclick=restart;
 
+document.getElementById("questionnaireDate").value=todayString();
 createChildrenInputs();
+renderSaved();
+load();
+
+function todayString(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+function uid(prefix="id"){return prefix+Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
+function fullName(child){return `${child.firstName||""} ${child.lastName||""}`.trim()||"Bambino"}
+function formatDate(value){if(!value)return "";const [y,m,d]=value.split("-");return `${d}/${m}/${y}`}
+function escapeHtml(value){return String(value??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
 
 function createChildrenInputs(){
-
-namesDiv.innerHTML="";
-
-const n=parseInt(document.getElementById("numChildren").value);
-
-for(let i=0;i<n;i++){
-
-const div=document.createElement("div");
-div.className="child-name-row";
-
-div.innerHTML=`
-<label>Nome bambino ${i+1}
-<input type="text" value="Bambino ${i+1}">
-</label>`;
-
-namesDiv.appendChild(div);
-
-}
-
+  const previous=[...namesDiv.querySelectorAll(".child-name-row")].map(row=>({
+    firstName:row.querySelector(".first-name")?.value||"",
+    lastName:row.querySelector(".last-name")?.value||""
+  }));
+  namesDiv.innerHTML="";
+  const n=Math.max(1,Math.min(10,parseInt(document.getElementById("numChildren").value)||1));
+  for(let i=0;i<n;i++){
+    const old=previous[i]||{};
+    const div=document.createElement("div");
+    div.className="child-name-row";
+    div.innerHTML=`<strong>Bambino ${i+1}</strong><div class="name-grid">
+      <label>Nome<input class="first-name" type="text" value="${escapeHtml(old.firstName||"")}" autocomplete="off"></label>
+      <label>Cognome<input class="last-name" type="text" value="${escapeHtml(old.lastName||"")}" autocomplete="off"></label>
+    </div>`;
+    namesDiv.appendChild(div);
+  }
 }
 
 function startAssessment(){
-
-children=[...namesDiv.querySelectorAll("input")].map(e=>e.value||"Bambino");
-
-answers={};
-
-children.forEach(c=>{
-answers[c]=Array(35).fill(null);
-});
-
-currentQuestion=0;
-
-setup.classList.add("hidden");
-assessment.classList.remove("hidden");
-
-showQuestion();
-
+  questionnaireDate=document.getElementById("questionnaireDate").value||todayString();
+  children=[...namesDiv.querySelectorAll(".child-name-row")].map((row,i)=>({
+    id:uid("child"),
+    firstName:row.querySelector(".first-name").value.trim(),
+    lastName:row.querySelector(".last-name").value.trim()
+  }));
+  if(children.some(c=>!c.firstName||!c.lastName)){
+    alert("Inserisci nome e cognome di ogni bambino.");
+    return;
+  }
+  assessmentId=uid("assessment");
+  answers={};
+  children.forEach(c=>answers[c.id]=Array(questions.length).fill(null));
+  currentQuestion=0;
+  setup.classList.add("hidden");
+  document.getElementById("savedAssessments").classList.add("hidden");
+  assessment.classList.remove("hidden");
+  results.classList.add("hidden");
+  showQuestion();
 }
 
 function showQuestion(){
-
-const q=questions[currentQuestion];
-
-document.getElementById("questionNumber").innerHTML=
-`Domanda ${currentQuestion+1} di ${questions.length}`;
-
-document.getElementById("questionCategory").innerHTML=q.category;
-
-document.getElementById("questionText").innerHTML=q.text;
-
-const container=document.getElementById("answersContainer");
-
-container.innerHTML="";
-children.forEach(child=>{
-
-const card=document.createElement("div");
-card.className="answer-card";
-
-const title=document.createElement("h4");
-title.textContent=child;
-
-const options=document.createElement("div");
-options.className="options";
-
-for(let score=1;score<=5;score++){
-
-const label=document.createElement("label");
-label.className="option";
-
-const radio=document.createElement("input");
-radio.type="radio";
-radio.name=`${child}-${currentQuestion}`;
-radio.value=score;
-
-if(answers[child][currentQuestion]===score){
-radio.checked=true;
+  const q=questions[currentQuestion];
+  document.getElementById("questionNumber").textContent=`Domanda ${currentQuestion+1} di ${questions.length}`;
+  document.getElementById("questionCategory").textContent=q.category;
+  document.getElementById("questionText").textContent=q.text;
+  const container=document.getElementById("answersContainer");
+  container.innerHTML="";
+  children.forEach(child=>{
+    const card=document.createElement("div");card.className="answer-card";
+    const title=document.createElement("h4");title.textContent=fullName(child);card.appendChild(title);
+    const options=document.createElement("div");options.className="options";
+    for(let score=1;score<=5;score++){
+      const label=document.createElement("label");label.className="option";
+      const radio=document.createElement("input");radio.type="radio";radio.name=`${child.id}-${currentQuestion}`;radio.value=score;
+      if(answers[child.id]?.[currentQuestion]===score)radio.checked=true;
+      radio.onchange=()=>{answers[child.id][currentQuestion]=score;saveCurrent()};
+      const span=document.createElement("span");span.textContent=`${score} - ${labels[score-1]}`;
+      label.append(radio,span);options.appendChild(label);
+    }
+    card.appendChild(options);container.appendChild(card);
+  });
+  document.getElementById("previousButton").disabled=currentQuestion===0;
+  document.getElementById("nextButton").textContent=currentQuestion===questions.length-1?"Mostra risultati":"Avanti →";
+  saveCurrent();
 }
-
-radio.onchange=()=>{
-answers[child][currentQuestion]=score;
-save();
-};
-
-const span=document.createElement("span");
-span.textContent=`${score} - ${labels[score-1]}`;
-
-label.appendChild(radio);
-label.appendChild(span);
-options.appendChild(label);
-
-}
-
-card.appendChild(title);
-card.appendChild(options);
-container.appendChild(card);
-
-});
-
-document.getElementById("previousButton").disabled=currentQuestion===0;
-
-document.getElementById("nextButton").textContent=
-currentQuestion===questions.length-1 ? "Mostra risultati" : "Avanti →";
-
-save();
-
-}
-
-function previousQuestion(){
-
-if(currentQuestion>0){
-currentQuestion--;
-showQuestion();
-}
-
-}
-
+function previousQuestion(){if(currentQuestion>0){currentQuestion--;showQuestion()}}
 function nextQuestion(){
-
-if(!isComplete()){
-alert("Rispondi alla domanda per tutti i bambini prima di continuare.");
-return;
-}
-
-if(currentQuestion<questions.length-1){
-currentQuestion++;
-showQuestion();
-}else{
-showResults();
-}
-
-}
-
-function isComplete(){
-
-return children.every(child=>answers[child][currentQuestion]!==null);
-
+  if(!children.every(c=>answers[c.id]?.[currentQuestion]!=null)){alert("Rispondi alla domanda per tutti i bambini prima di continuare.");return}
+  if(currentQuestion<questions.length-1){currentQuestion++;showQuestion()}else{showResults()}
 }
 
 function calculateScores(){
-
-const scores={};
-
-children.forEach(child=>{
-
-scores[child]={};
-
-categories.forEach(cat=>{
-scores[child][cat]=0;
-});
-
-questions.forEach((q,i)=>{
-scores[child][q.category]+=answers[child][i];
-});
-
-});
-
-return scores;
-
+  const scores={};
+  children.forEach(child=>{
+    scores[child.id]={};categories.forEach(cat=>scores[child.id][cat]=0);
+    questions.forEach((q,i)=>scores[child.id][q.category]+=Number(answers[child.id][i]||0));
+  });
+  return scores;
 }
-
 function showResults(){
-
-const scores=calculateScores();
-
-assessment.classList.add("hidden");
-results.classList.remove("hidden");
-
-drawRadar(scores);
-drawSummary(scores);
-
-save();
-
+  const scores=calculateScores();
+  assessment.classList.add("hidden");results.classList.remove("hidden");
+  document.getElementById("resultDate").textContent=`Data questionario: ${formatDate(questionnaireDate)}`;
+  drawRadar(scores);drawSummary(scores);saveCompleted(scores);saveCurrent();
 }
-
 function drawRadar(scores){
-
-const ctx=document.getElementById("radarChart");
-
-if(radar){
-radar.destroy();
-}
-
-radar=new Chart(ctx,{
-type:"radar",
-data:{
-labels:categories,
-datasets:children.map(child=>({
-label:child,
-data:categories.map(cat=>scores[child][cat]),
-fill:true
-}))
-},
-options:{
-responsive:true,
-scales:{
-r:{
-min:0,
-max:25,
-ticks:{
-stepSize:5
-}
-}
-}
-}
-});
-
+  const ctx=document.getElementById("radarChart");if(radar)radar.destroy();
+  radar=new Chart(ctx,{type:"radar",data:{labels:categories,datasets:children.map(child=>({label:fullName(child),data:categories.map(cat=>scores[child.id][cat]),fill:true}))},options:{responsive:true,scales:{r:{min:0,max:25,ticks:{stepSize:5}}}}});
 }
 function drawSummary(scores){
-
-const summary=document.getElementById("summary");
-summary.innerHTML="";
-
-children.forEach(child=>{
-
-const ordered=Object.entries(scores[child])
-.sort((a,b)=>b[1]-a[1]);
-
-const strongest=ordered[0];
-const weakest=ordered[ordered.length-1];
-
-const div=document.createElement("div");
-div.className="answer-card";
-
-div.innerHTML=`
-<h3>${child}</h3>
-<p><strong>Punto di forza principale:</strong> ${strongest[0]} (${strongest[1]}/25)</p>
-<p><strong>Area da incoraggiare:</strong> ${weakest[0]} (${weakest[1]}/25)</p>
-<table>
-<tr>
-<th>Area</th>
-<th>Punteggio</th>
-</tr>
-${ordered.map(([cat,score])=>`
-<tr>
-<td>${cat}</td>
-<td>${score}/25</td>
-</tr>
-`).join("")}
-</table>
-`;
-
-summary.appendChild(div);
-
-});
-
+  const summary=document.getElementById("summary");summary.innerHTML="";
+  children.forEach(child=>{
+    const ordered=Object.entries(scores[child.id]).sort((a,b)=>b[1]-a[1]);
+    const strongest=ordered[0],weakest=ordered[ordered.length-1];
+    const div=document.createElement("div");div.className="answer-card";
+    div.innerHTML=`<h3>${escapeHtml(fullName(child))}</h3><p><strong>Punto di forza principale:</strong> ${strongest[0]} (${strongest[1]}/25)</p><p><strong>Area da incoraggiare:</strong> ${weakest[0]} (${weakest[1]}/25)</p><table><tr><th>Area</th><th>Punteggio</th></tr>${ordered.map(([cat,score])=>`<tr><td>${cat}</td><td>${score}/25</td></tr>`).join("")}</table>`;
+    summary.appendChild(div);
+  });
 }
 
-function save(){
-
-const data={
-children,
-answers,
-currentQuestion,
-screen:results.classList.contains("hidden") ? "assessment" : "results"
-};
-
-localStorage.setItem("assessmentCarattereBambini",JSON.stringify(data));
-
+function loadArchive(){try{const v=JSON.parse(localStorage.getItem(ARCHIVE_KEY)||"[]");return Array.isArray(v)?v:[]}catch{return []}}
+function saveCompleted(scores){
+  let archive=loadArchive();
+  children.forEach(child=>{
+    const record={id:`${assessmentId}-${child.id}`,assessmentId,childId:child.id,firstName:child.firstName,lastName:child.lastName,questionnaireDate,answers:[...(answers[child.id]||[])],scores:scores[child.id],savedAt:new Date().toISOString()};
+    const idx=archive.findIndex(r=>r.id===record.id);
+    if(idx>=0)archive[idx]=record;else archive.unshift(record);
+  });
+  localStorage.setItem(ARCHIVE_KEY,JSON.stringify(archive));
+  renderSaved();
+}
+function renderSaved(){
+  const archive=loadArchive();savedList.innerHTML="";
+  if(!archive.length){savedList.innerHTML='<p class="muted">Nessun questionario salvato.</p>';return}
+  archive.sort((a,b)=>(b.questionnaireDate||"").localeCompare(a.questionnaireDate||"")).forEach(record=>{
+    const ordered=Object.entries(record.scores||{}).sort((a,b)=>b[1]-a[1]);
+    const card=document.createElement("div");card.className="saved-card";
+    card.innerHTML=`<div class="saved-head"><div><h3>${escapeHtml(`${record.firstName||""} ${record.lastName||""}`.trim())}</h3><div class="muted">Questionario del ${formatDate(record.questionnaireDate)}</div></div><div class="saved-actions"><button class="secondary" data-view="${escapeHtml(record.id)}">Vedi risultati</button><button class="danger" data-delete="${escapeHtml(record.id)}">Elimina</button></div></div>${ordered.length?`<p><strong>Punto di forza:</strong> ${ordered[0][0]} (${ordered[0][1]}/25)</p>`:""}`;
+    savedList.appendChild(card);
+  });
+  savedList.querySelectorAll("[data-delete]").forEach(btn=>btn.onclick=()=>deleteSaved(btn.dataset.delete));
+  savedList.querySelectorAll("[data-view]").forEach(btn=>btn.onclick=()=>viewSaved(btn.dataset.view));
+}
+function deleteSaved(id){
+  if(!confirm("Eliminare questo questionario salvato?"))return;
+  localStorage.setItem(ARCHIVE_KEY,JSON.stringify(loadArchive().filter(r=>r.id!==id)));renderSaved();
+}
+function viewSaved(id){
+  const record=loadArchive().find(r=>r.id===id);if(!record)return;
+  children=[{id:record.childId||uid("child"),firstName:record.firstName||"",lastName:record.lastName||""}];
+  answers={[children[0].id]:record.answers||Array(questions.length).fill(null)};
+  questionnaireDate=record.questionnaireDate||"";assessmentId=record.assessmentId||uid("assessment");
+  setup.classList.add("hidden");document.getElementById("savedAssessments").classList.add("hidden");assessment.classList.add("hidden");results.classList.remove("hidden");
+  document.getElementById("resultDate").textContent=`Data questionario: ${formatDate(questionnaireDate)}`;
+  const scores={[children[0].id]:record.scores||{}};drawRadar(scores);drawSummary(scores);
 }
 
+function saveCurrent(){
+  const data={children,answers,currentQuestion,questionnaireDate,assessmentId,screen:results.classList.contains("hidden")?"assessment":"results"};
+  localStorage.setItem(CURRENT_KEY,JSON.stringify(data));
+}
 function load(){
-
-const raw=localStorage.getItem("assessmentCarattereBambini");
-
-if(!raw){
-return;
+  const raw=localStorage.getItem(CURRENT_KEY);if(!raw)return;
+  try{
+    const data=JSON.parse(raw);if(!data.children||!data.answers)return;
+    children=data.children.map((c,i)=>typeof c==="string"?{id:`legacy${i}`,firstName:c,lastName:""}:c);
+    answers=data.answers;currentQuestion=data.currentQuestion||0;questionnaireDate=data.questionnaireDate||todayString();assessmentId=data.assessmentId||uid("assessment");
+    if(children.some(c=>!answers[c.id])){
+      const legacy={};Object.keys(answers).forEach((k,i)=>{if(children[i])legacy[children[i].id]=answers[k]});answers=legacy;
+    }
+    setup.classList.add("hidden");document.getElementById("savedAssessments").classList.add("hidden");
+    if(data.screen==="results"){
+      results.classList.remove("hidden");assessment.classList.add("hidden");document.getElementById("resultDate").textContent=`Data questionario: ${formatDate(questionnaireDate)}`;const scores=calculateScores();drawRadar(scores);drawSummary(scores);
+    }else{assessment.classList.remove("hidden");results.classList.add("hidden");showQuestion()}
+  }catch(e){console.error(e)}
 }
-
-try{
-
-const data=JSON.parse(raw);
-
-if(!data.children || !data.answers){
-return;
-}
-
-children=data.children;
-answers=data.answers;
-currentQuestion=data.currentQuestion || 0;
-
-setup.classList.add("hidden");
-
-if(data.screen==="results"){
-results.classList.remove("hidden");
-assessment.classList.add("hidden");
-const scores=calculateScores();
-drawRadar(scores);
-drawSummary(scores);
-}else{
-assessment.classList.remove("hidden");
-results.classList.add("hidden");
-showQuestion();
-}
-
-}catch(e){
-console.error(e);
-}
-
-}
-
 function restart(){
-
-if(!confirm("Vuoi cancellare i dati salvati e iniziare un nuovo assessment?")){
-return;
+  if(!confirm("Vuoi chiudere il questionario corrente e iniziarne uno nuovo? I questionari completati resteranno salvati."))return;
+  localStorage.removeItem(CURRENT_KEY);children=[];answers={};currentQuestion=0;questionnaireDate="";assessmentId="";
+  results.classList.add("hidden");assessment.classList.add("hidden");setup.classList.remove("hidden");document.getElementById("savedAssessments").classList.remove("hidden");
+  document.getElementById("questionnaireDate").value=todayString();document.getElementById("numChildren").value=1;createChildrenInputs();renderSaved();
 }
-
-localStorage.removeItem("assessmentCarattereBambini");
-
-children=[];
-answers={};
-currentQuestion=0;
-
-results.classList.add("hidden");
-assessment.classList.add("hidden");
-setup.classList.remove("hidden");
-
-createChildrenInputs();
-
-}
-
-load();
-
 </script>
-
 </body>
 </html>
