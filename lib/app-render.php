@@ -18,16 +18,25 @@ function app_allowed(string $appKey): bool {
     $v = $stmt->fetchColumn();
     return $v === false ? true : (bool)$v;
 }
+function app_progress_state(int $profileId, string $appKey): array {
+    $stmt = db()->prepare('SELECT state_json FROM app_progress WHERE profile_id=? AND app_key=?');
+    $stmt->execute([$profileId, $appKey]);
+    $raw = $stmt->fetchColumn();
+    if (!$raw) return [];
+    $decoded = json_decode((string)$raw, true);
+    return is_array($decoded) ? $decoded : [];
+}
 function render_legacy_app(string $appKey, bool $syncProgress=true): void {
     require_login();
     if (!app_allowed($appKey)) { http_response_code(403); exit('Questa app non è attiva per il tuo account.'); }
-    if ($syncProgress) require_profile();
+    $profileId = $syncProgress ? require_profile() : null;
     $file = dirname(__DIR__) . '/' . $appKey . '/index.html';
     if (!is_file($file)) { http_response_code(404); exit('App non trovata.'); }
     $html = file_get_contents($file);
     if ($syncProgress) {
-        $tag = '<script>window.HOME_APP_KEY=' . json_encode($appKey) . ';window.HOME_CSRF=' . json_encode(csrf_token()) . ';</script><script src="/assets/profile-sync.js"></script>';
-        $html = str_replace('</body>', $tag . '</body>', $html);
+        $state = app_progress_state($profileId, $appKey);
+        $bootstrap = '<script>window.HOME_APP_KEY=' . json_encode($appKey) . ';window.HOME_CSRF=' . json_encode(csrf_token()) . ';window.HOME_PROGRESS=' . json_encode($state, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) . ';</script><script src="/assets/profile-sync.js"></script>';
+        $html = preg_replace('/<head(.*?)>/i', '<head$1>' . $bootstrap, $html, 1);
     }
     echo $html;
 }
