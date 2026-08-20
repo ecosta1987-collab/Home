@@ -16,7 +16,7 @@ require_csrf();
 $payload = json_decode(file_get_contents('php://input'), true);
 $appKey = $payload['app_key'] ?? '';
 $state = $payload['state'] ?? null;
-$allowed = ['Compiti','CompitiVacanze','Lettura','LetturaAvventura','Operazioni','Thrivers'];
+$allowed = ['Compiti','CompitiVacanze','Lettura','LetturaAvventura','MissioneNumeri','Operazioni','Thrivers'];
 if (!in_array($appKey, $allowed, true) || !is_array($state)) { http_response_code(400); exit('Dati non validi'); }
 if (!app_allowed($appKey)) { http_response_code(403); exit; }
 $json = json_encode($state, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);
