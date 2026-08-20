@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../lib/bootstrap.php';
 require_admin();
-$apps=['Compiti'=>'Compiti','Lettura'=>'Lettura','LetturaAvventura'=>'Lettura Avventura','Operazioni'=>'Operazioni','Scala'=>'Scala','Thrivers'=>'Thrivers'];
+$apps=['Compiti'=>'Compiti','Lettura'=>'Lettura','LetturaAvventura'=>'Lettura Avventura','MissioneNumeri'=>'Missione Numeri','Operazioni'=>'Operazioni','Scala'=>'Scala','Thrivers'=>'Thrivers'];
 if($_SERVER['REQUEST_METHOD']==='POST'){
   require_csrf();
   $userId=(int)($_POST['user_id']??0);$appKey=$_POST['app_key']??'';$enabled=isset($_POST['enabled'])?1:0;
