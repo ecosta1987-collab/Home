@@ -1,5 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
   const button = document.getElementById('restartButton');
+  const startButton = document.getElementById('startButton');
+  const countInput = document.getElementById('numChildren');
+
+  if (startButton && typeof startAssessment === 'function') {
+    startButton.onclick = () => {
+      let count = parseInt(countInput?.value || '1', 10);
+      if (!Number.isFinite(count)) count = 1;
+      count = Math.max(1, Math.min(10, count));
+      if (countInput) countInput.value = count;
+
+      if (typeof createChildrenInputs === 'function') {
+        createChildrenInputs();
+      }
+
+      startAssessment();
+    };
+  }
+
   if (!button) return;
 
   button.textContent = 'Torna a homepage';
@@ -25,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const setupSection = document.getElementById('setup');
     const savedSection = document.getElementById('savedAssessments');
     const dateInput = document.getElementById('questionnaireDate');
-    const countInput = document.getElementById('numChildren');
 
     resultsSection?.classList.add('hidden');
     assessmentSection?.classList.add('hidden');
