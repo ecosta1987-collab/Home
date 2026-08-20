@@ -8,7 +8,7 @@ $apps = [
   'Lettura' => ['label'=>'Lettura','emoji'=>'📖'],
   'LetturaAvventura' => ['label'=>'Lettura Avventura','emoji'=>'⚽'],
   'Operazioni' => ['label'=>'Operazioni','emoji'=>'➗'],
-  'Scala' => ['label'=>'Scala','emoji'=>'🎵'],
+  'Scala' => ['label'=>'Scala','emoji'=>'🃏'],
   'Thrivers' => ['label'=>'Thrivers','emoji'=>'🌱'],
 ];
 
