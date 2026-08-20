@@ -13,7 +13,7 @@ $categories = [
     'LetturaAvventura' => ['label'=>'Lettura Avventura','emoji'=>'⚽'],
   ],
   'Giochi' => [
-    'Scala' => ['label'=>'Scala','emoji'=>'🃏'],
+    'Scala 40' => ['label'=>'Scala','emoji'=>'🃏'],
   ],
   'Crescita' => [
     'Thrivers' => ['label'=>'Thrivers','emoji'=>'🌱'],
