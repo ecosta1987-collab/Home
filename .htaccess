@@ -8,6 +8,18 @@ RewriteRule ^(?:lib|database)/ - [F,L]
   Require all denied
 </FilesMatch>
 
-# Impedisce di bypassare i wrapper PHP aprendo direttamente i vecchi index.html.
+# La radice del sito e' pubblica: non usare il vecchio index.html.
 RewriteRule ^index\.html$ / [R=302,L,NC]
-RewriteRule ^(Compiti|CompitiVacanze|Lettura|LetturaAvventura|Operazioni|Scala|Thrivers)/index\.html$ /$1/ [R=302,L,NC]
+
+# URL pubblici delle applicazioni: /Applicazioni/NomeApp/
+RewriteRule ^Applicazioni/(Compiti|Lettura|LetturaAvventura|Operazioni|Scala|Thrivers)/index\.html$ /Applicazioni/$1/ [R=302,L,NC]
+RewriteRule ^Applicazioni/(Compiti|Lettura|LetturaAvventura|Operazioni|Scala|Thrivers)/?$ /$1/index.php [L,NC]
+RewriteRule ^Applicazioni/(Compiti|Lettura|LetturaAvventura|Operazioni|Scala|Thrivers)/(.*)$ /$1/$2 [L,NC]
+
+# I vecchi indirizzi alla radice vengono portati ai nuovi URL.
+RewriteCond %{THE_REQUEST} \s/+((?:Compiti|Lettura|LetturaAvventura|Operazioni|Scala|Thrivers))(?:/|[?\s]) [NC]
+RewriteRule ^(Compiti|Lettura|LetturaAvventura|Operazioni|Scala|Thrivers)(?:/.*)?$ /Applicazioni/$1/ [R=302,L,NE]
+
+# CompitiVacanze non fa piu' parte del menu applicazioni.
+RewriteCond %{THE_REQUEST} \s/+CompitiVacanze(?:/|[?\s]) [NC]
+RewriteRule ^CompitiVacanze(?:/.*)?$ /Applicazioni/ [R=302,L,NE]
