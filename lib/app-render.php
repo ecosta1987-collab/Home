@@ -35,7 +35,20 @@ function render_legacy_app(string $appKey, bool $syncProgress=true): void {
     $html = file_get_contents($file);
 
     $homeButton = '<style>#home-back-button{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;z-index:2147483647;display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border-radius:999px;background:#fff;color:#1f2937;text-decoration:none;font:700 15px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.18);border:1px solid rgba(0,0,0,.08)}#home-back-button:active{transform:translateY(1px)}@media(max-width:520px){#home-back-button{top:max(8px,env(safe-area-inset-top));left:8px;padding:9px 12px;font-size:14px}}</style><a id="home-back-button" href="/Applicazioni/" aria-label="Torna alle Applicazioni">&#8592; Torna alle Applicazioni</a>';
-    $html = preg_replace('/<body(.*?)>/i', '<body$1>' . $homeButton, $html, 1);
+
+    // Cerca il vero tag <body> solo dopo la chiusura di <head>, evitando
+    // eventuali stringhe "<body>" presenti in CSS, commenti o script.
+    $headEnd = stripos($html, '</head>');
+    if ($headEnd !== false) {
+        $bodyStart = stripos($html, '<body', $headEnd + 7);
+        if ($bodyStart !== false) {
+            $bodyTagEnd = strpos($html, '>', $bodyStart);
+            if ($bodyTagEnd !== false) {
+                $insertAt = $bodyTagEnd + 1;
+                $html = substr($html, 0, $insertAt) . $homeButton . substr($html, $insertAt);
+            }
+        }
+    }
 
     if ($syncProgress) {
         $state = app_progress_state($profileId, $appKey);
