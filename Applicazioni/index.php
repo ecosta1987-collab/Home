@@ -11,6 +11,7 @@ $categories = [
   ],
   'Apprendimento' => [
     'LetturaAvventura' => ['label'=>'Lettura Avventura','emoji'=>'⚽'],
+    'MissioneNumeri' => ['label'=>'Missione Numeri','emoji'=>'🔢'],
   ],
   'Giochi' => [
     'Scala 40' => ['label'=>'Scala','emoji'=>'🃏'],
