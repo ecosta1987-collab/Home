@@ -14,7 +14,7 @@ $categories = [
     'MissioneNumeri' => ['label'=>'Missione Numeri','emoji'=>'🔢'],
   ],
   'Giochi' => [
-    'Scala 40' => ['label'=>'Scala 40','emoji'=>'🃏'],
+    'Scala' => ['label'=>'Scala 40','emoji'=>'🃏'],
   ],
   'Crescita' => [
     'Thrivers' => ['label'=>'Thrivers','emoji'=>'🌱'],
