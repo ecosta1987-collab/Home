@@ -5,19 +5,19 @@ require_profile();
 
 $categories = [
   'Scuola' => [
-    'Compiti' => ['label'=>'Compiti','emoji'=>'✏️'],
-    'Operazioni' => ['label'=>'Operazioni','emoji'=>'➗'],
-    'Lettura' => ['label'=>'Lettura','emoji'=>'📖'],
+    'Compiti' => ['label'=>'Compiti','emoji'=>'✏️','author'=>'Elisa'],
+    'Operazioni' => ['label'=>'Operazioni','emoji'=>'➗','author'=>'Elisa'],
+    'Lettura' => ['label'=>'Lettura','emoji'=>'📖','author'=>'Elisa'],
   ],
   'Apprendimento' => [
-    'LetturaAvventura' => ['label'=>'Lettura Avventura','emoji'=>'⚽'],
-    'MissioneNumeri' => ['label'=>'Missione Numeri','emoji'=>'🔢'],
+    'LetturaAvventura' => ['label'=>'Lettura Avventura','emoji'=>'⚽','author'=>'Elisa'],
+    'MissioneNumeri' => ['label'=>'Missione Numeri','emoji'=>'🔢','author'=>'Giulia'],
   ],
   'Giochi' => [
-    'Scala' => ['label'=>'Scala 40','emoji'=>'🃏'],
+    'Scala' => ['label'=>'Scala 40','emoji'=>'🃏','author'=>'Elisa'],
   ],
   'Crescita' => [
-    'Thrivers' => ['label'=>'Thrivers','emoji'=>'🌱'],
+    'Thrivers' => ['label'=>'Thrivers','emoji'=>'🌱','author'=>'Elisa'],
   ],
 ];
 
@@ -44,7 +44,8 @@ foreach($profiles as $p){
     .category h2{margin:0 0 14px;font-size:1.35rem}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
     .app{display:block;text-decoration:none;color:inherit;background:#fff;border-radius:24px;padding:24px;box-shadow:0 10px 30px #17203312;font-weight:900;font-size:1.15rem}
-    .app span{font-size:2.5rem;display:block;margin-bottom:10px}
+    .app .emoji{font-size:2.5rem;display:block;margin-bottom:10px}
+    .app .author{display:block;margin-top:8px;font-size:.78rem;font-weight:650;color:#7a8498}
     .muted{color:#657087}.profile{background:#e9eefc;padding:8px 12px;border-radius:999px;font-weight:800}
   </style>
 </head>
@@ -75,7 +76,11 @@ foreach($profiles as $p){
       <h2><?=htmlspecialchars($categoryName)?></h2>
       <div class="grid">
         <?php foreach($visibleApps as $key=>$a): ?>
-          <a class="app" href="/Applicazioni/<?=rawurlencode($key)?>/"><span><?=$a['emoji']?></span><?=htmlspecialchars($a['label'])?></a>
+          <a class="app" href="/Applicazioni/<?=rawurlencode($key)?>/">
+            <span class="emoji"><?=$a['emoji']?></span>
+            <?=htmlspecialchars($a['label'])?>
+            <span class="author">Autore: <?=htmlspecialchars($a['author'])?></span>
+          </a>
         <?php endforeach; ?>
       </div>
     </section>
