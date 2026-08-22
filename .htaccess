@@ -1,0 +1,25 @@
+Options -Indexes
+DirectoryIndex index.php index.html
+RewriteEngine On
+
+# Non esporre file e cartelle server-side.
+RewriteRule ^(?:lib|database)/ - [F,L]
+<FilesMatch "^(?:config(?:\.example)?\.php|.*\.sql)$">
+  Require all denied
+</FilesMatch>
+
+# La radice del sito e' pubblica: non usare il vecchio index.html.
+RewriteRule ^index\.html$ / [R=302,L,NC]
+
+# URL pubblici delle applicazioni: /Applicazioni/NomeApp/
+RewriteRule ^Applicazioni/(Compiti|Lettura|LetturaAvventura|MissioneNumeri|Operazioni|Scala|Thrivers)/index\.html$ /Applicazioni/$1/ [R=302,L,NC]
+RewriteRule ^Applicazioni/(Compiti|Lettura|LetturaAvventura|MissioneNumeri|Operazioni|Scala|Thrivers)/?$ /$1/index.php [L,NC]
+RewriteRule ^Applicazioni/(Compiti|Lettura|LetturaAvventura|MissioneNumeri|Operazioni|Scala|Thrivers)/(.*)$ /$1/$2 [L,NC]
+
+# I vecchi indirizzi alla radice vengono portati ai nuovi URL.
+RewriteCond %{THE_REQUEST} \s/+((?:Compiti|Lettura|LetturaAvventura|MissioneNumeri|Operazioni|Scala|Thrivers))(?:/|[?\s]) [NC]
+RewriteRule ^(Compiti|Lettura|LetturaAvventura|MissioneNumeri|Operazioni|Scala|Thrivers)(?:/.*)?$ /Applicazioni/$1/ [R=302,L,NE]
+
+# CompitiVacanze non fa piu' parte del menu applicazioni.
+RewriteCond %{THE_REQUEST} \s/+CompitiVacanze(?:/|[?\s]) [NC]
+RewriteRule ^CompitiVacanze(?:/.*)?$ /Applicazioni/ [R=302,L,NE]

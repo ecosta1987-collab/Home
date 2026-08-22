@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<title>Missione Numeri — L'Avventura dei Calcoli</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#2b2b33;
+    --shell-bg-1:#eef0ff;
+    --shell-bg-2:#dfe6ff;
+    --paper:#ffffff;
+    --shadow: 0 10px 0 rgba(43,43,51,0.12);
+    --radius: 26px;
+
+    /* theme accents get overridden per-world via data-theme on <body> */
+    --primary:#8B5FBF;
+    --primary-dark:#6C3FA0;
+    --accent:#FFD166;
+    --tint:#F3E8FF;
+  }
+
+  body[data-theme="castello"]{ --primary:#9C6B2E; --primary-dark:#6E4A1D; --accent:#D8B03C; --tint:#F5E9D2; }
+  body[data-theme="pirati"]{ --primary:#0E7C7B; --primary-dark:#0A5958; --accent:#F4A63C; --tint:#E6F7F5; }
+  body[data-theme="spazio"]{ --primary:#2541B2; --primary-dark:#1B2F82; --accent:#00C2D1; --tint:#E8ECFF; }
+  body[data-theme="dino"]{ --primary:#8C5A2B; --primary-dark:#6B421C; --accent:#7FB069; --tint:#FBF0DE; }
+
+  html{ font-size:107%; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; }
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Nunito', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 15% 10%, rgba(255,255,255,0.6), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(255,255,255,0.5), transparent 45%),
+      linear-gradient(160deg, var(--shell-bg-1), var(--shell-bg-2));
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+    padding:24px 14px 60px;
+    transition: background 0.6s ease;
+  }
+
+  h1,h2,h3, .display{ font-family:'Baloo 2', sans-serif; margin:0; }
+
+  .stage{ width:100%; max-width:560px; }
+
+  .card{
+    background:var(--paper);
+    border-radius:var(--radius);
+    border:4px solid var(--ink);
+    box-shadow: var(--shadow);
+    padding:26px 22px;
+  }
+
+  /* ---------- HOME ---------- */
+  .home-header{ text-align:center; margin-bottom:18px; }
+  .home-header .kicker{
+    display:inline-block; background:var(--ink); color:#fff; font-weight:800;
+    padding:6px 14px; border-radius:999px; font-size:0.78rem; letter-spacing:0.06em;
+    text-transform:uppercase; margin-bottom:10px;
+  }
+  .home-header h1{ font-size:1.9rem; line-height:1.15; color:var(--ink); }
+  .home-header p{ margin-top:8px; font-weight:700; color:#5b5866; font-size:1rem; }
+
+  .world-grid{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:18px; }
+  @media (max-width:420px){ .world-grid{ grid-template-columns:1fr; } }
+
+  .world-card{
+    cursor:pointer; border:4px solid var(--ink); border-radius:20px; padding:16px 14px;
+    text-align:left; background:#fff; position:relative; overflow:hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    box-shadow: 0 6px 0 rgba(43,43,51,0.15);
+  }
+  .world-card:hover{ transform:translateY(-3px); }
+  .world-card:active{ transform:translateY(2px); box-shadow:0 2px 0 rgba(43,43,51,0.15); }
+  .world-card .emoji{ font-size:2.2rem; display:block; margin-bottom:6px; }
+  .world-card h3{ font-size:1.15rem; }
+  .world-card p{ font-size:0.82rem; font-weight:700; color:#5b5866; margin:6px 0 10px; min-height:2.4em; }
+  .world-card .meta{ display:flex; gap:6px; flex-wrap:wrap; }
+  .badge{ font-size:0.68rem; font-weight:800; padding:4px 9px; border-radius:999px; text-transform:uppercase; letter-spacing:0.03em; }
+  .badge.stanze{ background:#eee; color:#444; }
+  .badge.diff-facile{ background:#DCF5DC; color:#256029; }
+  .badge.diff-media{ background:#FFEFCB; color:#8a5a00; }
+  .badge.diff-difficile{ background:#FBDADA; color:#9c1f1f; }
+  .badge.diff-complicatissimo{ background:#3a2233; color:#f5c9e0; }
+  .world-card[data-c="castello"]{ background:#F5E9D2; }
+  .world-card[data-c="pirati"]{ background:#E6F7F5; }
+  .world-card[data-c="spazio"]{ background:#E8ECFF; }
+  .world-card[data-c="dino"]{ background:#FBF0DE; }
+  .progress-pill{
+    position:absolute; top:10px; right:10px; background:var(--ink); color:#fff;
+    font-size:0.68rem; font-weight:800; padding:3px 9px; border-radius:999px;
+  }
+
+  /* ---------- BRIEFING ---------- */
+  .briefing .emoji-big{ font-size:3.2rem; text-align:center; display:block; margin-bottom:6px; }
+  .briefing h2{ text-align:center; font-size:1.5rem; color:var(--primary-dark); }
+  .briefing .story-text{ font-weight:700; font-size:1.12rem; line-height:1.6; color:#3d3a45; margin:14px 0; text-align:center; }
+  .btn-row{ display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; justify-content:center; }
+
+  button.btn{
+    font-family:'Baloo 2', sans-serif; font-size:1.05rem; font-weight:700;
+    border:4px solid var(--ink); border-radius:16px; padding:12px 22px; cursor:pointer;
+    background:var(--accent); color:var(--ink); box-shadow:0 5px 0 rgba(43,43,51,0.35);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+  button.btn:hover{ transform:translateY(-2px); }
+  button.btn:active{ transform:translateY(3px); box-shadow:0 1px 0 rgba(43,43,51,0.35); }
+  button.btn.secondary{ background:#fff; }
+  button.btn.primary{ background:var(--primary); color:#fff; }
+  button.btn.small{ font-size:0.85rem; padding:8px 14px; border-width:3px; box-shadow:0 3px 0 rgba(43,43,51,0.35); }
+  button.btn:disabled{ opacity:0.45; cursor:not-allowed; }
+  .link-btn{
+    background:none; border:none; text-decoration:underline; font-weight:800; color:#5b5866;
+    cursor:pointer; font-family:'Nunito',sans-serif; font-size:0.85rem;
+  }
+
+  /* ---------- GAME ---------- */
+  .top-bar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+  .stars{ font-weight:800; font-family:'Baloo 2'; color:var(--primary-dark); font-size:1rem; }
+  .exit-x{ background:none; border:none; font-size:1.3rem; cursor:pointer; color:#8a8794; }
+
+  .trail{ display:flex; align-items:center; overflow-x:auto; gap:0; padding:6px 2px 16px; }
+  .trail-step{
+    width:34px; height:34px; min-width:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:0.95rem; border:3px solid var(--ink); background:#fff; position:relative; z-index:1;
+  }
+  .trail-step.done{ background:var(--accent); }
+  .trail-step.current{ background:var(--primary); color:#fff; box-shadow:0 0 0 4px var(--tint); }
+  .trail-step.todo{ background:#f1f1f4; color:#bbb; border-color:#ddd; }
+  .trail-line{ height:4px; width:16px; background:var(--ink); min-width:16px; }
+  .trail-line.done{ background:var(--accent); }
+  .trail-line.todo{ background:#ddd; }
+
+  .story-box{
+    background:var(--tint); border:3px dashed var(--primary); border-radius:16px; padding:14px 16px;
+    font-weight:700; font-size:1.08rem; line-height:1.6; color:#3d3a45; margin-bottom:16px;
+  }
+
+  .problem-box{ text-align:center; margin:18px 0; }
+  .problem-index{ font-size:0.8rem; font-weight:800; color:#8a8794; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:6px;}
+  .prompt-text{ font-weight:800; font-size:1.08rem; color:var(--ink); line-height:1.5; margin:6px 0 14px; }
+  .equation{ font-family:'Baloo 2'; font-size:2.4rem; font-weight:800; color:var(--ink); display:flex; align-items:center; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px;}
+  .equation .blank{ color:var(--primary); }
+  .numeric-area{ margin-top:6px; }
+  input.answer{
+    width:92px; font-family:'Baloo 2'; font-size:2rem; text-align:center; font-weight:700;
+    border:4px solid var(--ink); border-radius:14px; padding:6px 4px; color:var(--primary-dark);
+    background:#fff;
+  }
+  input.answer:focus{ outline:3px solid var(--accent); }
+
+  /* insiemi/conteggio */
+  .emoji-grid{
+    display:flex; flex-wrap:wrap; justify-content:center; gap:7px; font-size:1.5rem;
+    background:var(--tint); border-radius:16px; padding:14px; margin-bottom:12px;
+  }
+  .emoji-grid span{ line-height:1; }
+
+  /* forme */
+  .shape-visual{ font-size:4rem; color:var(--primary); margin-bottom:8px; }
+
+  /* sequenze */
+  .sequence-visual{ display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
+  .seq-item{
+    font-family:'Baloo 2'; font-weight:800; font-size:1.3rem; min-width:44px; padding:8px 4px;
+    border:3px solid var(--ink); border-radius:12px; background:#fff;
+  }
+
+  /* scelta multipla */
+  .choice-area{ display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:10px; }
+  .choice-btn{
+    font-family:'Baloo 2', sans-serif; font-size:1rem; font-weight:700; cursor:pointer;
+    border:4px solid var(--ink); border-radius:14px; padding:12px 16px; background:#fff; color:var(--ink);
+    box-shadow:0 4px 0 rgba(43,43,51,0.25); transition:transform 0.1s ease;
+  }
+  .choice-btn:hover{ transform:translateY(-2px); }
+  .choice-btn:disabled{ opacity:0.6; cursor:default; }
+  .choice-btn.choice-correct{ background:#DCF5DC; border-color:#256029; }
+  .choice-btn.choice-wrong{ background:#FBDADA; border-color:#9c1f1f; }
+
+  /* colonna con riporto/prestito */
+  .column-area{ margin-bottom:12px; }
+  .column-op{ background:#f7f6fb; border-radius:16px; padding:14px; }
+  .column-grid{
+    display:grid; grid-template-columns:auto auto; justify-content:center; column-gap:2px; row-gap:2px;
+    font-family:'Baloo 2'; font-weight:800; font-size:1.6rem; color:var(--ink); width:fit-content; margin:0 auto;
+  }
+  .col-cell{ width:46px; text-align:center; position:relative; }
+  .op-cell{ text-align:left; }
+  .result-cell{ color:var(--primary-dark); }
+  .carry-mark{ position:absolute; top:-14px; left:6px; font-size:0.9rem; color:#c22b2b; }
+  .col-line{ grid-column:1 / span 2; border-top:3px solid var(--ink); margin:4px 0; }
+  .borrow-note{ font-size:0.78rem; font-weight:700; color:#5b5866; text-align:center; margin-bottom:6px; }
+  .column-explain{ font-size:0.82rem; font-weight:700; color:#5b5866; text-align:center; margin:10px 0 0; line-height:1.4; }
+
+  /* colonna con riporto/prestito — mostrata solo dentro il box Aiuto, come esempio */
+  .feedback{ min-height:1.6em; text-align:center; font-weight:800; font-family:'Baloo 2'; margin-top:10px; font-size:1.05rem; }
+  .feedback.ok{ color:#2b8a3e; }
+  .feedback.no{ color:#c22b2b; }
+  .hint-box{ text-align:center; font-size:0.9rem; font-weight:700; color:#5b5866; margin-top:8px; background:#f7f6fb; border-radius:14px; padding:10px 12px; display:none;}
+  .hint-box.show{ display:block; }
+  .teaching-intro{ font-size:0.86rem; font-weight:800; color:var(--primary-dark); margin:0 0 8px; line-height:1.4; }
+  .column-op{ background:#fff; border:3px solid var(--primary); border-radius:16px; padding:14px; margin-top:4px; }
+  .column-grid{
+    display:grid; grid-template-columns:auto auto; justify-content:center; column-gap:2px; row-gap:2px;
+    font-family:'Baloo 2'; font-weight:800; font-size:1.6rem; color:var(--ink); width:fit-content; margin:0 auto;
+  }
+  .col-cell{ width:46px; text-align:center; position:relative; }
+  .op-cell{ text-align:left; }
+  .result-cell{ color:var(--primary-dark); }
+  .carry-mark{ position:absolute; top:-14px; left:6px; font-size:0.9rem; color:#c22b2b; }
+  .col-line{ grid-column:1 / span 2; border-top:3px solid var(--ink); margin:4px 0; }
+  .borrow-note{ font-size:0.78rem; font-weight:700; color:#5b5866; text-align:center; margin-bottom:6px; }
+  .column-explain{ font-size:0.84rem; font-weight:700; color:#5b5866; text-align:center; margin:10px 0 0; line-height:1.45; }
+
+  .center-row{ display:flex; justify-content:center; gap:10px; margin-top:14px; flex-wrap:wrap; }
+
+  /* ---------- VICTORY ---------- */
+  .victory .emoji-big{ font-size:3.6rem; text-align:center; display:block; }
+  .victory h2{ text-align:center; font-size:1.6rem; color:var(--primary-dark); margin-top:6px; }
+  .victory p{ text-align:center; font-weight:700; color:#3d3a45; margin-top:10px; line-height:1.5; }
+  .victory .stars-final{ text-align:center; font-family:'Baloo 2'; font-size:1.8rem; margin:14px 0; color:var(--primary-dark); }
+
+  .hidden{ display:none !important; }
+
+  .footer-note{ text-align:center; font-size:0.72rem; color:#9a97a6; margin-top:18px; font-weight:700; }
+
+  @media (prefers-reduced-motion: reduce){
+    .world-card, button.btn{ transition:none; }
+  }
+</style>
+</head>
+<body data-theme="castello">
+
+<div class="stage">
+
+  <!-- ===================== HOME SCREEN ===================== -->
+  <section id="screen-home" class="card">
+    <div class="home-header">
+      <span class="kicker">Missione Numeri</span>
+      <h1>Scegli il tuo eroe e parti all'avventura! 🚀</h1>
+      <p>Risolvi le addizioni e le sottrazioni per aprire la strada.</p>
+    </div>
+    <div class="world-grid" id="world-grid"></div>
+    <p class="footer-note">I tuoi progressi si salvano da soli su questo dispositivo 💾</p>
+  </section>
+
+  <!-- ===================== BRIEFING SCREEN ===================== -->
+  <section id="screen-briefing" class="card briefing hidden">
+    <span class="emoji-big" id="briefing-emoji"></span>
+    <h2 id="briefing-title"></h2>
+    <div class="story-text" id="briefing-text"></div>
+    <div class="btn-row">
+      <button class="btn primary" id="btn-start">Comincia l'avventura</button>
+      <button class="btn secondary" id="btn-continue">Continua ▶️</button>
+    </div>
+    <div class="btn-row">
+      <button class="link-btn" id="btn-back-home-1">⬅ Torna alla scelta dell'eroe</button>
+    </div>
+  </section>
+
+  <!-- ===================== GAME SCREEN ===================== -->
+  <section id="screen-game" class="card hidden">
+    <div class="top-bar">
+      <span class="stars" id="game-stars">⭐ 0</span>
+      <button class="exit-x" id="btn-exit" title="Torna alla scelta dell'eroe">✕</button>
+    </div>
+    <div class="trail" id="trail"></div>
+    <div class="story-box" id="stanza-story"></div>
+    <div class="problem-box">
+      <div class="problem-index" id="problem-index">Calcolo 1 di 1</div>
+      <p class="prompt-text hidden" id="prompt-text"></p>
+      <div class="visual-area hidden" id="visual-area"></div>
+      <div class="equation hidden" id="equation"></div>
+      <div class="numeric-area" id="numeric-area">
+        <input type="text" inputmode="numeric" pattern="[0-9]*" class="answer" id="answer-input" autocomplete="off">
+      </div>
+      <div class="choice-area hidden" id="choice-area"></div>
+    </div>
+    <div class="feedback" id="feedback"></div>
+    <div class="hint-box" id="hint-box"></div>
+    <div class="center-row">
+      <button class="btn primary" id="btn-check">Controlla ✓</button>
+      <button class="btn small secondary" id="btn-hint">💡 Aiuto</button>
+    </div>
+  </section>
+
+  <!-- ===================== VICTORY SCREEN ===================== -->
+  <section id="screen-victory" class="card victory hidden">
+    <span class="emoji-big" id="victory-emoji">🏆</span>
+    <h2 id="victory-title">Missione completata!</h2>
+    <p id="victory-text"></p>
+    <div class="stars-final" id="victory-stars"></div>
+    <div class="btn-row">
+      <button class="btn primary" id="btn-victory-home">Scegli una nuova avventura</button>
+    </div>
+  </section>
+
+</div>
+
+<script src="story-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
