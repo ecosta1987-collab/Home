@@ -87,18 +87,9 @@
     replaceText(document.body);
   }
 
+  // Niente MutationObserver: evitava un ciclo continuo con la guida interattiva.
   adaptUi();
-
-  let scheduled = false;
-  const observer = new MutationObserver(() => {
-    if (scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(() => {
-      scheduled = false;
-      observer.disconnect();
-      adaptUi();
-      observer.observe(document.body, {childList:true, subtree:true});
-    });
-  });
-  observer.observe(document.body, {childList:true, subtree:true});
+  setTimeout(adaptUi, 250);
+  setTimeout(adaptUi, 1000);
+  document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => setTimeout(adaptUi, 0)));
 })();
