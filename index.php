@@ -335,7 +335,7 @@ if (is_logged_in()) {
         <a class="private" href="/auth/login.php?next=%2F">Accedi</a>
       <?php else: ?>
         <details class="account">
-          <summary><?= htmlspecialchars(current_user()['name'] ?: 'Account') ?></summary>
+          <summary>Menù</summary>
           <div class="account-menu">
             <div class="account-name">Area personale</div>
             <a href="/Applicazioni/">Tutte le applicazioni</a>
@@ -441,7 +441,6 @@ if (is_logged_in()) {
               Preferisco una tisana al caffè, l’estate all’inverno e, tra cane e gatto,
               scelgo il gatto.
             </p>
-            
           </div>
         </div>
       </section>
