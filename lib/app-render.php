@@ -40,8 +40,6 @@ function render_legacy_app(string $appKey, bool $syncProgress=true): void {
     $author = htmlspecialchars(app_author($appKey), ENT_QUOTES, 'UTF-8');
     $homeButton = '<style>#home-back-button{position:fixed;top:max(12px,env(safe-area-inset-top));left:12px;z-index:2147483647;display:inline-flex;align-items:center;gap:7px;padding:10px 14px;border-radius:999px;background:#fff;color:#1f2937;text-decoration:none;font:700 15px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;box-shadow:0 4px 16px rgba(0,0,0,.18);border:1px solid rgba(0,0,0,.08)}#home-back-button:active{transform:translateY(1px)}#app-author-badge{position:fixed;left:12px;bottom:max(12px,env(safe-area-inset-bottom));z-index:2147483647;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.94);color:#4b5563;font:600 12px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;box-shadow:0 3px 12px rgba(0,0,0,.12);border:1px solid rgba(0,0,0,.08)}@media(max-width:520px){#home-back-button{top:max(8px,env(safe-area-inset-top));left:8px;padding:9px 12px;font-size:14px}#app-author-badge{left:8px;bottom:max(8px,env(safe-area-inset-bottom));font-size:11px}}</style><a id="home-back-button" href="/Applicazioni/" aria-label="Torna alle Applicazioni">&#8592; Torna alle Applicazioni</a><div id="app-author-badge">Autore: ' . $author . '</div>';
 
-    // Cerca il vero tag <body> solo dopo la chiusura di <head>, evitando
-    // eventuali stringhe "<body>" presenti in CSS, commenti o script.
     $headEnd = stripos($html, '</head>');
     if ($headEnd !== false) {
         $bodyStart = stripos($html, '<body', $headEnd + 7);
@@ -63,10 +61,8 @@ function render_legacy_app(string $appKey, bool $syncProgress=true): void {
         $html = preg_replace('/<head(.*?)>/i', '<head$1>' . $bootstrap, $html, 1);
     }
 
-    // Gli adattamenti visivi e la guida di Compiti vengono caricati alla fine
-    // del body, quando tutta l'interfaccia originale dell'app è disponibile.
     if ($appKey === 'Compiti') {
-        $compitiScripts = '<script src="/assets/compiti-teen.js?v=20260822-2"></script><script src="/assets/compiti-guide.js?v=20260822-3"></script>';
+        $compitiScripts = '<script src="/assets/compiti-teen.js?v=20260822-3"></script><script src="/assets/compiti-guide.js?v=20260822-3"></script>';
         if (stripos($html, '</body>') !== false) {
             $html = preg_replace('/<\/body>/i', $compitiScripts . '</body>', $html, 1);
         } else {
