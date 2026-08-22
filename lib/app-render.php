@@ -57,13 +57,22 @@ function render_legacy_app(string $appKey, bool $syncProgress=true): void {
     if ($syncProgress) {
         $state = app_progress_state($profileId, $appKey);
         $bootstrap = '<script>window.HOME_APP_KEY=' . json_encode($appKey) . ';window.HOME_CSRF=' . json_encode(csrf_token()) . ';window.HOME_PROGRESS=' . json_encode($state, JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) . ';</script><script src="/assets/profile-sync.js"></script>';
-        if ($appKey === 'Compiti') {
-            $bootstrap .= '<script defer src="/assets/compiti-guide.js?v=20260822-1"></script>';
-        }
         if ($appKey === 'Thrivers') {
             $bootstrap .= '<script src="/assets/thrivers-enhancements.js?v=20260820-2"></script><script src="/assets/thrivers-results-home.js?v=20260820-4"></script>';
         }
         $html = preg_replace('/<head(.*?)>/i', '<head$1>' . $bootstrap, $html, 1);
     }
+
+    // La guida di Compiti viene caricata alla fine del body, quando tutta
+    // l'interfaccia e lo script originale dell'app sono già disponibili.
+    if ($appKey === 'Compiti') {
+        $guideScript = '<script src="/assets/compiti-guide.js?v=20260822-2"></script>';
+        if (stripos($html, '</body>') !== false) {
+            $html = preg_replace('/<\/body>/i', $guideScript . '</body>', $html, 1);
+        } else {
+            $html .= $guideScript;
+        }
+    }
+
     echo $html;
 }
