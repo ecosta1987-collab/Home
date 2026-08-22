@@ -73,11 +73,11 @@
 
   function adaptUi() {
     const parentTab = document.querySelector('button[data-tab="parent"]');
-    if (parentTab) parentTab.textContent = 'Crea compiti';
+    if (parentTab && parentTab.textContent !== 'Crea compiti') parentTab.textContent = 'Crea compiti';
 
     const mascot = document.getElementById('mainEmoji');
-    if (mascot && (mascot.textContent.trim() === '🦊' || !mascot.dataset.teenAdapted)) {
-      mascot.textContent = '✓';
+    if (mascot && !mascot.dataset.teenAdapted) {
+      if (mascot.textContent.trim() === '🦊') mascot.textContent = '✓';
       mascot.dataset.teenAdapted = '1';
     }
 
@@ -88,6 +88,17 @@
   }
 
   adaptUi();
-  const observer = new MutationObserver(() => adaptUi());
+
+  let scheduled = false;
+  const observer = new MutationObserver(() => {
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      observer.disconnect();
+      adaptUi();
+      observer.observe(document.body, {childList:true, subtree:true});
+    });
+  });
   observer.observe(document.body, {childList:true, subtree:true});
 })();
