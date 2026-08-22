@@ -66,7 +66,7 @@ function render_legacy_app(string $appKey, bool $syncProgress=true): void {
     // La guida di Compiti viene caricata alla fine del body, quando tutta
     // l'interfaccia e lo script originale dell'app sono già disponibili.
     if ($appKey === 'Compiti') {
-        $guideScript = '<script src="/assets/compiti-guide.js?v=20260822-2"></script>';
+        $guideScript = '<script src="/assets/compiti-guide.js?v=20260822-3"></script>';
         if (stripos($html, '</body>') !== false) {
             $html = preg_replace('/<\/body>/i', $guideScript . '</body>', $html, 1);
         } else {
