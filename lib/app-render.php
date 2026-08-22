@@ -66,7 +66,7 @@ function render_legacy_app(string $appKey, bool $syncProgress=true): void {
     // Gli adattamenti visivi e la guida di Compiti vengono caricati alla fine
     // del body, quando tutta l'interfaccia originale dell'app è disponibile.
     if ($appKey === 'Compiti') {
-        $compitiScripts = '<script src="/assets/compiti-teen.js?v=20260822-1"></script><script src="/assets/compiti-guide.js?v=20260822-3"></script>';
+        $compitiScripts = '<script src="/assets/compiti-teen.js?v=20260822-2"></script><script src="/assets/compiti-guide.js?v=20260822-3"></script>';
         if (stripos($html, '</body>') !== false) {
             $html = preg_replace('/<\/body>/i', $compitiScripts . '</body>', $html, 1);
         } else {
